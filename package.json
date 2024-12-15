@@ -1,0 +1,30 @@
+{
+  "name": "turbo-starter",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "docker": "docker-compose down --remove-orphans --volumes && docker container prune -f && docker-compose up --build -d",
+    "docker-compose": "docker-compose -f docker-compose.yml build"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "turbo": "^2.3.3",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "volta": {
+    "node": "22.12.0",
+    "pnpm": "9.12.0"
+  }
+}
