@@ -1,80 +1,157 @@
-# Turborepo starter
+# 🚀 Turborepo Starter
 
-This is an official starter Turborepo.
+This repository provides a pre-configured **Turborepo** setup with **Next.js 15**, **Tailwind CSS**, **Shadcn UI**, **Docker Compose**, and essential tools like **ESLint**, **Prettier**, **TypeScript**, and **pnpm workspaces**.
 
-## Using this example
+## 🛠️ Features
 
-Run the following command:
+- **Monorepo Architecture**: Built with [Turborepo](https://turbo.build/repo) for efficient builds and caching.
+- **Next.js 15**: Latest version of [Next.js](https://nextjs.org/) for modern web development.
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI design.
+- **Shadcn UI**: A beautiful and accessible component library for React.
+- **Docker Compose**: Simplified containerization for local development.
+- **ESLint + Prettier**: Code linting and formatting.
+- **TypeScript**: Static type checking.
+- **pnpm Workspaces**: Dependency management with [pnpm](https://pnpm.io/) for performance and consistency.
 
-```sh
-npx create-turbo@latest
+---
+
+## 📁 Project Structure
+
+```plaintext
+.
+├── apps/
+│   └── web/               # Next.js 15 app
+├── packages/              # Shared packages and components
+│   ├── eslint-config         # Shared ESLint configurations
+│   ├── typescript-config     # Shared TypeScript configs
+│   ├── ui/                   # Shared components (Shadcn UI)
+├── .dockerignore          # Docker ignore rules
+├── docker-compose.yml
+├── turbo.json             # Turborepo configuration
+└── pnpm-workspace.yaml
 ```
 
-## What's inside?
+---
 
-This Turborepo includes the following packages/apps:
+## 🚀 Getting Started
 
-### Apps and Packages
+### Prerequisites
 
--  `web`: a [Next.js](https://nextjs.org/) app
--  `@repo/ui`: a stub React component library, with Shadcn UI ready to go
--  `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
--  `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+Ensure you have the following installed:
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **Node.js** (v22.12.0+)
+- **pnpm** (v9.12.0+): Install with `npm i -g pnpm`
+- **Docker**: For containerized development
 
-### Utilities
+---
 
-This Turborepo has some additional tools already setup for you:
+### 📦 Installation
 
--  [TypeScript](https://www.typescriptlang.org/) for static type checking
--  [ESLint](https://eslint.org/) for code linting
--  [Prettier](https://prettier.io) for code formatting
+Clone the repository and install dependencies:
 
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```bash
+git clone https://github.com/ProductOfAmerica/turbo-starter.git
+cd turbo-starter
+pnpm install
 ```
 
-### Develop
+---
 
-To develop all apps and packages, run the following command:
+### 🏗️ Development
 
-```
-cd my-turborepo
+Run development mode:
+
+```bash
 pnpm dev
 ```
 
-### Remote Caching
+---
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### 🔧 Build
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+To build all apps and packages:
 
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
+```bash
+pnpm build
 ```
 
-## Useful Links
+---
 
-Learn more about the power of Turborepo:
+### 🐳 Docker
 
--  [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
--  [Caching](https://turbo.build/repo/docs/core-concepts/caching)
--  [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
--  [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
--  [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
--  [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+Start the project using Docker Compose:
+
+```bash
+pnpm docker
+```
+
+To rebuild the Docker containers explicitly:
+
+```bash
+pnpm docker-compose
+```
+
+---
+
+### 🧹 Clean
+
+Clean dependencies and build artifacts:
+
+```bash
+pnpm clean
+```
+
+---
+
+### ✅ Lint & Format
+
+Run ESLint and Prettier:
+
+```bash
+pnpm lint
+pnpm format
+```
+
+---
+
+### ✅ Type Checking
+Run TypeScript type checking:
+
+```bash
+pnpm check-types
+```
+
+---
+
+## 🚀 Remote Caching with Vercel
+
+Enable remote caching for Turborepo:
+
+1. Log in to Vercel:
+
+   ```bash
+   npx turbo login
+   ```
+
+2. Link your repository:
+
+   ```bash
+   npx turbo link
+   ```
+
+---
+
+## Additional Notes
+### pnpm Workspaces
+This project uses pnpm workspaces to manage shared dependencies and modularize the codebase. Shared configurations and libraries are under the packages directory.
+
+### Docker Network
+The Docker Compose setup includes an app_network to facilitate communication between containers. Services can reference each other by container name.
+
+## 📚 Learn More
+
+- [Turborepo Documentation](https://turbo.build/repo/docs)
+- [Next.js](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Shadcn UI](https://ui.shadcn.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
