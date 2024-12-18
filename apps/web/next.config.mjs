@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    output: 'standalone',
+    output: process.env.IS_DOCKER ? 'standalone' : 'export',
     transpilePackages: ["@repo/ui"],
     outputFileTracingRoot: path.join(__dirname, '../../'),
 }

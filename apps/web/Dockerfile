@@ -31,6 +31,8 @@ COPY --from=builder /app/out/full/ .
 
 RUN pnpm install --frozen-lockfile
 
+ENV IS_DOCKER 1
+
 # Build the Next.js application
 RUN cd apps/web && pnpm exec next telemetry disable && pnpm run build
 
@@ -45,6 +47,7 @@ USER nextjs
 ENV HOSTNAME "0.0.0.0"
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV IS_DOCKER 1
 ENV PORT 3000
 
 # Automatically leverage output traces to reduce image size
