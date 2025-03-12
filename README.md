@@ -1,6 +1,10 @@
-# Turborepo Starter 🚀
+<h1 style="display:flex; align-items:center;">
+  <img src="https://turbo.build/_next/image?url=%2Fimages%2Fproduct-icons%2Frepo-dark-32x32.png&w=48&q=75" alt="Turborepo Logo" style="margin-right:10px;" height="32"> Turborepo Starter
+</h1>
 
-A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 15**, **Turborepo**, **Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project—all wrapped in a Docker-friendly setup.
+A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 15**, **Turborepo**,
+**Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project—all
+wrapped in a Docker-friendly setup.
 
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
 [![Node.js](https://img.shields.io/badge/Node.js-v22.12.0+-green)](https://nodejs.org/)
@@ -40,11 +44,13 @@ Perfect for developers who want a cutting-edge stack without the setup hassle.
 ## 🛠️ Get Started
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/) (v22.12.0+)
 - [pnpm](https://pnpm.io/) (`npm i -g pnpm@10.6.2`)
 - [Docker](https://www.docker.com/) (optional, for containerized dev)
 
 ### Setup
+
 ```bash
 git clone https://github.com/ProductOfAmerica/turbo-starter.git
 cd turbo-starter
@@ -52,17 +58,20 @@ pnpm install
 ```
 
 ### Run Locally
+
 ```bash
 pnpm dev           # Start the Next.js app
 pnpm turbo check-types  # Type checking
 ```
 
 ### Build
+
 ```bash
 pnpm build         # Build all apps and packages
 ```
 
 ### Docker
+
 ```bash
 pnpm docker        # Launch with Docker Compose
 pnpm docker:build  # Rebuild containers
@@ -73,6 +82,7 @@ pnpm docker:build  # Rebuild containers
 ## 🎨 Code Quality
 
 Keep your code sharp with [Biome.js](https://biomejs.dev/):
+
 ```bash
 pnpm format-write  # Format code
 pnpm lint         # Check for issues
