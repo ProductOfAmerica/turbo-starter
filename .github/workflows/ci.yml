@@ -30,7 +30,11 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
-      # Install dependencies
+      - name: Configure PNPM to Allow Scripts
+        run: |
+          pnpm config set scripts-prepend-node-path true
+          pnpm config set allow-build-scripts "@biomejs/biome,sharp"
+
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
         env:
