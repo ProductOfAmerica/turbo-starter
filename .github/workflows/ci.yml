@@ -34,7 +34,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --force-scripts
+        run: pnpm install --frozen-lockfile
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
