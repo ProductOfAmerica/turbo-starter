@@ -1,0 +1,72 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 3,
+		"lineWidth": 120
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "warn"
+			},
+			"style": {
+				"useTemplate": "error"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"trailingCommas": "es5",
+			"semicolons": "always",
+			"arrowParentheses": "always",
+			"bracketSameLine": false,
+			"bracketSpacing": true
+		}
+	},
+	"json": {
+		"parser": {
+			"allowComments": true
+		}
+	},
+	"files": {
+		"ignore": ["node_modules", "dist", ".next", ".turbo", "apps/web/out/**"]
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"overrides": [
+		{
+			"include": ["apps/web/**"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"recommended": true
+					},
+					"correctness": {
+						"useJsxKeyInIterable": "error"
+					}
+				}
+			}
+		},
+		{
+			"include": ["packages/ui/**"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"recommended": true,
+						"useKeyWithClickEvents": "error",
+						"useValidAnchor": "error"
+					},
+					"suspicious": {
+						"noExplicitAny": "error"
+					}
+				}
+			}
+		}
+	]
+}

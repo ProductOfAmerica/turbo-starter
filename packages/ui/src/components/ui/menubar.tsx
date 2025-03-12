@@ -1,9 +1,9 @@
 'use client';
 
-import * as React from 'react';
 import * as MenubarPrimitive from '@radix-ui/react-menubar';
 import { cn } from '@repo/ui/lib/utils';
 import { Check, ChevronRight, Circle } from 'lucide-react';
+import * as React from 'react';
 
 const MenubarMenu: typeof MenubarPrimitive.Menu = MenubarPrimitive.Menu;
 
@@ -179,21 +179,12 @@ const MenubarSeparator = React.forwardRef<
 	React.ElementRef<typeof MenubarPrimitive.Separator>,
 	React.ComponentPropsWithoutRef<typeof MenubarPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-	<MenubarPrimitive.Separator
-		ref={ref}
-		className={cn('-mx-1 my-1 h-px bg-muted', className)}
-		{...props}
-	/>
+	<MenubarPrimitive.Separator ref={ref} className={cn('-mx-1 my-1 h-px bg-muted', className)} {...props} />
 ));
 MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName;
 
 const MenubarShortcut = ({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) => {
-	return (
-		<span
-			className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className)}
-			{...props}
-		/>
-	);
+	return <span className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className)} {...props} />;
 };
 MenubarShortcut.displayname = 'MenubarShortcut';
 

@@ -1,9 +1,9 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@repo/ui/lib/utils';
 import { OTPInput, OTPInputContext } from 'input-otp';
 import { Dot } from 'lucide-react';
+import * as React from 'react';
 
 const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.ComponentPropsWithoutRef<typeof OTPInput>>(
 	({ className, containerClassName, ...props }, ref) => (
@@ -18,13 +18,7 @@ const InputOTP = React.forwardRef<React.ElementRef<typeof OTPInput>, React.Compo
 InputOTP.displayName = 'InputOTP';
 
 const InputOTPGroup = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'>>(
-	({ className, ...props }, ref) => (
-		<div
-			ref={ref}
-			className={cn('flex items-center', className)}
-			{...props}
-		/>
-	)
+	({ className, ...props }, ref) => <div ref={ref} className={cn('flex items-center', className)} {...props} />
 );
 InputOTPGroup.displayName = 'InputOTPGroup';
 
@@ -68,10 +62,11 @@ const InputOTPSlot = React.forwardRef<
 InputOTPSlot.displayName = 'InputOTPSlot';
 
 const InputOTPSeparator = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'>>(
-	({ ...props }, ref) => (
+	({ className, ...props }, ref) => (
 		<div
 			ref={ref}
-			role="separator"
+			className={cn('relative flex items-center justify-center', className)}
+			aria-hidden="true"
 			{...props}
 		>
 			<Dot />

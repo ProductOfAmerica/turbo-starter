@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@repo/ui/lib/utils';
+import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -51,10 +51,7 @@ const ChartContainer = React.forwardRef<
 				)}
 				{...props}
 			>
-				<ChartStyle
-					id={chartId}
-					config={config}
-				/>
+				<ChartStyle id={chartId} config={config} />
 				<RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
 			</div>
 		</ChartContext.Provider>
@@ -71,6 +68,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
 	return (
 		<style
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: Generating CSS from safe theme data
 			dangerouslySetInnerHTML={{
 				__html: Object.entries(THEMES)
 					.map(

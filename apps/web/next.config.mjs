@@ -1,14 +1,14 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    reactStrictMode: true,
-    output: process.env.IS_DOCKER ? 'standalone' : 'export',
-    transpilePackages: ["@repo/ui"],
-    outputFileTracingRoot: path.join(__dirname, '../../'),
-}
+	reactStrictMode: true,
+	output: process.env.IS_DOCKER ? 'standalone' : 'export',
+	transpilePackages: ['@repo/ui'],
+	outputFileTracingRoot: path.join(__dirname, '../../'),
+};
 
-export default nextConfig
+export default nextConfig;

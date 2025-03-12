@@ -1,11 +1,18 @@
 'use client';
 
-import * as React from 'react';
-import * as LabelPrimitive from '@radix-ui/react-label';
+import type * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import { Label } from '@repo/ui/components/ui/label';
 import { cn } from '@repo/ui/lib/utils';
-import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from 'react-hook-form';
+import * as React from 'react';
+import {
+	Controller,
+	type ControllerProps,
+	type FieldPath,
+	type FieldValues,
+	FormProvider,
+	useFormContext,
+} from 'react-hook-form';
 
 const Form = FormProvider;
 
@@ -66,11 +73,7 @@ const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 
 		return (
 			<FormItemContext.Provider value={{ id }}>
-				<div
-					ref={ref}
-					className={cn('space-y-2', className)}
-					{...props}
-				/>
+				<div ref={ref} className={cn('space-y-2', className)} {...props} />
 			</FormItemContext.Provider>
 		);
 	}
@@ -83,14 +86,7 @@ const FormLabel = React.forwardRef<
 >(({ className, ...props }, ref) => {
 	const { error, formItemId } = useFormField();
 
-	return (
-		<Label
-			ref={ref}
-			className={cn(error && 'text-destructive', className)}
-			htmlFor={formItemId}
-			{...props}
-		/>
-	);
+	return <Label ref={ref} className={cn(error && 'text-destructive', className)} htmlFor={formItemId} {...props} />;
 });
 FormLabel.displayName = 'FormLabel';
 
@@ -116,12 +112,7 @@ const FormDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
 		const { formDescriptionId } = useFormField();
 
 		return (
-			<p
-				ref={ref}
-				id={formDescriptionId}
-				className={cn('text-sm text-muted-foreground', className)}
-				{...props}
-			/>
+			<p ref={ref} id={formDescriptionId} className={cn('text-sm text-muted-foreground', className)} {...props} />
 		);
 	}
 );
@@ -137,12 +128,7 @@ const FormMessage = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<
 		}
 
 		return (
-			<p
-				ref={ref}
-				id={formMessageId}
-				className={cn('text-sm font-medium text-destructive', className)}
-				{...props}
-			>
+			<p ref={ref} id={formMessageId} className={cn('text-sm font-medium text-destructive', className)} {...props}>
 				{body}
 			</p>
 		);

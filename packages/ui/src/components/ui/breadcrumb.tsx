@@ -1,20 +1,14 @@
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@repo/ui/lib/utils';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
+import * as React from 'react';
 
 const Breadcrumb = React.forwardRef<
 	HTMLElement,
 	React.ComponentPropsWithoutRef<'nav'> & {
 		separator?: React.ReactNode;
 	}
->(({ ...props }, ref) => (
-	<nav
-		ref={ref}
-		aria-label="breadcrumb"
-		{...props}
-	/>
-));
+>(({ ...props }, ref) => <nav ref={ref} aria-label="breadcrumb" {...props} />);
 Breadcrumb.displayName = 'Breadcrumb';
 
 const BreadcrumbList = React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<'ol'>>(
@@ -33,11 +27,7 @@ BreadcrumbList.displayName = 'BreadcrumbList';
 
 const BreadcrumbItem = React.forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<'li'>>(
 	({ className, ...props }, ref) => (
-		<li
-			ref={ref}
-			className={cn('inline-flex items-center gap-1.5', className)}
-			{...props}
-		/>
+		<li ref={ref} className={cn('inline-flex items-center gap-1.5', className)} {...props} />
 	)
 );
 BreadcrumbItem.displayName = 'BreadcrumbItem';
@@ -50,13 +40,7 @@ const BreadcrumbLink = React.forwardRef<
 >(({ asChild, className, ...props }, ref) => {
 	const Comp = asChild ? Slot : 'a';
 
-	return (
-		<Comp
-			ref={ref}
-			className={cn('transition-colors hover:text-foreground', className)}
-			{...props}
-		/>
-	);
+	return <Comp ref={ref} className={cn('transition-colors hover:text-foreground', className)} {...props} />;
 });
 BreadcrumbLink.displayName = 'BreadcrumbLink';
 
@@ -68,6 +52,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWit
 			aria-disabled="true"
 			aria-current="page"
 			className={cn('font-normal text-foreground', className)}
+			tabIndex={0} // Add tabIndex to make the element focusable
 			{...props}
 		/>
 	)
@@ -75,12 +60,7 @@ const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWit
 BreadcrumbPage.displayName = 'BreadcrumbPage';
 
 const BreadcrumbSeparator = ({ children, className, ...props }: React.ComponentProps<'li'>) => (
-	<li
-		role="presentation"
-		aria-hidden="true"
-		className={cn('[&>svg]:w-3.5 [&>svg]:h-3.5', className)}
-		{...props}
-	>
+	<li role="presentation" aria-hidden="true" className={cn('[&>svg]:w-3.5 [&>svg]:h-3.5', className)} {...props}>
 		{children ?? <ChevronRight />}
 	</li>
 );
