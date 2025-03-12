@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      DO_NOT_TRACK: 1
 
     steps:
       # Checkout the repository
@@ -31,7 +34,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --allow-scripts "@biomejs/biome,sharp"
+        run: pnpm install --frozen-lockfile --force-scripts
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
@@ -44,5 +47,3 @@ jobs:
       # Build the Next.js app via Turborepo
       - name: Build
         run: pnpm turbo build
-        env:
-          NEXT_TELEMETRY_DISABLED: 1
