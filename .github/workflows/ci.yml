@@ -3,9 +3,9 @@ name: CI
 # Trigger the workflow on push and pull requests to the main branch
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 # Jobs to run
 jobs:
@@ -17,18 +17,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.6.2'
+
       # Set up Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
-
-      # Install pnpm
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: '10.6.2'
 
       # Install dependencies
       - name: Install Dependencies
