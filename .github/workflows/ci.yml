@@ -30,15 +30,8 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
-      - name: Configure PNPM to Allow Scripts
-        run: |
-          pnpm config set scripts-prepend-node-path true
-          pnpm config set allow-build-scripts "@biomejs/biome,sharp"
-
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-        env:
-          PNPM_ALLOW_SCRIPTS: "@biomejs/biome,sharp"
+        run: pnpm install --frozen-lockfile --allow-scripts "@biomejs/biome,sharp"
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
