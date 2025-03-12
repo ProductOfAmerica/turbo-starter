@@ -1,0 +1,47 @@
+name: CI
+
+# Trigger the workflow on push and pull requests to the main branch
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Jobs to run
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      # Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.6.2'
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Run Biome linting and formatting checks
+      - name: Lint and Format Check
+        run: pnpm lint
+
+      # Run TypeScript type checking via Turborepo
+      - name: Type Check
+        run: pnpm turbo check-types
+
+      # Build the Next.js app via Turborepo
+      - name: Build
+        run: pnpm turbo build
