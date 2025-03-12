@@ -1,5 +1,5 @@
 <h1 style="display:flex; align-items:center;">
-  <img src="https://turbo.build/_next/image?url=%2Fimages%2Fproduct-icons%2Frepo-dark-32x32.png&w=48&q=75" alt="Turborepo Logo" style="margin-right:10px;" height="32"> Turborepo Starter
+  <img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" style="margin-right:10px;" height="32"> Turborepo Starter
 </h1>
 
 A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 15**, **Turborepo**,
