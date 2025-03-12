@@ -12,14 +12,15 @@
 		"@repo/ui": "workspace:*",
 		"next": "catalog:",
 		"react": "catalog:react18",
-		"react-dom": "catalog:react18"
+		"react-dom": "catalog:react18",
+		"sharp": "catalog:react18"
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:react18",
 		"@types/react-dom": "catalog:react18",
-		"typescript": "catalog:",
-		"postcss": "catalog:styling"
+		"postcss": "catalog:styling",
+		"typescript": "catalog:"
 	}
 }
