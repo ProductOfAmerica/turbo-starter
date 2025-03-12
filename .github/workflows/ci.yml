@@ -33,6 +33,8 @@ jobs:
       # Install dependencies
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+        env:
+          PNPM_ALLOW_SCRIPTS: "@biomejs/biome,sharp"
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
