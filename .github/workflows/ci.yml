@@ -45,3 +45,5 @@ jobs:
       # Build the Next.js app via Turborepo
       - name: Build
         run: pnpm turbo build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1

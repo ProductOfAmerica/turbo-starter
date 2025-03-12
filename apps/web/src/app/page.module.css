@@ -1,13 +1,7 @@
-:root {
-	--font-geist-sans: "Geist Sans", sans-serif; /* Define custom property */
-	--font-geist-mono: "Geist Mono", monospace; /* Define custom property */
-}
-
 .page {
 	--gray-rgb: 0, 0, 0;
 	--gray-alpha-200: rgba(var(--gray-rgb), 0.08);
 	--gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
 	--button-primary-hover: #383838;
 	--button-secondary-hover: #f2f2f2;
 
@@ -21,17 +15,6 @@
 	font-synthesis: none;
 }
 
-@media (prefers-color-scheme: dark) {
-	.page {
-		--gray-rgb: 255, 255, 255;
-		--gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-		--gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-		--button-primary-hover: #ccc;
-		--button-secondary-hover: #1a1a1a;
-	}
-}
-
 .main {
 	display: flex;
 	flex-direction: column;
@@ -40,7 +23,7 @@
 }
 
 .main ol {
-	font-family: var(--font-geist-mono, monospace), sans-serif;
+	font-family: var(--font-geist-mono), sans-serif;
 	padding-left: 0;
 	margin: 0;
 	font-size: 14px;
@@ -54,7 +37,7 @@
 }
 
 .main code {
-	font-family: inherit;
+	font-family: var(--font-geist-mono), sans-serif;
 	background: var(--gray-alpha-100);
 	padding: 2px 4px;
 	border-radius: 4px;
@@ -72,7 +55,7 @@
 	height: 48px;
 	padding: 0 20px;
 	border: 1px solid transparent;
-	font-family: var(--font-geist-sans, sans-serif), sans-serif;
+	font-family: var(--font-geist-sans), sans-serif;
 	transition: background 0.2s, color 0.2s, border-color 0.2s;
 	cursor: pointer;
 	display: flex;
@@ -83,24 +66,24 @@
 	font-weight: 500;
 }
 
-a.primary {
+.primary {
 	background: var(--foreground);
 	color: var(--background);
 	gap: 8px;
 }
 
-a.secondary {
+.secondary {
 	border: 1px solid var(--gray-alpha-200);
 	min-width: 180px;
 }
 
-button.secondary {
+.buttonSecondary {
 	appearance: none;
 	border-radius: 128px;
 	height: 48px;
 	padding: 0 20px;
 	border: 1px solid var(--gray-alpha-200);
-	font-family: var(--font-geist-sans, sans-serif), sans-serif;
+	font-family: var(--font-geist-sans), sans-serif;
 	transition: background 0.2s, color 0.2s, border-color 0.2s;
 	cursor: pointer;
 	display: flex;
@@ -114,7 +97,7 @@ button.secondary {
 }
 
 .footer {
-	font-family: var(--font-geist-sans, sans-serif), sans-serif;
+	font-family: var(--font-geist-sans), sans-serif;
 	grid-row-start: 3;
 	display: flex;
 	gap: 24px;
@@ -130,14 +113,24 @@ button.secondary {
 	flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
+/* Media Queries */
+@media (prefers-color-scheme: dark) {
+	.page {
+		--gray-rgb: 255, 255, 255;
+		--gray-alpha-200: rgba(var(--gray-rgb), 0.145);
+		--gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+		--button-primary-hover: #ccc;
+		--button-secondary-hover: #1a1a1a;
+	}
+}
+
 @media (hover: hover) and (pointer: fine) {
-	a.primary:hover {
+	.primary:hover {
 		background: var(--button-primary-hover);
 		border: 1px solid transparent;
 	}
 
-	a.secondary:hover {
+	.secondary:hover {
 		background: var(--button-secondary-hover);
 		border: 1px solid transparent;
 	}
@@ -171,14 +164,8 @@ button.secondary {
 		padding: 0 16px;
 	}
 
-	a.secondary {
+	.secondary {
 		min-width: auto;
-	}
-
-	.footer {
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: center;
 	}
 }
 
