@@ -1,177 +1,104 @@
-# 🚀 Turborepo Starter
+# Turborepo Starter 🚀
 
-This repository provides a pre-configured **Turborepo** setup with **Next.js 15**, **Tailwind CSS**, **Shadcn UI**, *
-*Docker Compose**, and essential tools like **Biome.js**, **TypeScript**, and **pnpm workspaces**.
+A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 15**, **Turborepo**, **Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project—all wrapped in a Docker-friendly setup.
 
-## 🛠️ Features
-
-- **Monorepo Architecture**: Built with [Turborepo](https://turbo.build/repo) for efficient builds and caching.
-- **Next.js 15**: Latest version of [Next.js](https://nextjs.org/) for modern web development.
-- **Tailwind CSS**: Utility-first CSS framework for rapid UI design.
-- **Shadcn UI**: A beautiful and accessible component library for React.
-- **Docker Compose**: Simplified containerization for local development.
-- **Biome.js**: Fast, all-in-one linting and formatting, replacing ESLint and Prettier.
-- **TypeScript**: Static type checking.
-- **pnpm Workspaces**: Dependency management with [pnpm](https://pnpm.io/) for performance and consistency.
+[![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
+[![Node.js](https://img.shields.io/badge/Node.js-v22.12.0+-green)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-v10.6.2-orange)](https://pnpm.io/)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
 ---
 
-## 📁 Project Structure
+## ✨ Why This Starter?
 
-```plaintext
-.
+- **Monorepo Magic**: [Turborepo](https://turbo.build/repo) optimizes builds and caching across apps and packages.
+- **Next.js 15**: The latest [Next.js](https://nextjs.org/) with Turbopack for blazing-fast development.
+- **Shadcn UI**: Beautiful, accessible React components paired with [Tailwind CSS](https://tailwindcss.com/).
+- **Biome.js**: A single, speedy tool for linting and formatting—no ESLint/Prettier mess.
+- **Docker Ready**: Spin up with [Docker Compose](https://docs.docker.com/compose/) for consistent environments.
+- **pnpm Workspaces**: Efficient dependency management with [pnpm](https://pnpm.io/).
+
+Perfect for developers who want a cutting-edge stack without the setup hassle.
+
+---
+
+## 🗂️ Project Structure
+
+```
 ├── apps/
-│   └── web/               # Next.js 15 app
-├── packages/              # Shared packages and components
-│   ├── typescript-config     # Shared TypeScript configs
-│   ├── ui/                   # Shared components (Shadcn UI)
-├── .dockerignore          # Docker ignore rules
-├── docker-compose.yml
-├── turbo.json             # Turborepo configuration
-└── pnpm-workspace.yaml
+│   └── web/                # Next.js 15 app
+├── packages/
+│   ├── ui/                 # Shadcn UI components & utilities
+│   └── typescript-config   # Shared TypeScript settings
+├── docker-compose.yml      # Docker setup
+├── turbo.json              # Turborepo config
+└── pnpm-workspace.yaml     # Workspace definitions
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Get Started
 
 ### Prerequisites
+- [Node.js](https://nodejs.org/) (v22.12.0+)
+- [pnpm](https://pnpm.io/) (`npm i -g pnpm@10.6.2`)
+- [Docker](https://www.docker.com/) (optional, for containerized dev)
 
-Ensure you have the following installed:
-
-- **Node.js** (v22.12.0)
-- **pnpm** (v9.12.0+): Install with `npm i -g pnpm`
-- **Docker**: For containerized development
-
----
-
-### 📦 Installation
-
-Clone the repository and install dependencies:
-
+### Setup
 ```bash
 git clone https://github.com/ProductOfAmerica/turbo-starter.git
 cd turbo-starter
 pnpm install
 ```
 
----
-
-### 🏗️ Development
-
-Run development mode:
-
+### Run Locally
 ```bash
-pnpm dev
+pnpm dev           # Start the Next.js app
+pnpm turbo check-types  # Type checking
+```
+
+### Build
+```bash
+pnpm build         # Build all apps and packages
+```
+
+### Docker
+```bash
+pnpm docker        # Launch with Docker Compose
+pnpm docker:build  # Rebuild containers
 ```
 
 ---
 
-### 🔧 Build
+## 🎨 Code Quality
 
-To build all apps and packages:
-
+Keep your code sharp with [Biome.js](https://biomejs.dev/):
 ```bash
-pnpm build
+pnpm format-write  # Format code
+pnpm lint         # Check for issues
+pnpm lint:fix     # Auto-fix issues
 ```
 
 ---
 
-### 🐳 Docker
+## 🌟 Bonus Features
 
-Start the project using Docker Compose:
-
-```bash
-pnpm docker
-```
-
-To rebuild the Docker containers explicitly:
-
-```bash
-pnpm docker:build
-```
+- **Remote Caching**: Connect to [Vercel](https://vercel.com/) for faster builds:
+  ```bash
+  npx turbo login
+  npx turbo link
+  ```
+- **Shared UI**: Reuse components and utilities from `packages/ui` across projects.
 
 ---
 
-### 🧹 Clean
+## 🤝 Contribute
 
-Clean dependencies and build artifacts:
+Love this starter? Star it, fork it, or submit a PR! Let’s make it even better together.
 
-```bash
-pnpm clean
-```
-
----
-
-### ✅ Lint & Format
-
-This project uses [Biome.js](https://biomejs.dev/) for linting and formatting, replacing ESLint and Prettier. Biome
-provides a fast, all-in-one solution for code quality and consistency. Use the following commands to keep your codebase
-clean:
-
-```bash
-# Format code and write changes (style only)
-pnpm format-write
-
-# Check code for formatting and quality issues (no changes)
-pnpm lint
-
-# Check and fix formatting and quality issues where possible
-pnpm lint-fix
-```
-
-- **`format-write`**: Formats code style (e.g., indentation, spacing) and saves changes, without linting for errors.
-- **`lint`**: Analyzes code for both formatting inconsistencies and quality issues (e.g., unused variables), reporting
-  problems without modifying files.
-- **`lint-fix`**: Runs the same checks as `lint` and automatically applies fixes for detected issues, writing changes to
-  files.
+- [Issues](https://github.com/ProductOfAmerica/turbo-starter/issues)
+- [Docs](https://turbo.build/repo/docs)
 
 ---
 
-### ✅ Type Checking
-
-Run TypeScript type checking:
-
-```bash
-pnpm check-types
-```
-
----
-
-## 🚀 Remote Caching with Vercel
-
-Enable remote caching for Turborepo:
-
-1. Log in to Vercel:
-
-   ```bash
-   npx turbo login
-   ```
-
-2. Link your repository:
-
-   ```bash
-   npx turbo link
-   ```
-
----
-
-## Additional Notes
-
-### pnpm Workspaces
-
-This project uses pnpm workspaces to manage shared dependencies and modularize the codebase. Shared configurations and
-libraries are under the packages directory.
-
-### Docker Network
-
-The Docker Compose setup includes an app_network to facilitate communication between containers. Services can reference
-each other by container name.
-
-## 📚 Learn More
-
-- [Turborepo Documentation](https://turbo.build/repo/docs)
-- [Next.js](https://nextjs.org/docs)
-- [Tailwind CSS](https://tailwindcss.com/docs)
-- [Shadcn UI](https://ui.shadcn.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+Built with ❤️ by [ProductOfAmerica](https://github.com/ProductOfAmerica). Happy coding!
