@@ -57,18 +57,18 @@ const techStack = [
 	{ name: 'Turborepo', color: 'bg-gradient-to-r from-[#FF1E56] to-[#0196FF] text-white', url: 'https://turbo.build' },
 	{
 		name: 'Shadcn UI',
-		color: 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900',
+		color: 'bg-[#0a0a0a] text-white dark:bg-zinc-100 dark:text-[#0a0a0a]',
 		url: 'https://ui.shadcn.com',
 	},
 	{
 		name: 'Tailwind CSS',
-		color: 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white',
+		color: 'bg-[#00bcff] text-white',
 		url: 'https://tailwindcss.com',
 	},
-	{ name: 'Biome.js', color: 'bg-[#f9ad00] text-black', url: 'https://biomejs.dev' },
-	{ name: 'TypeScript', color: 'bg-[#3178C6] text-white', url: 'https://www.typescriptlang.org' },
-	{ name: 'Docker', color: 'bg-[#0db7ed] text-white', url: 'https://www.docker.com' },
-	{ name: 'pnpm', color: 'bg-[#f9ad00] text-black', url: 'https://pnpm.io' },
+	{ name: 'Biome.js', color: 'bg-[#60a5fa] text-black', url: 'https://biomejs.dev' },
+	{ name: 'TypeScript', color: 'bg-[#3178c6] text-white', url: 'https://www.typescriptlang.org' },
+	{ name: 'Docker', color: 'bg-[#1d63ed] text-white', url: 'https://www.docker.com' },
+	{ name: 'pnpm', color: 'bg-[#f69220] text-black', url: 'https://pnpm.io' },
 ];
 
 export default function Home() {
@@ -296,17 +296,17 @@ export default function Home() {
 										<div className="flex items-center space-x-2">
 											<Code2 className="w-4 h-4" />
 											<span>apps/web</span>
-											<span className="text-muted-foreground/70">→ Next.js application</span>
+											<span className="text-muted-foreground">→ Next.js application</span>
 										</div>
 										<div className="flex items-center space-x-2 mt-2">
 											<Package className="w-4 h-4" />
 											<span>packages/ui</span>
-											<span className="text-muted-foreground/70">→ Shared components</span>
+											<span className="text-muted-foreground">→ Shared components</span>
 										</div>
 										<div className="flex items-center space-x-2 mt-2">
 											<Container className="w-4 h-4" />
 											<span>docker-compose.yml</span>
-											<span className="text-muted-foreground/70">→ Container setup</span>
+											<span className="text-muted-foreground">→ Container setup</span>
 										</div>
 									</div>
 									<p className="text-sm text-muted-foreground">
