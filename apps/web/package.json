@@ -10,7 +10,9 @@
 	},
 	"dependencies": {
 		"@repo/ui": "workspace:*",
+		"lucide-react": "^0.513.0",
 		"next": "catalog:",
+		"next-themes": "^0.4.6",
 		"react": "catalog:react18",
 		"react-dom": "catalog:react18",
 		"sharp": "catalog:react18"

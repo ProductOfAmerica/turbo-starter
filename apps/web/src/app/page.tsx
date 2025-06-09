@@ -1,71 +1,416 @@
-import Image, { type ImageProps } from 'next/image';
+import { Badge } from '@repo/ui/components/badge';
+import { Button } from '@repo/ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
+import {
+	ArrowRight,
+	Code2,
+	Container,
+	GitBranch,
+	Globe,
+	Layers,
+	Package,
+	Palette,
+	Rocket,
+	Sparkles,
+	Terminal,
+	Zap,
+} from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
+import { ThemeToggle } from './components/theme-toggle';
 
-import styles from './page.module.css';
+const features = [
+	{
+		icon: <Zap className="w-5 h-5" />,
+		title: 'Lightning Fast',
+		description: 'Optimized builds with intelligent caching and parallel execution',
+	},
+	{
+		icon: <Palette className="w-5 h-5" />,
+		title: 'Modern UI',
+		description: 'Pre-configured Shadcn UI components with Tailwind CSS',
+	},
+	{
+		icon: <Rocket className="w-5 h-5" />,
+		title: 'Production Ready',
+		description: 'Next.js 15 with Turbopack for optimal performance',
+	},
+	{
+		icon: <Sparkles className="w-5 h-5" />,
+		title: 'Developer Experience',
+		description: 'Biome.js for fast, unified linting and formatting',
+	},
+	{
+		icon: <Container className="w-5 h-5" />,
+		title: 'Containerized',
+		description: 'Docker Compose setup for consistent development',
+	},
+	{
+		icon: <Package className="w-5 h-5" />,
+		title: 'Monorepo Structure',
+		description: 'Efficient workspace management with pnpm',
+	},
+];
 
-type Props = Omit<ImageProps, 'src'> & {
-	srcLight: string;
-	srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-	const { srcLight, srcDark, ...rest } = props;
-
-	return <Image {...rest} src={srcLight} className="imgLight" />;
-};
+const techStack = [
+	{ name: 'Next.js 15', color: 'bg-black text-white dark:bg-white dark:text-black', url: 'https://nextjs.org' },
+	{ name: 'Turborepo', color: 'bg-gradient-to-r from-[#FF1E56] to-[#0196FF] text-white', url: 'https://turbo.build' },
+	{
+		name: 'Shadcn UI',
+		color: 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900',
+		url: 'https://ui.shadcn.com',
+	},
+	{
+		name: 'Tailwind CSS',
+		color: 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white',
+		url: 'https://tailwindcss.com',
+	},
+	{ name: 'Biome.js', color: 'bg-[#f9ad00] text-black', url: 'https://biomejs.dev' },
+	{ name: 'TypeScript', color: 'bg-[#3178C6] text-white', url: 'https://www.typescriptlang.org' },
+	{ name: 'Docker', color: 'bg-[#0db7ed] text-white', url: 'https://www.docker.com' },
+	{ name: 'pnpm', color: 'bg-[#f9ad00] text-black', url: 'https://pnpm.io' },
+];
 
 export default function Home() {
 	return (
-		<div className={styles.page}>
-			<main className={styles.main}>
-				<ThemeImage
-					className={styles.logo}
-					srcLight="turborepo-dark.svg"
-					srcDark="turborepo-light.svg"
-					alt="Turborepo logo"
-					width={180}
-					height={38}
-					priority
-				/>
-				<ol>
-					<li>
-						Get started by editing <code>apps/web/src/app/page.tsx</code>
-					</li>
-					<li>Save and see your changes instantly.</li>
-				</ol>
+		<div className="min-h-screen bg-background">
+			{/* Subtle gradient accent */}
+			<div className="fixed inset-0 -z-10">
+				<div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-background to-indigo-50 opacity-70 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20" />
+				<div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100 dark:bg-blue-900/20 rounded-full blur-3xl opacity-20" />
+				<div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-20" />
+			</div>
 
-				<div className={styles.ctas}>
-					<a
-						className={styles.primary}
-						href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Image className={styles.logo} src="/vercel.svg" alt="Vercel logomark" width={20} height={20} />
-						Deploy now
-					</a>
-					<a
-						href="https://turbo.build/repo/docs?utm_source"
-						target="_blank"
-						rel="noopener noreferrer"
-						className={styles.secondary}
-					>
-						Read our docs
-					</a>
+			{/* Navigation */}
+			<nav className="sticky top-0 z-50 backdrop-blur-md bg-background/70 border-b border-border">
+				<div className="container mx-auto px-6 py-4">
+					<div className="flex items-center justify-between">
+						<div className="flex items-center space-x-2">
+							<Button
+								variant="ghost"
+								size="sm"
+								className="font-semibold text-muted-foreground hover:text-foreground transition-colors"
+								asChild
+							>
+								<Link href="#">turbo-starter</Link>
+							</Button>
+						</div>
+						<div className="flex items-center space-x-6">
+							<Link
+								href="#features"
+								scroll={true}
+								className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+							>
+								Features
+							</Link>
+							<Link
+								href="#quick-start"
+								scroll={true}
+								className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+							>
+								Quick Start
+							</Link>
+							<ThemeToggle />
+							<Button variant="outline" size="sm" className="border-border hover:bg-accent" asChild>
+								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
+									<GitBranch className="w-4 h-4 mr-2" />
+									GitHub
+								</Link>
+							</Button>
+						</div>
+					</div>
 				</div>
-			</main>
-			<footer className={styles.footer}>
-				<a
-					href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image aria-hidden src="/window.svg" alt="Window icon" width={16} height={16} />
-					Examples
-				</a>
-				<a href="https://turbo.build?utm_source=create-turbo" target="_blank" rel="noopener noreferrer">
-					<Image aria-hidden src="/globe.svg" alt="Globe icon" width={16} height={16} />
-					Go to turbo.build →
-				</a>
+			</nav>
+
+			{/* Hero Section */}
+			<section className="relative overflow-hidden">
+				<div className="container mx-auto px-6 py-16 sm:py-20 md:py-24 lg:py-32">
+					<div className="max-w-4xl mx-auto text-center space-y-8">
+						{/* Badge */}
+						<div className="inline-flex items-center space-x-2 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 rounded-full px-4 py-1.5">
+							<Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+							<span className="text-sm text-blue-700 dark:text-blue-300 font-medium">
+								v2.0 - Now with Next.js 15
+							</span>
+						</div>
+
+						{/* Main heading */}
+						<div className="space-y-4">
+							<h1 className="text-5xl md:text-7xl font-bold text-foreground tracking-tight">
+								Build faster with
+								<span className="bg-gradient-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text text-transparent">
+									{' '}
+									Turborepo
+								</span>
+							</h1>
+							<p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+								A modern monorepo starter template that scales with your ambitions. Production-ready from day
+								one.
+							</p>
+						</div>
+
+						{/* CTA Buttons */}
+						<div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+							<Button
+								size="lg"
+								className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8"
+								asChild
+							>
+								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
+									Get Started
+									<ArrowRight className="w-4 h-4 ml-2" />
+								</Link>
+							</Button>
+							<Button variant="outline" size="lg" className="border-border hover:bg-accent px-8" asChild>
+								<Link href="https://turbo.build/repo/docs" target="_blank">
+									Read Documentation
+								</Link>
+							</Button>
+						</div>
+
+						{/* Tech Stack Pills */}
+						<div className="flex flex-col gap-3 pt-8">
+							<div className="flex flex-wrap justify-center gap-2">
+								{techStack.slice(0, 4).map((tech) => (
+									<Link key={tech.name} href={tech.url} target="_blank" rel="noopener noreferrer">
+										<Badge
+											className={`${tech.color} border-0 hover:scale-105 transition-transform duration-200 px-3 pt-1.5 pb-2 select-none will-change-transform font-medium flex items-center justify-center leading-none cursor-pointer`}
+										>
+											{tech.name}
+										</Badge>
+									</Link>
+								))}
+							</div>
+							<div className="flex flex-wrap justify-center gap-2">
+								{techStack.slice(4).map((tech) => (
+									<Link key={tech.name} href={tech.url} target="_blank" rel="noopener noreferrer">
+										<Badge
+											className={`${tech.color} border-0 hover:scale-105 transition-transform duration-200 px-3 pt-1.5 pb-2 select-none will-change-transform font-medium flex items-center justify-center leading-none cursor-pointer`}
+										>
+											{tech.name}
+										</Badge>
+									</Link>
+								))}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Decorative element */}
+				<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+			</section>
+
+			{/* Features Grid */}
+			<section id="features" className="py-24 bg-secondary/20">
+				<div className="container mx-auto px-6">
+					<div className="max-w-3xl mx-auto text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Everything you need to ship</h2>
+						<p className="text-lg text-muted-foreground">
+							Carefully selected tools and configurations to accelerate your development workflow
+						</p>
+					</div>
+
+					<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+						{features.map((feature) => (
+							<Card
+								key={feature.title}
+								className="border-border shadow-sm hover:shadow-md transition-all duration-200 bg-card flex flex-col h-full"
+							>
+								<CardHeader>
+									<div className="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-lg flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400">
+										{feature.icon}
+									</div>
+									<CardTitle className="text-lg font-semibold text-card-foreground select-none">
+										{feature.title}
+									</CardTitle>
+								</CardHeader>
+								<CardContent className="flex-grow">
+									<CardDescription className="text-muted-foreground select-none">
+										{feature.description}
+									</CardDescription>
+								</CardContent>
+							</Card>
+						))}
+					</div>
+				</div>
+			</section>
+
+			{/* Quick Start Section */}
+			<section id="quick-start" className="py-24">
+				<div className="container mx-auto px-6">
+					<div className="max-w-4xl mx-auto">
+						<div className="text-center mb-16">
+							<h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Get up and running</h2>
+							<p className="text-lg text-muted-foreground">
+								Start building your next project in minutes, not hours
+							</p>
+						</div>
+
+						<div className="grid md:grid-cols-2 gap-8">
+							{/* Installation */}
+							<Card className="border-border bg-card">
+								<CardHeader>
+									<div className="flex items-center space-x-3 mb-2">
+										<div className="w-10 h-10 bg-blue-100 dark:bg-blue-950/50 rounded-lg flex items-center justify-center">
+											<Terminal className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+										</div>
+										<CardTitle className="text-xl text-card-foreground">Installation</CardTitle>
+									</div>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<div className="bg-muted rounded-lg p-4 font-mono text-sm">
+										<div className="text-foreground">
+											${' '}
+											<span className="text-blue-600 dark:text-blue-400">
+												git clone https://github.com/ProductOfAmerica/turbo-starter.git
+											</span>
+										</div>
+										<div className="text-foreground">
+											$ <span className="text-blue-600 dark:text-blue-400">cd turbo-starter</span>
+										</div>
+										<div className="text-foreground">
+											$ <span className="text-blue-600 dark:text-blue-400">pnpm install</span>
+										</div>
+										<div className="text-foreground">
+											$ <span className="text-purple-600 dark:text-purple-400 font-semibold">pnpm dev</span>
+										</div>
+									</div>
+									<p className="text-sm text-muted-foreground">
+										Clone the repository and start developing immediately with hot reload
+									</p>
+								</CardContent>
+							</Card>
+
+							{/* Project Structure */}
+							<Card className="border-border bg-card">
+								<CardHeader>
+									<div className="flex items-center space-x-3 mb-2">
+										<div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-950/50 rounded-lg flex items-center justify-center">
+											<Layers className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+										</div>
+										<CardTitle className="text-xl text-card-foreground">Project Structure</CardTitle>
+									</div>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<div className="bg-muted rounded-lg p-4 font-mono text-sm text-muted-foreground">
+										<div className="flex items-center space-x-2">
+											<Code2 className="w-4 h-4" />
+											<span>apps/web</span>
+											<span className="text-muted-foreground/70">→ Next.js application</span>
+										</div>
+										<div className="flex items-center space-x-2 mt-2">
+											<Package className="w-4 h-4" />
+											<span>packages/ui</span>
+											<span className="text-muted-foreground/70">→ Shared components</span>
+										</div>
+										<div className="flex items-center space-x-2 mt-2">
+											<Container className="w-4 h-4" />
+											<span>docker-compose.yml</span>
+											<span className="text-muted-foreground/70">→ Container setup</span>
+										</div>
+									</div>
+									<p className="text-sm text-muted-foreground">
+										Organized monorepo structure for scalable development
+									</p>
+								</CardContent>
+							</Card>
+						</div>
+
+						{/* Commands */}
+						<Card className="mt-8 border-border bg-gradient-to-br from-muted/50 to-card">
+							<CardHeader>
+								<CardTitle className="text-xl text-card-foreground flex items-center space-x-2">
+									<Rocket className="w-5 h-5" />
+									<span>Available Commands</span>
+								</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<div className="grid md:grid-cols-2 gap-4">
+									{[
+										{ cmd: 'pnpm build', desc: 'Build all packages and apps' },
+										{ cmd: 'pnpm lint', desc: 'Check code quality across the monorepo' },
+										{ cmd: 'pnpm format-write', desc: 'Auto-format all code with Biome' },
+										{ cmd: 'pnpm docker', desc: 'Run the entire stack with Docker' },
+									].map((item) => (
+										<div key={item.cmd} className="flex items-start space-x-3">
+											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400">
+												{item.cmd}
+											</code>
+											<span className="text-sm text-muted-foreground pt-1">{item.desc}</span>
+										</div>
+									))}
+								</div>
+							</CardContent>
+						</Card>
+					</div>
+				</div>
+			</section>
+
+			{/* CTA Section */}
+			<section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+				<div className="container mx-auto px-6 text-center">
+					<div className="max-w-3xl mx-auto space-y-8">
+						<h2 className="text-3xl md:text-4xl font-bold text-foreground">Ready to build something amazing?</h2>
+						<p className="text-lg text-muted-foreground">
+							Join developers who are shipping faster with our modern monorepo setup
+						</p>
+						<div className="flex flex-col sm:flex-row gap-4 justify-center">
+							<Button size="lg" className="bg-foreground hover:bg-foreground/90 text-background px-8" asChild>
+								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
+									<GitBranch className="w-4 h-4 mr-2" />
+									Clone Repository
+								</Link>
+							</Button>
+							<Button variant="outline" size="lg" className="border-border hover:bg-accent px-8" asChild>
+								<Link href="https://vercel.com/templates" target="_blank">
+									<Globe className="w-4 h-4 mr-2" />
+									Deploy to Vercel
+								</Link>
+							</Button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{/* Footer */}
+			<footer className="border-t border-border bg-background">
+				<div className="container mx-auto px-6 py-12">
+					<div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+						<div className="flex items-center space-x-6 text-sm text-muted-foreground">
+							<Link
+								href="https://turbo.build"
+								target="_blank"
+								className="hover:text-foreground transition-colors"
+							>
+								Turborepo
+							</Link>
+							<Link
+								href="https://nextjs.org"
+								target="_blank"
+								className="hover:text-foreground transition-colors"
+							>
+								Next.js
+							</Link>
+							<Link
+								href="https://ui.shadcn.com"
+								target="_blank"
+								className="hover:text-foreground transition-colors"
+							>
+								Shadcn UI
+							</Link>
+						</div>
+						<div className="text-sm text-muted-foreground">
+							Built by{' '}
+							<Link
+								href="https://github.com/ProductOfAmerica"
+								target="_blank"
+								className="font-medium text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+							>
+								ProductOfAmerica
+							</Link>
+						</div>
+					</div>
+				</div>
 			</footer>
 		</div>
 	);
