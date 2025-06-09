@@ -5,7 +5,7 @@ catalog:
   typescript: ^5.3.3
   turbo: ^2.4.4
   '@biomejs/biome': ^1.9.4
-  next: 15.2.2
+  next: 15.2.4
   '@types/node': ^22.10.2
 catalogs:
   react18:

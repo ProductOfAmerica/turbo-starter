@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "turbo dev",
 		"build": "turbo build",
+		"start": "turbo start",
 		"clean": "turbo run clean && rm -rf node_modules",
 		"format-write": "biome format --write .",
 		"lint": "biome check .",
@@ -20,10 +21,10 @@
 	},
 	"packageManager": "pnpm@10.6.2",
 	"engines": {
-		"node": ">=22.12.0"
+		"node": ">=20.19.2"
 	},
 	"volta": {
-		"node": "22.12.0",
+		"node": "20.19.2",
 		"pnpm": "10.6.2"
 	}
 }
