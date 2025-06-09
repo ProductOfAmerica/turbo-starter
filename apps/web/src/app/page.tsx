@@ -1,3 +1,4 @@
+import MobileNavigation from '@/app/components/mobile-navigation';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
@@ -83,9 +84,11 @@ export default function Home() {
 
 			{/* Navigation */}
 			<nav className="sticky top-0 z-50 backdrop-blur-md bg-background/70 border-b border-border">
-				<div className="container mx-auto px-6 py-4">
+				<div className="container mx-auto px-4 sm:px-6 py-4">
 					<div className="flex items-center justify-between">
-						<div className="flex items-center space-x-2">
+						{/* Left side - Mobile hamburger + Logo */}
+						<div className="flex items-center space-x-3">
+							<MobileNavigation />
 							<Button
 								variant="ghost"
 								size="sm"
@@ -95,7 +98,9 @@ export default function Home() {
 								<Link href="#">turbo-starter</Link>
 							</Button>
 						</div>
-						<div className="flex items-center space-x-6">
+
+						{/* Right side - Desktop navigation + Theme toggle */}
+						<div className="hidden md:flex items-center space-x-6">
 							<Link
 								href="#features"
 								scroll={true}
@@ -111,12 +116,9 @@ export default function Home() {
 								Quick Start
 							</Link>
 							<ThemeToggle />
-							<Button variant="outline" size="sm" className="border-border hover:bg-accent" asChild>
-								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
-									<GitBranch className="w-4 h-4 mr-2" />
-									GitHub
-								</Link>
-							</Button>
+						</div>
+						<div className="flex md:hidden items-center space-x-6">
+							<ThemeToggle />
 						</div>
 					</div>
 				</div>
@@ -136,14 +138,14 @@ export default function Home() {
 
 						{/* Main heading */}
 						<div className="space-y-4">
-							<h1 className="text-5xl md:text-7xl font-bold text-foreground tracking-tight">
+							<h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground tracking-tight">
 								Build faster with
 								<span className="bg-gradient-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text text-transparent">
 									{' '}
 									Turborepo
 								</span>
 							</h1>
-							<p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+							<p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
 								A modern monorepo starter template that scales with your ambitions. Production-ready from day
 								one.
 							</p>
@@ -153,7 +155,7 @@ export default function Home() {
 						<div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
 							<Button
 								size="lg"
-								className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8"
+								className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8 w-full sm:w-auto"
 								asChild
 							>
 								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
@@ -161,7 +163,12 @@ export default function Home() {
 									<ArrowRight className="w-4 h-4" />
 								</Link>
 							</Button>
-							<Button variant="outline" size="lg" className="border-border hover:bg-accent px-8" asChild>
+							<Button
+								variant="outline"
+								size="lg"
+								className="border-border hover:bg-accent px-8 w-full sm:w-auto"
+								asChild
+							>
 								<Link href="https://turbo.build/repo/docs" target="_blank">
 									Read Documentation
 								</Link>
@@ -258,7 +265,7 @@ export default function Home() {
 									</div>
 								</CardHeader>
 								<CardContent className="space-y-4">
-									<div className="bg-muted rounded-lg p-4 font-mono text-sm">
+									<div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
 										<div className="text-foreground">
 											${' '}
 											<span className="text-blue-600 dark:text-blue-400">
@@ -294,18 +301,18 @@ export default function Home() {
 								<CardContent className="space-y-4">
 									<div className="bg-muted rounded-lg p-4 font-mono text-sm text-muted-foreground">
 										<div className="flex items-center space-x-2">
-											<Code2 className="w-4 h-4" />
-											<span>apps/web</span>
+											<Code2 className="w-4 h-4 flex-shrink-0" />
+											<span className="flex-shrink-0">apps/web</span>
 											<span className="text-muted-foreground">→ Next.js application</span>
 										</div>
 										<div className="flex items-center space-x-2 mt-2">
-											<Package className="w-4 h-4" />
-											<span>packages/ui</span>
+											<Package className="w-4 h-4 flex-shrink-0" />
+											<span className="flex-shrink-0">packages/ui</span>
 											<span className="text-muted-foreground">→ Shared components</span>
 										</div>
 										<div className="flex items-center space-x-2 mt-2">
-											<Container className="w-4 h-4" />
-											<span>docker-compose.yml</span>
+											<Container className="w-4 h-4 flex-shrink-0" />
+											<span className="flex-shrink-0">docker-compose.yml</span>
 											<span className="text-muted-foreground">→ Container setup</span>
 										</div>
 									</div>
@@ -332,11 +339,14 @@ export default function Home() {
 										{ cmd: 'pnpm format-write', desc: 'Auto-format all code with Biome' },
 										{ cmd: 'pnpm docker', desc: 'Run the entire stack with Docker' },
 									].map((item) => (
-										<div key={item.cmd} className="flex items-start space-x-3">
-											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400">
+										<div
+											key={item.cmd}
+											className="flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3"
+										>
+											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400 flex-shrink-0">
 												{item.cmd}
 											</code>
-											<span className="text-sm text-muted-foreground pt-1">{item.desc}</span>
+											<span className="text-sm text-muted-foreground sm:pt-1">{item.desc}</span>
 										</div>
 									))}
 								</div>
@@ -355,13 +365,22 @@ export default function Home() {
 							Join developers who are shipping faster with our modern monorepo setup
 						</p>
 						<div className="flex flex-col sm:flex-row gap-4 justify-center">
-							<Button size="lg" className="bg-foreground hover:bg-foreground/90 text-background px-8" asChild>
+							<Button
+								size="lg"
+								className="bg-foreground hover:bg-foreground/90 text-background px-8 w-full sm:w-auto"
+								asChild
+							>
 								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
 									<GitBranch className="w-4 h-4 mr-2" />
 									Clone Repository
 								</Link>
 							</Button>
-							<Button variant="outline" size="lg" className="border-border hover:bg-accent px-8" asChild>
+							<Button
+								variant="outline"
+								size="lg"
+								className="border-border hover:bg-accent px-8 w-full sm:w-auto"
+								asChild
+							>
 								<Link href="https://vercel.com/templates" target="_blank">
 									<Globe className="w-4 h-4 mr-2" />
 									Deploy to Vercel
@@ -376,7 +395,7 @@ export default function Home() {
 			<footer className="border-t border-border bg-background">
 				<div className="container mx-auto px-6 py-6">
 					<div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-						<div className="flex items-center space-x-6 text-sm text-muted-foreground">
+						<div className="flex flex-wrap items-center justify-center md:justify-start space-x-6 text-sm text-muted-foreground">
 							<Link
 								href="https://turbo.build"
 								target="_blank"
@@ -399,7 +418,7 @@ export default function Home() {
 								Shadcn UI
 							</Link>
 						</div>
-						<div className="text-sm text-muted-foreground">
+						<div className="text-sm text-muted-foreground text-center">
 							Built by{' '}
 							<Link
 								href="https://github.com/ProductOfAmerica"
