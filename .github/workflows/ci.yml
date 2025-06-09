@@ -45,10 +45,5 @@ jobs:
         run: pnpm turbo check-types
 
       # Build the Next.js app via Turborepo
-#      - name: Build
-#        run: pnpm turbo build --no-cache -vvv
-      - name: Build Dependencies First
-        run: pnpm turbo build --filter="@repo/typescript-config" --filter="@repo/ui" --no-cache -vv
-
-      - name: Build Web App
-        run: pnpm turbo build --filter="web" --no-cache  -vv
+      - name: Build
+        run: pnpm turbo build

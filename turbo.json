@@ -22,5 +22,7 @@
 		"//#format-write": { "cache": false },
 		"//#lint": {},
 		"//#lint:fix": { "cache": false }
-	}
+	},
+	"globalDependencies": ["package.json", "pnpm-lock.yaml"],
+	"globalEnv": ["NODE_ENV"]
 }

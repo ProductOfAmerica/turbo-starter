@@ -11,7 +11,8 @@
 		"./components/*": "./src/components/*.tsx"
 	},
 	"scripts": {
-		"check-types": "tsc --noEmit"
+		"check-types": "tsc --noEmit",
+		"build": "echo 'UI package - no build needed'"
 	},
 	"peerDependencies": {
 		"react": "catalog:react18"
