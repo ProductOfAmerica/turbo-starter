@@ -14,6 +14,9 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
       DO_NOT_TRACK: 1
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      TURBO_UI: false
+      CI: true
 
     steps:
       # Checkout the repository
@@ -42,8 +45,8 @@ jobs:
 
       # Run TypeScript type checking via Turborepo
       - name: Type Check
-        run: pnpm turbo check-types
+        run: pnpm check-types
 
       # Build the Next.js app via Turborepo
       - name: Build
-        run: pnpm turbo build --filter="web" --cache=local:r --concurrency=1 -vvv
+        run: pnpm build
