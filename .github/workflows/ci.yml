@@ -46,4 +46,4 @@ jobs:
 
       # Build the Next.js app via Turborepo
       - name: Build
-        run: pnpm turbo build
+        run: pnpm turbo build --filter="web" --no-cache
