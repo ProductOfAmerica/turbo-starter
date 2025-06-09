@@ -1,3 +1,4 @@
+import ClipboardButton from '@/app/components/clipboard-button';
 import MobileNavigation from '@/app/components/mobile-navigation';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
@@ -341,12 +342,13 @@ export default function Home() {
 									].map((item) => (
 										<div
 											key={item.cmd}
-											className="flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3"
+											className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3"
 										>
-											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400 flex-shrink-0">
+											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400 flex-shrink-0 flex items-center justify-between">
 												{item.cmd}
+												<ClipboardButton cmd={item.cmd} />
 											</code>
-											<span className="text-sm text-muted-foreground sm:pt-1">{item.desc}</span>
+											<span className="text-sm text-muted-foreground">{item.desc}</span>
 										</div>
 									))}
 								</div>
