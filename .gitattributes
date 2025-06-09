@@ -7,6 +7,7 @@
 
 # Force specific files to have LF line endings on checkout
 *.sh text eol=lf
+biome.ci.json text eol=lf
 
 # These files are always treated as binary
 *.jpg binary
