@@ -158,7 +158,7 @@ export default function Home() {
 							>
 								<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
 									Get Started
-									<ArrowRight className="w-4 h-4 ml-2" />
+									<ArrowRight className="w-4 h-4" />
 								</Link>
 							</Button>
 							<Button variant="outline" size="lg" className="border-border hover:bg-accent px-8" asChild>
