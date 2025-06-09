@@ -14,9 +14,6 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
       DO_NOT_TRACK: 1
-      NODE_OPTIONS: "--max-old-space-size=4096"
-      TURBO_UI: false
-      CI: true
 
     steps:
       # Checkout the repository
