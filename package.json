@@ -8,6 +8,7 @@
 		"clean": "turbo run clean && rm -rf node_modules",
 		"format-write": "biome format --write .",
 		"lint": "biome check .",
+		"lint:ci": "biome check . --config-path biome.ci.json",
 		"lint:fix": "biome check . --write",
 		"check-types": "turbo check-types",
 		"docker": "docker-compose down --remove-orphans --volumes && docker container prune -f && docker-compose up --build -d",

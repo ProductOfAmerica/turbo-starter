@@ -38,7 +38,7 @@ jobs:
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
-        run: pnpm lint
+        run: pnpm lint:ci
 
       # Run TypeScript type checking via Turborepo
       - name: Type Check
