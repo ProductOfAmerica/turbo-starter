@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
@@ -35,14 +35,12 @@
 		}
 	},
 	"files": {
-		"ignore": ["node_modules", "dist", ".next", ".turbo", "apps/web/out/**"]
+		"includes": ["**", "!**/node_modules", "!**/dist", "!**/.next", "!**/.turbo", "!**/apps/web/out/**"]
 	},
-	"organizeImports": {
-		"enabled": true
-	},
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"overrides": [
 		{
-			"include": ["apps/web/**"],
+			"includes": ["**/apps/web/**"],
 			"linter": {
 				"rules": {
 					"a11y": {
@@ -55,7 +53,7 @@
 			}
 		},
 		{
-			"include": ["packages/ui/**"],
+			"includes": ["**/packages/ui/**"],
 			"linter": {
 				"rules": {
 					"a11y": {
