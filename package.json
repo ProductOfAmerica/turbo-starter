@@ -17,9 +17,9 @@
 	},
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
-		"@biomejs/biome": "catalog:",
-		"turbo": "catalog:",
-		"typescript": "catalog:"
+		"@biomejs/biome": "^1.9.4",
+		"turbo": "^2.4.4",
+		"typescript": "^5.3.3"
 	},
 	"packageManager": "pnpm@10.6.2",
 	"engines": {

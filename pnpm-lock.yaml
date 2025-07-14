@@ -4,207 +4,21 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  default:
-    '@biomejs/biome':
-      specifier: ^1.9.4
-      version: 1.9.4
-    '@types/node':
-      specifier: ^22.10.2
-      version: 22.15.30
-    next:
-      specifier: 15.2.4
-      version: 15.2.4
-    turbo:
-      specifier: ^2.4.4
-      version: 2.5.4
-    typescript:
-      specifier: ^5.3.3
-      version: 5.8.3
-  form:
-    '@hookform/resolvers':
-      specifier: ^3.9.1
-      version: 3.10.0
-    react-hook-form:
-      specifier: ^7.54.1
-      version: 7.57.0
-    zod:
-      specifier: ^3.24.1
-      version: 3.25.56
-  radix:
-    '@radix-ui/react-accordion':
-      specifier: ^1.2.2
-      version: 1.2.11
-    '@radix-ui/react-alert-dialog':
-      specifier: ^1.1.3
-      version: 1.1.14
-    '@radix-ui/react-aspect-ratio':
-      specifier: ^1.1.1
-      version: 1.1.7
-    '@radix-ui/react-avatar':
-      specifier: ^1.1.2
-      version: 1.1.10
-    '@radix-ui/react-checkbox':
-      specifier: ^1.1.3
-      version: 1.3.2
-    '@radix-ui/react-collapsible':
-      specifier: ^1.1.2
-      version: 1.1.11
-    '@radix-ui/react-context-menu':
-      specifier: ^2.2.3
-      version: 2.2.15
-    '@radix-ui/react-dialog':
-      specifier: ^1.1.3
-      version: 1.1.14
-    '@radix-ui/react-dropdown-menu':
-      specifier: ^2.1.3
-      version: 2.1.15
-    '@radix-ui/react-hover-card':
-      specifier: ^1.1.3
-      version: 1.1.14
-    '@radix-ui/react-label':
-      specifier: ^2.1.1
-      version: 2.1.7
-    '@radix-ui/react-menubar':
-      specifier: ^1.1.3
-      version: 1.1.15
-    '@radix-ui/react-navigation-menu':
-      specifier: ^1.2.2
-      version: 1.2.13
-    '@radix-ui/react-popover':
-      specifier: ^1.1.3
-      version: 1.1.14
-    '@radix-ui/react-progress':
-      specifier: ^1.1.1
-      version: 1.1.7
-    '@radix-ui/react-radio-group':
-      specifier: ^1.2.2
-      version: 1.3.7
-    '@radix-ui/react-scroll-area':
-      specifier: ^1.2.2
-      version: 1.2.9
-    '@radix-ui/react-select':
-      specifier: ^2.1.3
-      version: 2.2.5
-    '@radix-ui/react-separator':
-      specifier: ^1.1.1
-      version: 1.1.7
-    '@radix-ui/react-slider':
-      specifier: ^1.2.2
-      version: 1.3.5
-    '@radix-ui/react-slot':
-      specifier: ^1.1.1
-      version: 1.2.3
-    '@radix-ui/react-switch':
-      specifier: ^1.1.2
-      version: 1.2.5
-    '@radix-ui/react-tabs':
-      specifier: ^1.1.2
-      version: 1.1.12
-    '@radix-ui/react-toast':
-      specifier: ^1.2.3
-      version: 1.2.14
-    '@radix-ui/react-toggle':
-      specifier: ^1.1.1
-      version: 1.1.9
-    '@radix-ui/react-toggle-group':
-      specifier: ^1.1.1
-      version: 1.1.10
-    '@radix-ui/react-tooltip':
-      specifier: ^1.1.5
-      version: 1.2.7
-  react18:
-    '@types/react':
-      specifier: ^19
-      version: 19.1.6
-    '@types/react-dom':
-      specifier: ^19
-      version: 19.1.6
-    react:
-      specifier: ^19.0.0
-      version: 19.1.0
-    react-dom:
-      specifier: ^19.0.0
-      version: 19.1.0
-    sharp:
-      specifier: ^0.33.5
-      version: 0.33.5
-  styling:
-    autoprefixer:
-      specifier: ^10.4.17
-      version: 10.4.21
-    postcss:
-      specifier: ^8.4.35
-      version: 8.5.4
-    postcss-load-config:
-      specifier: ^6.0.0
-      version: 6.0.1
-    tailwindcss:
-      specifier: ^3.4.1
-      version: 3.4.17
-    tailwindcss-animate:
-      specifier: ^1.0.7
-      version: 1.0.7
-  ui-components:
-    cmdk:
-      specifier: 1.0.0
-      version: 1.0.0
-    date-fns:
-      specifier: ^4.1.0
-      version: 4.1.0
-    embla-carousel-react:
-      specifier: ^8.5.1
-      version: 8.6.0
-    input-otp:
-      specifier: ^1.4.1
-      version: 1.4.2
-    next-themes:
-      specifier: ^0.4.4
-      version: 0.4.6
-    react-day-picker:
-      specifier: 8.10.1
-      version: 8.10.1
-    react-resizable-panels:
-      specifier: ^2.1.7
-      version: 2.1.9
-    recharts:
-      specifier: ^2.15.0
-      version: 2.15.3
-    sonner:
-      specifier: ^1.7.1
-      version: 1.7.4
-    vaul:
-      specifier: ^1.1.2
-      version: 1.1.2
-  utils:
-    class-variance-authority:
-      specifier: ^0.7.1
-      version: 0.7.1
-    clsx:
-      specifier: ^2.1.1
-      version: 2.1.1
-    lucide-react:
-      specifier: ^0.468.0
-      version: 0.468.0
-    tailwind-merge:
-      specifier: ^2.3.0
-      version: 2.6.0
-
 importers:
 
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: 'catalog:'
+        specifier: ^1.9.4
         version: 1.9.4
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:packages/typescript-config
       turbo:
-        specifier: 'catalog:'
+        specifier: ^2.4.4
         version: 2.5.4
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.3.3
         version: 5.8.3
 
   apps/web:
@@ -216,38 +30,38 @@ importers:
         specifier: ^0.513.0
         version: 0.513.0(react@19.1.0)
       next:
-        specifier: 'catalog:'
+        specifier: 15.2.4
         version: 15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: catalog:react18
+        specifier: ^19.0.0
         version: 19.1.0
       react-dom:
-        specifier: catalog:react18
+        specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
       sharp:
-        specifier: catalog:react18
+        specifier: ^0.33.5
         version: 0.33.5
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.10.2
         version: 22.15.30
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^19
         version: 19.1.6
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: ^19
         version: 19.1.6(@types/react@19.1.6)
       postcss:
-        specifier: catalog:styling
+        specifier: ^8.4.35
         version: 8.5.4
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.3.3
         version: 5.8.3
 
   packages/typescript-config: {}
@@ -255,170 +69,170 @@ importers:
   packages/ui:
     dependencies:
       '@hookform/resolvers':
-        specifier: catalog:form
+        specifier: ^3.9.1
         version: 3.10.0(react-hook-form@7.57.0(react@19.1.0))
       '@radix-ui/react-accordion':
-        specifier: catalog:radix
+        specifier: ^1.2.2
         version: 1.2.11(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-alert-dialog':
-        specifier: catalog:radix
+        specifier: ^1.1.3
         version: 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-aspect-ratio':
-        specifier: catalog:radix
+        specifier: ^1.1.1
         version: 1.1.7(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-avatar':
-        specifier: catalog:radix
+        specifier: ^1.1.2
         version: 1.1.10(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-checkbox':
-        specifier: catalog:radix
+        specifier: ^1.1.3
         version: 1.3.2(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-collapsible':
-        specifier: catalog:radix
+        specifier: ^1.1.2
         version: 1.1.11(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-context-menu':
-        specifier: catalog:radix
+        specifier: ^2.2.3
         version: 2.2.15(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dialog':
-        specifier: catalog:radix
+        specifier: ^1.1.3
         version: 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dropdown-menu':
-        specifier: catalog:radix
+        specifier: ^2.1.3
         version: 2.1.15(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-hover-card':
-        specifier: catalog:radix
+        specifier: ^1.1.3
         version: 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-label':
-        specifier: catalog:radix
+        specifier: ^2.1.1
         version: 2.1.7(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-menubar':
-        specifier: catalog:radix
+        specifier: ^1.1.3
         version: 1.1.15(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-navigation-menu':
-        specifier: catalog:radix
+        specifier: ^1.2.2
         version: 1.2.13(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-popover':
-        specifier: catalog:radix
+        specifier: ^1.1.3
         version: 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-progress':
-        specifier: catalog:radix
+        specifier: ^1.1.1
         version: 1.1.7(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-radio-group':
-        specifier: catalog:radix
+        specifier: ^1.2.2
         version: 1.3.7(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-scroll-area':
-        specifier: catalog:radix
+        specifier: ^1.2.2
         version: 1.2.9(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-select':
-        specifier: catalog:radix
+        specifier: ^2.1.3
         version: 2.2.5(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-separator':
-        specifier: catalog:radix
+        specifier: ^1.1.1
         version: 1.1.7(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-slider':
-        specifier: catalog:radix
+        specifier: ^1.2.2
         version: 1.3.5(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-slot':
-        specifier: catalog:radix
+        specifier: ^1.1.1
         version: 1.2.3(@types/react@19.1.6)(react@19.1.0)
       '@radix-ui/react-switch':
-        specifier: catalog:radix
+        specifier: ^1.1.2
         version: 1.2.5(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-tabs':
-        specifier: catalog:radix
+        specifier: ^1.1.2
         version: 1.1.12(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-toast':
-        specifier: catalog:radix
+        specifier: ^1.2.3
         version: 1.2.14(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-toggle':
-        specifier: catalog:radix
+        specifier: ^1.1.1
         version: 1.1.9(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-toggle-group':
-        specifier: catalog:radix
+        specifier: ^1.1.1
         version: 1.1.10(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-tooltip':
-        specifier: catalog:radix
+        specifier: ^1.1.5
         version: 1.2.7(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       class-variance-authority:
-        specifier: catalog:utils
+        specifier: ^0.7.1
         version: 0.7.1
       clsx:
-        specifier: catalog:utils
+        specifier: ^2.1.1
         version: 2.1.1
       cmdk:
-        specifier: catalog:ui-components
+        specifier: 1.0.0
         version: 1.0.0(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       date-fns:
-        specifier: catalog:ui-components
+        specifier: ^4.1.0
         version: 4.1.0
       embla-carousel-react:
-        specifier: catalog:ui-components
+        specifier: ^8.5.1
         version: 8.6.0(react@19.1.0)
       input-otp:
-        specifier: catalog:ui-components
+        specifier: ^1.4.1
         version: 1.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       lucide-react:
-        specifier: catalog:utils
+        specifier: ^0.468.0
         version: 0.468.0(react@19.1.0)
       next-themes:
-        specifier: catalog:ui-components
+        specifier: ^0.4.4
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: catalog:react18
+        specifier: ^19.0.0
         version: 19.1.0
       react-day-picker:
-        specifier: catalog:ui-components
+        specifier: 8.10.1
         version: 8.10.1(date-fns@4.1.0)(react@19.1.0)
       react-hook-form:
-        specifier: catalog:form
+        specifier: ^7.54.1
         version: 7.57.0(react@19.1.0)
       react-resizable-panels:
-        specifier: catalog:ui-components
+        specifier: ^2.1.7
         version: 2.1.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       recharts:
-        specifier: catalog:ui-components
+        specifier: ^2.15.0
         version: 2.15.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       sonner:
-        specifier: catalog:ui-components
+        specifier: ^1.7.1
         version: 1.7.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       tailwind-merge:
-        specifier: catalog:utils
+        specifier: ^2.3.0
         version: 2.6.0
       tailwindcss-animate:
-        specifier: catalog:styling
+        specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.17)
       vaul:
-        specifier: catalog:ui-components
+        specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.1.6(@types/react@19.1.6))(@types/react@19.1.6)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
-        specifier: catalog:form
+        specifier: ^3.24.1
         version: 3.25.56
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.10.2
         version: 22.15.30
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^19
         version: 19.1.6
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: ^19
         version: 19.1.6(@types/react@19.1.6)
       autoprefixer:
-        specifier: catalog:styling
+        specifier: ^10.4.17
         version: 10.4.21(postcss@8.5.4)
       postcss:
-        specifier: catalog:styling
+        specifier: ^8.4.35
         version: 8.5.4
       postcss-load-config:
-        specifier: catalog:styling
+        specifier: ^6.0.0
         version: 6.0.1(jiti@1.21.7)(postcss@8.5.4)(yaml@2.8.0)
       tailwindcss:
-        specifier: catalog:styling
+        specifier: ^3.4.1
         version: 3.4.17
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.3.3
         version: 5.8.3
 
 packages:
