@@ -60,7 +60,7 @@ const ChartContainer = React.forwardRef<
 ChartContainer.displayName = 'Chart';
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
-	const colorConfig = Object.entries(config).filter(([_, config]) => config.theme || config.color);
+	const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color);
 
 	if (!colorConfig.length) {
 		return null;
@@ -68,7 +68,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
 	return (
 		<style
-			// biome-ignore lint/security/noDangerouslySetInnerHtml: Generating CSS from safe theme data
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: idk shadcn wants to do it this way sooo
 			dangerouslySetInnerHTML={{
 				__html: Object.entries(THEMES)
 					.map(
