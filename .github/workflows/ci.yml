@@ -38,7 +38,7 @@ jobs:
 
       # 👉 Inject LF-only config for Biome in CI
       - name: Use LF config for Biome
-        run: mv biome.ci.json .biome.json
+        run: mv biome.ci.json biome.json
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
