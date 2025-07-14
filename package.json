@@ -16,10 +16,10 @@
 		"docker:build": "docker-compose -f docker-compose.yml build"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.1.1",
 		"@repo/typescript-config": "workspace:*",
-		"@biomejs/biome": "^1.9.4",
-		"turbo": "^2.4.4",
-		"typescript": "^5.3.3"
+		"turbo": "^2.5.4",
+		"typescript": "^5.8.3"
 	},
 	"packageManager": "pnpm@10.6.2",
 	"engines": {
