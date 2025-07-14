@@ -1,5 +1,5 @@
 import { cn } from '@repo/ui/lib/utils';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import type * as React from 'react';
 
 const badgeVariants = cva(

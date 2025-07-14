@@ -9,7 +9,7 @@ import { Skeleton } from '@repo/ui/components/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@repo/ui/components/tooltip';
 import { useIsMobile } from '@repo/ui/hooks/use-mobile';
 import { cn } from '@repo/ui/lib/utils';
-import { type VariantProps, cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
 import * as React from 'react';
 
@@ -57,16 +57,30 @@ const SidebarProvider = React.forwardRef<
 	const [_open, _setOpen] = React.useState(defaultOpen);
 	const open = openProp ?? _open;
 	const setOpen = React.useCallback(
-		(value: boolean | ((value: boolean) => boolean)) => {
+		async (value: boolean | ((value: boolean) => boolean)) => {
 			const openState = typeof value === 'function' ? value(open) : value;
+
 			if (setOpenProp) {
 				setOpenProp(openState);
 			} else {
 				_setOpen(openState);
 			}
 
-			// This sets the cookie to keep the sidebar state.
-			document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+			try {
+				if (window.cookieStore?.set) {
+					await window.cookieStore.set({
+						name: SIDEBAR_COOKIE_NAME,
+						value: String(openState),
+						path: '/',
+						maxAge: SIDEBAR_COOKIE_MAX_AGE,
+					});
+				} else {
+					// biome-ignore lint/suspicious/noDocumentCookie: dumb rule
+					document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+				}
+			} catch (err) {
+				console.error('Failed to set sidebar cookie', err);
+			}
 		},
 		[setOpenProp, open]
 	);

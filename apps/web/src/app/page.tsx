@@ -1,5 +1,3 @@
-import ClipboardButton from '@/app/components/clipboard-button';
-import MobileNavigation from '@/app/components/mobile-navigation';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
@@ -18,7 +16,8 @@ import {
 	Zap,
 } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
+import ClipboardButton from '@/app/components/clipboard-button';
+import MobileNavigation from '@/app/components/mobile-navigation';
 import { ThemeToggle } from './components/theme-toggle';
 
 const features = [

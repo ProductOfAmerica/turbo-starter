@@ -116,6 +116,7 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 					canScrollNext,
 				}}
 			>
+				{/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: dumb rule */}
 				<section
 					ref={ref}
 					onKeyDownCapture={handleKeyDown}

@@ -4,7 +4,7 @@ import { Button } from '@repo/ui/components/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@repo/ui/components/sheet';
 import { GitBranch, Globe, Menu, Rocket, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function MobileNavigation() {
 	const [open, setOpen] = useState(false);
