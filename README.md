@@ -7,7 +7,7 @@ A modern, turbocharged monorepo template for building Next.js apps with ease. Pa
 wrapped in a Docker-friendly setup.
 
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
-[![Node.js](https://img.shields.io/badge/Node.js-v22.12.0+-green)](https://nodejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-v20.19.2+-green)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-v10.6.2-orange)](https://pnpm.io/)
 [![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
