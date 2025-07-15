@@ -36,13 +36,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      # 👉 Inject LF-only config for Biome in CI
-      - name: Use LF config for Biome
-        run: mv biome.ci.json biome.json
-
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
-        run: pnpm lint
+        run: pnpm biome check --line-ending=lf .
 
       # Run TypeScript type checking via Turborepo
       - name: Type Check
