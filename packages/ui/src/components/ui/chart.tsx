@@ -68,7 +68,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
 	return (
 		<style
-			// biome-ignore lint/security/noDangerouslySetInnerHtml: idk shadcn wants to do it this way sooo
+			// biome-ignore lint/security/noDangerouslySetInnerHtml: idk shadcn wants to do this
 			dangerouslySetInnerHTML={{
 				__html: Object.entries(THEMES)
 					.map(

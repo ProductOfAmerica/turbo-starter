@@ -2,8 +2,11 @@
 	"extends": "@repo/typescript-config/react-library.json",
 	"compilerOptions": {
 		"esModuleInterop": true,
-		"baseUrl": "."
+		"baseUrl": ".",
+		"paths": {
+			"@repo/ui/*": ["./src/*"]
+		}
 	},
 	"include": ["src"],
-	"exclude": ["node_modules", "dist"]
+	"exclude": ["node_modules"]
 }

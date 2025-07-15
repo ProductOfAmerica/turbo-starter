@@ -18,7 +18,7 @@ import {
 import Link from 'next/link';
 import ClipboardButton from '@/app/components/clipboard-button';
 import MobileNavigation from '@/app/components/mobile-navigation';
-import { ThemeToggle } from './components/theme-toggle';
+import { ThemeToggle } from '@/app/components/theme-toggle';
 
 const features = [
 	{

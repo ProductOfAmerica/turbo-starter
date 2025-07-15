@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@repo/ui/components/button';
+import { Button } from '@repo/ui/components/ui/button';
 import { cn } from '@repo/ui/lib/utils';
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
@@ -116,16 +116,17 @@ const Carousel = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
 					canScrollNext,
 				}}
 			>
-				{/** biome-ignore lint/a11y/useAriaPropsSupportedByRole: dumb rule */}
-				<section
+				{/** biome-ignore lint/a11y/useSemanticElements: biomejs is fucking wrong */}
+				<div
 					ref={ref}
 					onKeyDownCapture={handleKeyDown}
 					className={cn('relative', className)}
+					role="region"
 					aria-roledescription="carousel"
 					{...props}
 				>
 					{children}
-				</section>
+				</div>
 			</CarouselContext.Provider>
 		);
 	}

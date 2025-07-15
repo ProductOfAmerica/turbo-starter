@@ -46,13 +46,13 @@ BreadcrumbLink.displayName = 'BreadcrumbLink';
 
 const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
 	({ className, ...props }, ref) => (
+		// biome-ignore lint/a11y/useFocusableInteractive: biomejs is fucking wrong
 		<span
 			ref={ref}
 			role="link"
 			aria-disabled="true"
 			aria-current="page"
 			className={cn('font-normal text-foreground', className)}
-			tabIndex={0} // Add tabIndex to make the element focusable
 			{...props}
 		/>
 	)

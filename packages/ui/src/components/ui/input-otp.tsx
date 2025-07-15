@@ -22,23 +22,13 @@ const InputOTPGroup = React.forwardRef<React.ElementRef<'div'>, React.ComponentP
 );
 InputOTPGroup.displayName = 'InputOTPGroup';
 
-interface SlotProps {
-	char: string;
-	hasFakeCaret: boolean;
-	isActive: boolean;
-}
-
-interface OTPInputContextType {
-	slots: SlotProps[];
-}
-
 const InputOTPSlot = React.forwardRef<
 	React.ElementRef<'div'>,
 	React.ComponentPropsWithoutRef<'div'> & { index: number }
 >(({ index, className, ...props }, ref) => {
-	const inputOTPContext = React.useContext(OTPInputContext) as OTPInputContextType;
-	const slot = inputOTPContext.slots[index] ?? { char: '', hasFakeCaret: false, isActive: false };
-	const { char, hasFakeCaret, isActive } = slot;
+	const inputOTPContext = React.useContext(OTPInputContext);
+	// @ts-ignore is fucking wrong...
+	const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index];
 
 	return (
 		<div
@@ -62,13 +52,8 @@ const InputOTPSlot = React.forwardRef<
 InputOTPSlot.displayName = 'InputOTPSlot';
 
 const InputOTPSeparator = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'>>(
-	({ className, ...props }, ref) => (
-		<div
-			ref={ref}
-			className={cn('relative flex items-center justify-center', className)}
-			aria-hidden="true"
-			{...props}
-		>
+	({ ...props }, ref) => (
+		<div ref={ref} {...props}>
 			<Dot />
 		</div>
 	)
