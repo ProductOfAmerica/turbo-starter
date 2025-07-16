@@ -95,7 +95,7 @@ export default function Home() {
 								className="font-semibold text-muted-foreground hover:text-foreground transition-colors"
 								asChild
 							>
-								<Link href="#">turbo-starter</Link>
+								<Link href="https://github.com/ProductOfAmerica/turbo-starter">turbo-starter</Link>
 							</Button>
 						</div>
 
