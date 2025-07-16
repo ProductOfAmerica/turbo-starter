@@ -55,7 +55,7 @@ const features = [
 
 const techStack = [
 	{ name: 'Next.js 15', color: 'bg-black text-white dark:bg-white dark:text-black', url: 'https://nextjs.org' },
-	{ name: 'Turborepo', color: 'bg-gradient-to-r from-[#FF1E56] to-[#0196FF] text-white', url: 'https://turbo.build' },
+	{ name: 'Turborepo', color: 'bg-linear-to-r from-[#FF1E56] to-[#0196FF] text-white', url: 'https://turbo.build' },
 	{
 		name: 'Shadcn UI',
 		color: 'bg-[#0a0a0a] text-white dark:bg-zinc-100 dark:text-[#0a0a0a]',
@@ -77,7 +77,7 @@ export default function Home() {
 		<div className="min-h-screen bg-background">
 			{/* Subtle gradient accent */}
 			<div className="fixed inset-0 -z-10">
-				<div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-background to-indigo-50 opacity-70 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20" />
+				<div className="absolute inset-0 bg-linear-to-br from-blue-50 via-background to-indigo-50 opacity-70 dark:from-blue-950/20 dark:via-background dark:to-indigo-950/20" />
 				<div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-100 dark:bg-blue-900/20 rounded-full blur-3xl opacity-20" />
 				<div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-20" />
 			</div>
@@ -140,7 +140,7 @@ export default function Home() {
 						<div className="space-y-4">
 							<h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground tracking-tight">
 								Build faster with
-								<span className="bg-gradient-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text text-transparent">
+								<span className="bg-linear-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text text-transparent">
 									{' '}
 									Turborepo
 								</span>
@@ -155,6 +155,7 @@ export default function Home() {
 						<div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
 							<Button
 								size="lg"
+								variant="ghost"
 								className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8 w-full sm:w-auto"
 								asChild
 							>
@@ -204,7 +205,7 @@ export default function Home() {
 				</div>
 
 				{/* Decorative element */}
-				<div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+				<div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
 			</section>
 
 			{/* Features Grid */}
@@ -224,14 +225,14 @@ export default function Home() {
 								className="border-border shadow-sm hover:shadow-md transition-all duration-200 bg-card flex flex-col h-full"
 							>
 								<CardHeader>
-									<div className="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-lg flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400">
+									<div className="w-12 h-12 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-lg flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400">
 										{feature.icon}
 									</div>
 									<CardTitle className="text-lg font-semibold text-card-foreground select-none">
 										{feature.title}
 									</CardTitle>
 								</CardHeader>
-								<CardContent className="flex-grow">
+								<CardContent className="grow">
 									<CardDescription className="text-muted-foreground select-none">
 										{feature.description}
 									</CardDescription>
@@ -301,18 +302,18 @@ export default function Home() {
 								<CardContent className="space-y-4">
 									<div className="bg-muted rounded-lg p-4 font-mono text-sm text-muted-foreground">
 										<div className="flex items-center space-x-2">
-											<Code2 className="w-4 h-4 flex-shrink-0" />
-											<span className="flex-shrink-0">apps/web</span>
+											<Code2 className="w-4 h-4 shrink-0" />
+											<span className="shrink-0">apps/web</span>
 											<span className="text-muted-foreground">→ Next.js application</span>
 										</div>
 										<div className="flex items-center space-x-2 mt-2">
-											<Package className="w-4 h-4 flex-shrink-0" />
-											<span className="flex-shrink-0">packages/ui</span>
+											<Package className="w-4 h-4 shrink-0" />
+											<span className="shrink-0">packages/ui</span>
 											<span className="text-muted-foreground">→ Shared components</span>
 										</div>
 										<div className="flex items-center space-x-2 mt-2">
-											<Container className="w-4 h-4 flex-shrink-0" />
-											<span className="flex-shrink-0">docker-compose.yml</span>
+											<Container className="w-4 h-4 shrink-0" />
+											<span className="shrink-0">docker-compose.yml</span>
 											<span className="text-muted-foreground">→ Container setup</span>
 										</div>
 									</div>
@@ -324,7 +325,7 @@ export default function Home() {
 						</div>
 
 						{/* Commands */}
-						<Card className="mt-8 border-border bg-gradient-to-br from-muted/50 to-card">
+						<Card className="mt-8 border-border bg-linear-to-br from-muted/50 to-card">
 							<CardHeader>
 								<CardTitle className="text-xl text-card-foreground flex items-center space-x-2">
 									<Rocket className="w-5 h-5" />
@@ -343,7 +344,7 @@ export default function Home() {
 											key={item.cmd}
 											className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3"
 										>
-											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400 flex-shrink-0 flex items-center justify-between">
+											<code className="bg-background border border-border rounded px-3 py-1 text-sm font-mono text-blue-600 dark:text-blue-400 shrink-0 flex items-center justify-between">
 												{item.cmd}
 												<ClipboardButton cmd={item.cmd} />
 											</code>
@@ -358,7 +359,7 @@ export default function Home() {
 			</section>
 
 			{/* CTA Section */}
-			<section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
+			<section className="py-24 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
 				<div className="container mx-auto px-6 text-center">
 					<div className="max-w-3xl mx-auto space-y-8">
 						<h2 className="text-3xl md:text-4xl font-bold text-foreground">Ready to build something amazing?</h2>
