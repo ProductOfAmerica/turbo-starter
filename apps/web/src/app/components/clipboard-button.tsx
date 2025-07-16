@@ -23,7 +23,7 @@ export default function ClipboardButton({ cmd }: { cmd: string }) {
 		<Button
 			variant="ghost"
 			size="sm"
-			className="ml-2 h-7 w-7 p-0 rounded-full hover:bg-muted/50 transition-all duration-200 hover:scale-110"
+			className="ml-2 h-7 w-7 p-0 rounded-full hover:bg-muted/50 transition-all duration-200 hover:scale-110 cursor-pointer"
 			onClick={(e) => {
 				e.preventDefault();
 				copyToClipboard(cmd);
