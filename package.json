@@ -10,6 +10,7 @@
 		"format-write": "biome format --write .",
 		"lint": "biome check .",
 		"lint:fix": "biome check . --write",
+		"lint:ci": "biome check . --line-ending=lf",
 		"check-types": "turbo check-types",
 		"docker": "docker-compose down --remove-orphans --volumes && docker container prune -f && docker-compose up --build -d",
 		"docker:build": "docker-compose -f docker-compose.yml build"
