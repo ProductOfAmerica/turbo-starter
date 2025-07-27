@@ -1,12 +1,12 @@
 'use client';
 
 import { Slot } from '@radix-ui/react-slot';
-import { Button } from '@repo/ui/components/ui/button';
-import { Input } from '@repo/ui/components/ui/input';
-import { Separator } from '@repo/ui/components/ui/separator';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@repo/ui/components/ui/sheet';
-import { Skeleton } from '@repo/ui/components/ui/skeleton';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@repo/ui/components/ui/tooltip';
+import { Button } from '@repo/ui/components/button';
+import { Input } from '@repo/ui/components/input';
+import { Separator } from '@repo/ui/components/separator';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@repo/ui/components/sheet';
+import { Skeleton } from '@repo/ui/components/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@repo/ui/components/tooltip';
 import { useIsMobile } from '@repo/ui/hooks/use-mobile';
 import { cn } from '@repo/ui/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';

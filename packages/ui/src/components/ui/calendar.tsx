@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, buttonVariants } from '@repo/ui/components/ui/button';
+import { Button, buttonVariants } from '@repo/ui/components/button';
 import { cn } from '@repo/ui/lib/utils';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import * as React from 'react';
