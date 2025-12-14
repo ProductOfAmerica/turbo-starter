@@ -44,12 +44,10 @@ const BreadcrumbLink = React.forwardRef<
 });
 BreadcrumbLink.displayName = 'BreadcrumbLink';
 
-const BreadcrumbPage = React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<'span'>>(
+const BreadcrumbPage = React.forwardRef<HTMLAnchorElement, React.ComponentPropsWithoutRef<'a'>>(
 	({ className, ...props }, ref) => (
-		// biome-ignore lint/a11y/useFocusableInteractive: biomejs is fucking wrong
-		<span
+		<a
 			ref={ref}
-			role="link"
 			aria-disabled="true"
 			aria-current="page"
 			className={cn('font-normal text-foreground', className)}

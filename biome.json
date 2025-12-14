@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
@@ -34,8 +34,13 @@
 			"allowComments": true
 		}
 	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
 	"files": {
-		"includes": ["**", "!**/node_modules", "!**/dist", "!**/.next", "!**/.turbo", "!**/apps/web/out/**"]
+		"includes": ["**", "!**/node_modules", "!**/dist", "!**/.next", "!**/.turbo", "!**/apps/web/out"]
 	},
 	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"overrides": [

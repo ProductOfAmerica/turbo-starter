@@ -41,32 +41,32 @@
 	--color-sidebar-ring: hsl(var(--sidebar-ring));
 
 	/* Typography Scale - Refactoring UI compliant */
-	--font-size-xs: 0.75rem;     /* 12px */
-	--font-size-sm: 0.875rem;    /* 14px */
-	--font-size-base: 1rem;      /* 16px */
-	--font-size-lg: 1.125rem;    /* 18px */
-	--font-size-xl: 1.25rem;     /* 20px */
-	--font-size-2xl: 1.5rem;     /* 24px */
-	--font-size-3xl: 1.875rem;   /* 30px */
-	--font-size-4xl: 2.25rem;    /* 36px */
-	--font-size-5xl: 3rem;       /* 48px */
-	--font-size-6xl: 3.75rem;    /* 60px */
-	--font-size-7xl: 4.5rem;     /* 72px */
+	--font-size-xs: 0.75rem; /* 12px */
+	--font-size-sm: 0.875rem; /* 14px */
+	--font-size-base: 1rem; /* 16px */
+	--font-size-lg: 1.125rem; /* 18px */
+	--font-size-xl: 1.25rem; /* 20px */
+	--font-size-2xl: 1.5rem; /* 24px */
+	--font-size-3xl: 1.875rem; /* 30px */
+	--font-size-4xl: 2.25rem; /* 36px */
+	--font-size-5xl: 3rem; /* 48px */
+	--font-size-6xl: 3.75rem; /* 60px */
+	--font-size-7xl: 4.5rem; /* 72px */
 
 	/* Spacing Scale - Ratio-based */
-	--spacing-1: 0.25rem;   /* 4px */
-	--spacing-2: 0.5rem;    /* 8px */
-	--spacing-3: 0.75rem;   /* 12px */
-	--spacing-4: 1rem;      /* 16px */
-	--spacing-6: 1.5rem;    /* 24px */
-	--spacing-8: 2rem;      /* 32px */
-	--spacing-12: 3rem;     /* 48px */
-	--spacing-16: 4rem;     /* 64px */
-	--spacing-24: 6rem;     /* 96px */
-	--spacing-32: 8rem;     /* 128px */
-	--spacing-48: 12rem;    /* 192px */
-	--spacing-64: 16rem;    /* 256px */
-	--spacing-96: 24rem;    /* 384px */
+	--spacing-1: 0.25rem; /* 4px */
+	--spacing-2: 0.5rem; /* 8px */
+	--spacing-3: 0.75rem; /* 12px */
+	--spacing-4: 1rem; /* 16px */
+	--spacing-6: 1.5rem; /* 24px */
+	--spacing-8: 2rem; /* 32px */
+	--spacing-12: 3rem; /* 48px */
+	--spacing-16: 4rem; /* 64px */
+	--spacing-24: 6rem; /* 96px */
+	--spacing-32: 8rem; /* 128px */
+	--spacing-48: 12rem; /* 192px */
+	--spacing-64: 16rem; /* 256px */
+	--spacing-96: 24rem; /* 384px */
 
 	/* Shadow Elevation System - 5 levels */
 	--shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -198,30 +198,74 @@
 /* Refactoring UI Utility Classes */
 @layer utilities {
 	/* Typography Scale */
-	.text-xs { font-size: var(--font-size-xs); }
-	.text-sm { font-size: var(--font-size-sm); }
-	.text-base { font-size: var(--font-size-base); }
-	.text-lg { font-size: var(--font-size-lg); }
-	.text-xl { font-size: var(--font-size-xl); }
-	.text-2xl { font-size: var(--font-size-2xl); }
-	.text-3xl { font-size: var(--font-size-3xl); }
-	.text-4xl { font-size: var(--font-size-4xl); }
-	.text-5xl { font-size: var(--font-size-5xl); }
-	.text-6xl { font-size: var(--font-size-6xl); }
-	.text-7xl { font-size: var(--font-size-7xl); }
+	.text-xs {
+		font-size: var(--font-size-xs);
+	}
+	.text-sm {
+		font-size: var(--font-size-sm);
+	}
+	.text-base {
+		font-size: var(--font-size-base);
+	}
+	.text-lg {
+		font-size: var(--font-size-lg);
+	}
+	.text-xl {
+		font-size: var(--font-size-xl);
+	}
+	.text-2xl {
+		font-size: var(--font-size-2xl);
+	}
+	.text-3xl {
+		font-size: var(--font-size-3xl);
+	}
+	.text-4xl {
+		font-size: var(--font-size-4xl);
+	}
+	.text-5xl {
+		font-size: var(--font-size-5xl);
+	}
+	.text-6xl {
+		font-size: var(--font-size-6xl);
+	}
+	.text-7xl {
+		font-size: var(--font-size-7xl);
+	}
 
 	/* Shadow Elevation System */
-	.shadow-elevation-1 { box-shadow: var(--shadow-xs); }
-	.shadow-elevation-2 { box-shadow: var(--shadow-sm); }
-	.shadow-elevation-3 { box-shadow: var(--shadow-base); }
-	.shadow-elevation-4 { box-shadow: var(--shadow-md); }
-	.shadow-elevation-5 { box-shadow: var(--shadow-lg); }
-	.shadow-elevation-modal { box-shadow: var(--shadow-xl); }
+	.shadow-elevation-1 {
+		box-shadow: var(--shadow-xs);
+	}
+	.shadow-elevation-2 {
+		box-shadow: var(--shadow-sm);
+	}
+	.shadow-elevation-3 {
+		box-shadow: var(--shadow-base);
+	}
+	.shadow-elevation-4 {
+		box-shadow: var(--shadow-md);
+	}
+	.shadow-elevation-5 {
+		box-shadow: var(--shadow-lg);
+	}
+	.shadow-elevation-modal {
+		box-shadow: var(--shadow-xl);
+	}
 
 	/* Spacing utilities that match our scale */
-	.space-xs { margin: var(--spacing-1); }
-	.space-sm { margin: var(--spacing-2); }
-	.space-md { margin: var(--spacing-4); }
-	.space-lg { margin: var(--spacing-6); }
-	.space-xl { margin: var(--spacing-8); }
+	.space-xs {
+		margin: var(--spacing-1);
+	}
+	.space-sm {
+		margin: var(--spacing-2);
+	}
+	.space-md {
+		margin: var(--spacing-4);
+	}
+	.space-lg {
+		margin: var(--spacing-6);
+	}
+	.space-xl {
+		margin: var(--spacing-8);
+	}
 }
