@@ -2,7 +2,7 @@
   <img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" style="margin-right:10px;" height="32"> Turborepo Starter
 </h1>
 
-A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 15**, **Turborepo**,
+A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 16**, **Turborepo**,
 **Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project—all
 wrapped in a Docker-friendly setup.
 
@@ -18,7 +18,7 @@ wrapped in a Docker-friendly setup.
 ## ✨ Why This Starter?
 
 - **Monorepo Magic**: [Turborepo](https://turbo.build/repo) optimizes builds and caching across apps and packages.
-- **Next.js 15**: The latest [Next.js](https://nextjs.org/) with Turbopack for blazing-fast development.
+- **Next.js 16**: The latest [Next.js](https://nextjs.org/) with Turbopack for blazing-fast development.
 - **Shadcn UI**: Beautiful, accessible React components paired with [Tailwind CSS](https://tailwindcss.com/).
 - **Biome.js**: A single, speedy tool for linting and formatting—no ESLint/Prettier mess.
 - **Docker Ready**: Spin up with [Docker Compose](https://docs.docker.com/compose/) for consistent environments.
@@ -32,7 +32,7 @@ Perfect for developers who want a cutting-edge stack without the setup hassle.
 
 ```
 ├── apps/
-│   └── web/                # Next.js 15 app
+│   └── web/                # Next.js 16 app
 ├── packages/
 │   ├── ui/                 # Shadcn UI components & utilities
 │   └── typescript-config   # Shared TypeScript settings

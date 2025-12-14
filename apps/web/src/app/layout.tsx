@@ -16,7 +16,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
 	title: 'Turbo Starter',
-	description: 'A production-ready monorepo starter with Next.js 15, Turborepo, and Shadcn UI.',
+	description: 'A production-ready monorepo starter with Next.js 16, Turborepo, and Shadcn UI.',
 };
 
 export default function RootLayout({
