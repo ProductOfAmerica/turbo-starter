@@ -138,14 +138,14 @@ export default function Home() {
 
 						{/* Main heading */}
 						<div className="space-y-4">
-							<h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground tracking-tight">
+							<h1 className="text-7xl sm:text-5xl md:text-7xl font-bold text-foreground tracking-tight">
 								Build faster with
 								<span className="bg-linear-to-r from-[#FF1E56] to-[#0196FF] bg-clip-text text-transparent">
 									{' '}
 									Turborepo
 								</span>
 							</h1>
-							<p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+							<p className="text-2xl sm:text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
 								A modern monorepo starter template that scales with your ambitions. Production-ready from day
 								one.
 							</p>
@@ -155,7 +155,6 @@ export default function Home() {
 						<div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
 							<Button
 								size="lg"
-								variant="ghost"
 								className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8 w-full sm:w-auto"
 								asChild
 							>
@@ -212,7 +211,7 @@ export default function Home() {
 			<section id="features" className="py-24 bg-secondary/20">
 				<div className="container mx-auto px-6">
 					<div className="max-w-3xl mx-auto text-center mb-16">
-						<h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Everything you need to ship</h2>
+						<h2 className="text-4xl md:text-4xl font-bold text-foreground mb-4">Everything you need to ship</h2>
 						<p className="text-lg text-muted-foreground">
 							Carefully selected tools and configurations to accelerate your development workflow
 						</p>
@@ -222,7 +221,7 @@ export default function Home() {
 						{features.map((feature) => (
 							<Card
 								key={feature.title}
-								className="border-border shadow-sm hover:shadow-md transition-all duration-200 bg-card flex flex-col h-full"
+								className="border-border shadow-elevation-2 hover:shadow-elevation-3 transition-all duration-200 bg-card flex flex-col h-full"
 							>
 								<CardHeader>
 									<div className="w-12 h-12 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-lg flex items-center justify-center mb-4 text-blue-600 dark:text-blue-400">
@@ -248,7 +247,7 @@ export default function Home() {
 				<div className="container mx-auto px-6">
 					<div className="max-w-4xl mx-auto">
 						<div className="text-center mb-16">
-							<h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Get up and running</h2>
+							<h2 className="text-4xl md:text-4xl font-bold text-foreground mb-4">Get up and running</h2>
 							<p className="text-lg text-muted-foreground">
 								Start building your next project in minutes, not hours
 							</p>
@@ -362,7 +361,7 @@ export default function Home() {
 			<section className="py-24 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20">
 				<div className="container mx-auto px-6 text-center">
 					<div className="max-w-3xl mx-auto space-y-8">
-						<h2 className="text-3xl md:text-4xl font-bold text-foreground">Ready to build something amazing?</h2>
+						<h2 className="text-4xl md:text-4xl font-bold text-foreground">Ready to build something amazing?</h2>
 						<p className="text-lg text-muted-foreground">
 							Join developers who are shipping faster with our modern monorepo setup
 						</p>
