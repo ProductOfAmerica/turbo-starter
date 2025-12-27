@@ -29,6 +29,6 @@
 		"pnpm": "10.6.2"
 	},
 	"pnpm": {
-		"onlyBuiltDependencies": ["@tailwindcss/oxide", "sharp"]
+		"onlyBuiltDependencies": ["sharp", "@tailwindcss/oxide"]
 	}
 }
