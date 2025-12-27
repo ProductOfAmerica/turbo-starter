@@ -2,5 +2,4 @@ packages:
   - apps/*
   - packages/*
 
-onlyBuiltDependencies:
-  - "*"
+neverBuiltDependencies: []
