@@ -27,11 +27,5 @@
 	"volta": {
 		"node": "20.19.2",
 		"pnpm": "10.6.2"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"sharp",
-			"@tailwindcss/oxide"
-		]
 	}
 }
