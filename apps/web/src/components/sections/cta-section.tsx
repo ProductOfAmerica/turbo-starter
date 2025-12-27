@@ -17,7 +17,7 @@ export function CTASection() {
 							className="bg-foreground hover:bg-foreground/90 text-background px-8 w-full sm:w-auto"
 							asChild
 						>
-							<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank">
+							<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank" rel="noopener noreferrer">
 								<GitBranch className="w-4 h-4 mr-2" />
 								Clone Repository
 							</Link>
@@ -28,7 +28,7 @@ export function CTASection() {
 							className="border-border hover:bg-accent px-8 w-full sm:w-auto"
 							asChild
 						>
-							<Link href="https://vercel.com/templates" target="_blank">
+							<Link href="https://vercel.com/templates" target="_blank" rel="noopener noreferrer">
 								<Globe className="w-4 h-4 mr-2" />
 								Deploy to Vercel
 							</Link>

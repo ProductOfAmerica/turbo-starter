@@ -52,6 +52,7 @@ export function MobileNavigation() {
 							<Link
 								href="https://github.com/ProductOfAmerica/turbo-starter"
 								target="_blank"
+								rel="noopener noreferrer"
 								className="flex items-center space-x-3 text-lg text-muted-foreground hover:text-foreground transition-colors py-2"
 								onClick={handleLinkClick}
 							>
@@ -62,6 +63,7 @@ export function MobileNavigation() {
 							<Link
 								href="https://turbo.build/repo/docs"
 								target="_blank"
+								rel="noopener noreferrer"
 								className="flex items-center space-x-3 text-lg text-muted-foreground hover:text-foreground transition-colors py-2"
 								onClick={handleLinkClick}
 							>

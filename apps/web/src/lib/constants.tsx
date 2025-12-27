@@ -2,32 +2,32 @@ import { Container, Package, Palette, Rocket, Sparkles, Zap } from 'lucide-react
 
 export const features = [
 	{
-		icon: <Zap className="w-5 h-5" />,
+		icon: <Zap className="w-5 h-5" aria-hidden="true" />,
 		title: 'Lightning Fast',
 		description: 'Optimized builds with intelligent caching and parallel execution',
 	},
 	{
-		icon: <Palette className="w-5 h-5" />,
+		icon: <Palette className="w-5 h-5" aria-hidden="true" />,
 		title: 'Modern UI',
 		description: 'Pre-configured Shadcn UI components with Tailwind CSS',
 	},
 	{
-		icon: <Rocket className="w-5 h-5" />,
+		icon: <Rocket className="w-5 h-5" aria-hidden="true" />,
 		title: 'Production Ready',
 		description: 'Next.js 16 with Turbopack for optimal performance',
 	},
 	{
-		icon: <Sparkles className="w-5 h-5" />,
+		icon: <Sparkles className="w-5 h-5" aria-hidden="true" />,
 		title: 'Developer Experience',
 		description: 'Biome.js for fast, unified linting and formatting',
 	},
 	{
-		icon: <Container className="w-5 h-5" />,
+		icon: <Container className="w-5 h-5" aria-hidden="true" />,
 		title: 'Containerized',
 		description: 'Docker Compose setup for consistent development',
 	},
 	{
-		icon: <Package className="w-5 h-5" />,
+		icon: <Package className="w-5 h-5" aria-hidden="true" />,
 		title: 'Monorepo Structure',
 		description: 'Efficient workspace management with pnpm',
 	},
