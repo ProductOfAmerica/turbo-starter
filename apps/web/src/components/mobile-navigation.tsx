@@ -6,7 +6,7 @@ import { GitBranch, Globe, Menu, Rocket, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
-export default function MobileNavigation() {
+export function MobileNavigation() {
 	const [open, setOpen] = useState(false);
 
 	const handleLinkClick = () => {

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import type React from 'react';
-import { ThemeProvider } from './components/theme-provider';
+import { ThemeProvider } from '@/components/theme-provider';
 
 import './globals.css';
 
@@ -17,6 +17,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
 	title: 'Turbo Starter',
 	description: 'A production-ready monorepo starter with Next.js 16, Turborepo, and Shadcn UI.',
+	appleWebApp: {
+		title: 'TurboStarter',
+	},
 };
 
 export default function RootLayout({
@@ -27,7 +30,6 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
-				<meta name="apple-mobile-web-app-title" content="TurboStarter" />
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					{children}
 				</ThemeProvider>

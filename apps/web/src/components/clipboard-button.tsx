@@ -4,7 +4,7 @@ import { Button } from '@repo/ui/components/button';
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
 
-export default function ClipboardButton({ cmd }: { cmd: string }) {
+export function ClipboardButton({ cmd }: { cmd: string }) {
 	const [copied, setCopied] = useState(false);
 
 	const copyToClipboard = (text: string) => {
