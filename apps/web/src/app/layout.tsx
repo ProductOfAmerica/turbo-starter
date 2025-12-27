@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import type React from 'react';
 import { ThemeProvider } from '@/components/theme-provider';
+import { baseMetadata } from '@/lib/metadata';
 
 import './globals.css';
 
@@ -14,13 +15,7 @@ const geistMono = localFont({
 	variable: '--font-geist-mono',
 });
 
-export const metadata: Metadata = {
-	title: 'Turbo Starter',
-	description: 'A production-ready monorepo starter with Next.js 16, Turborepo, and Shadcn UI.',
-	appleWebApp: {
-		title: 'TurboStarter',
-	},
-};
+export const metadata: Metadata = baseMetadata;
 
 export default function RootLayout({
 	children,
