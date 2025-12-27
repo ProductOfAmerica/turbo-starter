@@ -5,3 +5,5 @@ packages:
 allowedBuilds:
   - sharp
   - "@tailwindcss/oxide"
+
+ignoredBuiltDependencies: [ 'sharp' ]
