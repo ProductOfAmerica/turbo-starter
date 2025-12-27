@@ -43,7 +43,7 @@ export const techStack = [
 	},
 	{
 		name: 'Tailwind CSS',
-		color: 'bg-[#00bcff] text-white',
+		color: 'bg-[#38bdf8] text-black',
 		url: 'https://tailwindcss.com',
 	},
 	{ name: 'Biome.js', color: 'bg-[#60a5fa] text-black', url: 'https://biomejs.dev' },
