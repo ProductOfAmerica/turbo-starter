@@ -2,4 +2,6 @@ packages:
   - apps/*
   - packages/*
 
-neverBuiltDependencies: []
+allowedBuilds:
+  - sharp
+  - "@tailwindcss/oxide"
