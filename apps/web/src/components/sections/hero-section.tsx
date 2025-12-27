@@ -35,7 +35,11 @@ export function HeroSection() {
 							className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8 w-full sm:w-auto"
 							asChild
 						>
-							<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank" rel="noopener noreferrer">
+							<Link
+								href="https://github.com/ProductOfAmerica/turbo-starter"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
 								Get Started
 								<ArrowRight className="w-4 h-4" />
 							</Link>

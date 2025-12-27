@@ -9,7 +9,7 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.3.8
+        specifier: ^2.3.10
         version: 2.3.10
       turbo:
         specifier: ^2.7.2

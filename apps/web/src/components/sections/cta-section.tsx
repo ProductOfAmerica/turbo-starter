@@ -17,7 +17,11 @@ export function CTASection() {
 							className="bg-foreground hover:bg-foreground/90 text-background px-8 w-full sm:w-auto"
 							asChild
 						>
-							<Link href="https://github.com/ProductOfAmerica/turbo-starter" target="_blank" rel="noopener noreferrer">
+							<Link
+								href="https://github.com/ProductOfAmerica/turbo-starter"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
 								<GitBranch className="w-4 h-4 mr-2" />
 								Clone Repository
 							</Link>

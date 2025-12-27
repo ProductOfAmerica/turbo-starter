@@ -6,10 +6,20 @@ export function Footer() {
 			<div className="container mx-auto px-6 py-6">
 				<div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
 					<div className="flex flex-wrap items-center justify-center md:justify-start space-x-6 text-sm text-muted-foreground">
-						<Link href="https://turbo.build" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+						<Link
+							href="https://turbo.build"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:text-foreground transition-colors"
+						>
 							Turborepo
 						</Link>
-						<Link href="https://nextjs.org" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+						<Link
+							href="https://nextjs.org"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:text-foreground transition-colors"
+						>
 							Next.js
 						</Link>
 						<Link
