@@ -9,7 +9,7 @@ wrapped in a Docker-friendly setup.
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
 [![Node.js](https://img.shields.io/badge/Node.js-v20.19.2+-green)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-v10.6.2-orange)](https://pnpm.io/)
-[![nextjs](https://img.shields.io/badge/Next.js-15.4.4-blue?logo=nextdotjs)](https://nextjs.org/)
+[![nextjs](https://img.shields.io/badge/Next.js-16.0.10-blue?logo=nextdotjs)](https://nextjs.org/)
 [![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.1.11-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
