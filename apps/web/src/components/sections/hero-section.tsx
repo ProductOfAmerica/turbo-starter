@@ -32,7 +32,7 @@ export function HeroSection() {
 					<div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
 						<Button
 							size="lg"
-							className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg shadow-blue-500/25 px-8 w-full sm:w-auto"
+							className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 w-full sm:w-auto"
 							asChild
 						>
 							<Link

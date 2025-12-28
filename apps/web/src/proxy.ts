@@ -9,7 +9,7 @@ const SECURITY_HEADERS = {
 	'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
 	'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
 	'Content-Security-Policy':
-		"default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self'",
+		"default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
 } as const;
 
 export function proxy(_request: NextRequest) {

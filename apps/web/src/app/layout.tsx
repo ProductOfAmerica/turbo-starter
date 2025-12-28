@@ -1,47 +1,31 @@
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import type React from 'react';
+import { StructuredData } from '@/components/structured-data';
 import { ThemeProvider } from '@/components/theme-provider';
+import { WebVitals } from '@/components/web-vitals';
 import { baseMetadata } from '@/lib/metadata';
-import { siteConfig } from '@/lib/site-config';
+import { baseViewport } from '@/lib/viewport';
 
 import './globals.css';
-
-const jsonLd = {
-	'@context': 'https://schema.org',
-	'@type': 'WebSite',
-	name: siteConfig.name,
-	description: siteConfig.description,
-	url: siteConfig.url,
-	author: {
-		'@type': 'Person',
-		name: siteConfig.author.name,
-		url: siteConfig.author.url,
-	},
-};
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
 	variable: '--font-geist-sans',
 	display: 'swap',
+	preload: false,
 });
 const geistMono = localFont({
 	src: './fonts/GeistMonoVF.woff',
 	variable: '--font-geist-mono',
 	display: 'swap',
+	preload: false,
 });
 
 export const metadata: Metadata = baseMetadata;
 
-export const viewport: Viewport = {
-	width: 'device-width',
-	initialScale: 1,
-	maximumScale: 5,
-	themeColor: [
-		{ media: '(prefers-color-scheme: light)', color: '#ffffff' },
-		{ media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-	],
-};
+export const viewport: Viewport = baseViewport;
 
 export default function RootLayout({
 	children,
@@ -51,16 +35,14 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				<script
-					type="application/ld+json"
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: I want to
-					dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-				/>
+				<StructuredData />
 			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					{children}
 				</ThemeProvider>
+				<WebVitals />
+				<Analytics />
 			</body>
 		</html>
 	);

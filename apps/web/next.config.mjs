@@ -1,7 +1,12 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import bundleAnalyzer from '@next/bundle-analyzer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const withBundleAnalyzer = bundleAnalyzer({
+	enabled: process.env.ANALYZE === 'true',
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,6 +14,9 @@ const nextConfig = {
 	output: process.env.IS_DOCKER ? 'standalone' : undefined,
 	transpilePackages: ['@repo/ui'],
 	outputFileTracingRoot: path.join(__dirname, '../../'),
+	experimental: {
+		optimizePackageImports: ['lucide-react'],
+	},
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
