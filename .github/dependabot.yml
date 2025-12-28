@@ -16,20 +16,3 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-  # Also check apps/web directory
-  - package-ecosystem: "npm"
-    directory: "/apps/web"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    versioning-strategy: increase
-    commit-message:
-      prefix: "chore"
-      prefix-development: "chore"
-    groups:
-      development:
-        patterns: ["@types/*", "*eslint*", "*prettier*", "@biomejs/*"]
-    # Only minor and patch updates
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
