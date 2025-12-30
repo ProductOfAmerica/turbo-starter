@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Toaster } from '@repo/ui/components/sonner';
 import { Header } from '@/components/dashboard/header';
 import { StatusBar } from '@/components/dashboard/status-bar';
 import { StatsCards } from '@/components/dashboard/stats-cards';
@@ -13,7 +14,8 @@ import { StopDialog } from '@/components/dashboard/stop-dialog';
 import { useTradingStream } from '@/hooks/use-trading-stream';
 import { useBotState } from '@/hooks/use-bot-state';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
-import type { Config } from '@/services/types';
+import { useTradingToasts } from '@/hooks/use-trading-toasts';
+import type { BotStatus, Config } from '@/services/types';
 
 const DEFAULT_CONFIG: Config = {
 	game: 'lol',
@@ -34,6 +36,8 @@ export default function DashboardPage() {
 	const chartRef = useRef<HTMLDivElement>(null);
 	const eventsRef = useRef<HTMLDivElement>(null);
 	const tradesRef = useRef<HTMLDivElement>(null);
+	const prevBotStatusRef = useRef<BotStatus | null>(null);
+	const wasConnectedRef = useRef(false);
 
 	const {
 		state: botState,
@@ -229,6 +233,25 @@ export default function DashboardPage() {
 		canTogglePlayPause,
 	});
 
+	useTradingToasts({
+		botStatus: botState.status,
+		prevBotStatus: prevBotStatusRef.current,
+		isConnected,
+		wasConnected: wasConnectedRef.current,
+		dryRun: botState.dryRun,
+		trades,
+		events,
+		pnl: stats.pnl,
+	});
+
+	useEffect(() => {
+		prevBotStatusRef.current = botState.status;
+	}, [botState.status]);
+
+	useEffect(() => {
+		wasConnectedRef.current = isConnected;
+	}, [isConnected]);
+
 	return (
 		<div className="min-h-screen bg-background">
 			<Header
@@ -310,6 +333,8 @@ export default function DashboardPage() {
 				position={stats.position}
 				positionDirection={positionDirection}
 			/>
+
+			<Toaster position="bottom-right" richColors closeButton />
 		</div>
 	);
 }

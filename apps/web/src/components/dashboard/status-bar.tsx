@@ -101,10 +101,14 @@ export function StatusBar({
 					<span
 						className={cn(
 							'h-1.5 w-1.5 rounded-full',
-							connection === 'connected' ? 'bg-green-500' : 'bg-destructive'
+							connection === 'connected' && 'bg-green-500',
+							connection === 'reconnecting' && 'bg-yellow-500 animate-pulse',
+							connection === 'disconnected' && 'bg-destructive'
 						)}
 					/>
-					{connection === 'connected' ? 'Connected' : 'Disconnected'}
+					{connection === 'connected' && 'Connected'}
+					{connection === 'reconnecting' && 'Reconnecting...'}
+					{connection === 'disconnected' && 'Disconnected'}
 				</div>
 			</div>
 

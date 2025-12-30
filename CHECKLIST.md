@@ -31,43 +31,44 @@
 - [x] Trades empty state
 
 ## Phase 5: Overlays & Dialogs
-- [ ] Configuration Sheet (match config, trading params, API status)
-- [ ] Command Palette (⌘K)
-- [ ] Stop Confirmation Dialog
+- [x] Configuration Sheet (match config, trading params, API status)
+- [x] Command Palette (⌘K)
+- [x] Stop Confirmation Dialog
 
 ## Phase 6: Hooks & State
-- [ ] use-bot-state.ts (state machine, elapsed timer)
-- [ ] use-keyboard-shortcuts.ts (global shortcuts)
-- [ ] Update use-trading-stream.ts for new events
+- [x] use-bot-state.ts (state machine, elapsed timer)
+- [x] use-keyboard-shortcuts.ts (global shortcuts)
+- [x] use-trading-toasts.ts (toast notifications)
+- [x] Update use-trading-stream.ts for new events
 
 ## Phase 7: API Routes
-- [ ] POST /api/bot/start
-- [ ] POST /api/bot/stop
-- [ ] POST /api/bot/pause
-- [ ] POST /api/bot/resume
-- [ ] GET /api/bot/status
+- [x] POST /api/bot/start
+- [x] POST /api/bot/stop
+- [x] POST /api/bot/pause
+- [x] POST /api/bot/resume
+- [x] GET /api/bot/status
 
 ## Phase 8: Bot Service
-- [ ] Create trading-bot.ts singleton service
-- [ ] Integrate with existing SSE stream
+- [x] Create trading-bot.ts singleton service
+- [x] Integrate with existing SSE stream
 
 ## Phase 9: Polish
-- [ ] Loading skeletons for stat cards
-- [ ] Chart loading state
-- [ ] Feed loading states
-- [ ] Toast notifications (Baron, Elder, Roshan, Aegis)
-- [ ] Animations (pulse, transitions)
-- [ ] Responsive breakpoints (sm/md/lg/xl)
+- [x] Loading skeletons for stat cards (StatsCardsSkeleton)
+- [x] Chart loading state (centered spinner)
+- [x] Feed empty states (Radio icon, TrendingUp icon)
+- [x] Toast notifications (trades, connection, bot status, significant events)
+- [x] Animations (pulse, transitions, hover effects)
+- [x] Responsive breakpoints (sm/md/lg/xl)
 
 ## Quality Checks
-- [ ] All 7 bot states handled
-- [ ] All 3 connection states handled
-- [ ] Loading skeletons for initial load
-- [ ] Empty states for feeds
-- [ ] Error states with retry actions
-- [ ] Keyboard shortcuts working
-- [ ] Context menus functional
-- [ ] Command palette complete
-- [ ] Responsive at all breakpoints
-- [ ] Animations smooth
-- [ ] Toast notifications wired up
+- [x] All 7 bot states handled (IDLE, STARTING, RUNNING, PAUSED, STOPPING, STOPPED, ERROR)
+- [x] All 3 connection states handled (connected, reconnecting, disconnected)
+- [x] Loading skeletons for initial load
+- [x] Empty states for feeds
+- [x] Error states with retry actions
+- [x] Keyboard shortcuts working (⌘K, ⌘,, Space, ⌘Enter, ⌘D, ⌘E, ?)
+- [x] Context menus functional (chart, events, trades)
+- [x] Command palette complete (actions, navigation, export, help)
+- [x] Responsive at all breakpoints (header hides text on mobile, stat cards 2/3/6 cols)
+- [x] Animations smooth (pulse for live, transitions on hover)
+- [x] Toast notifications wired up (Sonner with rich colors)

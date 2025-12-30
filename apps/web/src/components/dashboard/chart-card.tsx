@@ -30,7 +30,7 @@ import {
 	Tooltip,
 	ResponsiveContainer,
 } from 'recharts';
-import { Download, Eye, FileDown, Maximize2, MoreHorizontal } from 'lucide-react';
+import { Download, Eye, FileDown, Loader2, Maximize2, MoreHorizontal } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 import type { GameEvent, ProbabilityUpdate } from '@/services/types';
 
@@ -40,6 +40,7 @@ interface ChartCardProps {
 	history: ProbabilityUpdate[];
 	marketPriceHistory: Array<{ timestamp: Date; price: number }>;
 	events: GameEvent[];
+	isLoading?: boolean;
 }
 
 interface ChartDataPoint {
@@ -89,7 +90,7 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
 	);
 }
 
-export function ChartCard({ history, marketPriceHistory, events }: ChartCardProps) {
+export function ChartCard({ history, marketPriceHistory, events, isLoading = false }: ChartCardProps) {
 	const [timeRange, setTimeRange] = useState<TimeRange>('all');
 	const [showModelLine, setShowModelLine] = useState(true);
 	const [showMarketLine, setShowMarketLine] = useState(true);
@@ -234,6 +235,12 @@ export function ChartCard({ history, marketPriceHistory, events }: ChartCardProp
 				</div>
 			</CardHeader>
 			<CardContent>
+				{isLoading ? (
+					<div className="flex h-[300px] flex-col items-center justify-center gap-2 text-muted-foreground">
+						<Loader2 className="h-8 w-8 animate-spin" />
+						<span className="text-sm">Loading chart data...</span>
+					</div>
+				) : (
 				<ContextMenu>
 					<ContextMenuTrigger>
 						<ChartContainer config={{}} className="h-[300px] w-full">
@@ -329,7 +336,9 @@ export function ChartCard({ history, marketPriceHistory, events }: ChartCardProp
 						</ContextMenuItem>
 					</ContextMenuContent>
 				</ContextMenu>
+				)}
 
+				{!isLoading && (
 				<div className="mt-4 flex items-center justify-center gap-6 text-sm">
 					<div className="flex items-center gap-2">
 						<div className="h-0.5 w-4 bg-primary" />
@@ -348,6 +357,7 @@ export function ChartCard({ history, marketPriceHistory, events }: ChartCardProp
 						<span className="text-muted-foreground">Red Event</span>
 					</div>
 				</div>
+				)}
 			</CardContent>
 		</Card>
 	);

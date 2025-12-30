@@ -2,6 +2,7 @@
 
 import { Card, CardContent } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
+import { Skeleton } from '@repo/ui/components/skeleton';
 import { Activity, Brain, DollarSign, TrendingUp, Wallet, Zap } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
 
@@ -18,6 +19,7 @@ interface StatsCardsProps {
 	position: number;
 	exposure: number;
 	eventCount: number;
+	isLoading?: boolean;
 }
 
 function formatCurrency(value: number): string {
@@ -43,6 +45,31 @@ function getPositionDirection(position: number): PositionDirection {
 	return 'FLAT';
 }
 
+function StatCardSkeleton() {
+	return (
+		<Card>
+			<CardContent className="p-4">
+				<div className="flex items-center justify-between">
+					<Skeleton className="h-4 w-16" />
+					<Skeleton className="h-4 w-4" />
+				</div>
+				<Skeleton className="mt-2 h-8 w-24" />
+				<Skeleton className="mt-1 h-3 w-32" />
+			</CardContent>
+		</Card>
+	);
+}
+
+export function StatsCardsSkeleton() {
+	return (
+		<div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+			{Array.from({ length: 6 }).map((_, i) => (
+				<StatCardSkeleton key={i} />
+			))}
+		</div>
+	);
+}
+
 export function StatsCards({
 	pnl,
 	tradeCount,
@@ -56,7 +83,12 @@ export function StatsCards({
 	position,
 	exposure,
 	eventCount,
+	isLoading = false,
 }: StatsCardsProps) {
+	if (isLoading) {
+		return <StatsCardsSkeleton />;
+	}
+
 	const winRate = tradeCount > 0 ? (winCount / tradeCount) * 100 : 0;
 	const isPositive = pnl >= 0;
 	const isTradeable = Math.abs(edge) >= edgeThreshold;
