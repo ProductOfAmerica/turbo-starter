@@ -5,8 +5,8 @@ import { Header } from '@/components/dashboard/header';
 import { StatusBar } from '@/components/dashboard/status-bar';
 import { StatsCards } from '@/components/dashboard/stats-cards';
 import { ChartCard } from '@/components/dashboard/chart-card';
-import { LiveFeed } from '@/components/dashboard/live-feed';
-import { TradeLog } from '@/components/dashboard/trade-log';
+import { EventsFeed } from '@/components/dashboard/events-feed';
+import { TradesFeed } from '@/components/dashboard/trades-feed';
 import { useTradingStream } from '@/hooks/use-trading-stream';
 import type { BotStatus } from '@/services/types';
 
@@ -142,8 +142,8 @@ export default function DashboardPage() {
 				/>
 
 				<div className="grid gap-6 lg:grid-cols-2">
-					<LiveFeed events={events} />
-					<TradeLog trades={trades} />
+					<EventsFeed events={events} />
+					<TradesFeed trades={trades} edgeThreshold={EDGE_THRESHOLD} />
 				</div>
 			</main>
 		</div>

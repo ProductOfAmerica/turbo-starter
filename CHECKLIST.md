@@ -23,12 +23,12 @@
 - [x] Custom tooltip with edge display
 
 ## Phase 4: Feeds
-- [ ] Events Feed with filter dropdown
-- [ ] Events context menu (show on chart, filter, copy)
-- [ ] Events empty state
-- [ ] "X new" indicator for scrolled feeds
-- [ ] Trades Feed with HoverCard details
-- [ ] Trades empty state
+- [x] Events Feed with filter dropdown
+- [x] Events context menu (show on chart, filter, copy)
+- [x] Events empty state
+- [x] "X new" indicator for scrolled feeds
+- [x] Trades Feed with HoverCard details
+- [x] Trades empty state
 
 ## Phase 5: Overlays & Dialogs
 - [ ] Configuration Sheet (match config, trading params, API status)
