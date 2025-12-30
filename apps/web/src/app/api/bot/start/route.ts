@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { tradingBot } from '@/services/trading-bot';
 import type { GameType } from '@/services/types';
 
+export const dynamic = 'force-dynamic';
+
 interface StartRequest {
 	gameType: GameType;
 	matchId: string;
@@ -29,9 +31,6 @@ export async function POST(request: Request) {
 			state: tradingBot.getState(),
 		});
 	} catch (err) {
-		return NextResponse.json(
-			{ error: err instanceof Error ? err.message : 'Failed to start bot' },
-			{ status: 400 }
-		);
+		return NextResponse.json({ error: err instanceof Error ? err.message : 'Failed to start bot' }, { status: 400 });
 	}
 }

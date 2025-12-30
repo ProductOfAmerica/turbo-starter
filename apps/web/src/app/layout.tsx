@@ -1,10 +1,8 @@
-import { Analytics } from '@vercel/analytics/react';
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import type React from 'react';
 import { StructuredData } from '@/components/structured-data';
 import { ThemeProvider } from '@/components/theme-provider';
-import { WebVitals } from '@/components/web-vitals';
 import { baseMetadata } from '@/lib/metadata';
 import { baseViewport } from '@/lib/viewport';
 
@@ -41,8 +39,6 @@ export default function RootLayout({
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					{children}
 				</ThemeProvider>
-				<WebVitals />
-				<Analytics />
 			</body>
 		</html>
 	);

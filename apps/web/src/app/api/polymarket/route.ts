@@ -1,5 +1,5 @@
-import { fetchMarketPrices } from '@/services/polymarket';
 import { NextResponse } from 'next/server';
+import { fetchMarketPrices } from '@/services/polymarket';
 
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);

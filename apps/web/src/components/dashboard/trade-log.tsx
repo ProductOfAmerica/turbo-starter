@@ -1,12 +1,12 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { ScrollArea } from '@repo/ui/components/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/components/table';
 import { CheckCircle, XCircle } from 'lucide-react';
-import type { TradeExecution } from '@/services/types';
 import { formatPrice } from '@/services/trade-evaluator';
+import type { TradeExecution } from '@/services/types';
 
 interface TradeLogProps {
 	trades: TradeExecution[];
@@ -24,9 +24,7 @@ export function TradeLog({ trades }: TradeLogProps) {
 			<CardContent>
 				<ScrollArea className="h-[300px]">
 					{reversedTrades.length === 0 ? (
-						<p className="text-muted-foreground text-center py-8">
-							No trades executed yet
-						</p>
+						<p className="text-muted-foreground text-center py-8">No trades executed yet</p>
 					) : (
 						<Table>
 							<TableHeader>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BotState, BotStatus, Config, ConnectionStatus, GameType, Stats } from '@/services/types';
+import type { BotState, GameType, Stats } from '@/services/types';
 
 interface UseBotStateReturn {
 	state: BotState;
@@ -54,6 +54,7 @@ export function useBotState(): UseBotStateReturn {
 	const elapsedIntervalRef = useRef<NodeJS.Timeout | null>(null);
 	const statusIntervalRef = useRef<NodeJS.Timeout | null>(null);
 	const startTimeRef = useRef<number | null>(null);
+	const initialElapsedRef = useRef<number>(0);
 
 	const fetchStatus = useCallback(async () => {
 		try {
@@ -72,9 +73,13 @@ export function useBotState(): UseBotStateReturn {
 	}, []);
 
 	useEffect(() => {
+		initialElapsedRef.current = state.elapsed;
+	}, [state.elapsed]);
+
+	useEffect(() => {
 		if (state.status === 'RUNNING') {
 			if (!startTimeRef.current) {
-				startTimeRef.current = Date.now() - state.elapsed * 1000;
+				startTimeRef.current = Date.now() - initialElapsedRef.current * 1000;
 			}
 
 			elapsedIntervalRef.current = setInterval(() => {
@@ -115,35 +120,32 @@ export function useBotState(): UseBotStateReturn {
 		fetchStatus();
 	}, [fetchStatus]);
 
-	const start = useCallback(
-		async (gameType: GameType, matchId: string, marketId?: string, dryRun = true) => {
-			setIsLoading(true);
-			setError(null);
+	const start = useCallback(async (gameType: GameType, matchId: string, marketId?: string, dryRun = true) => {
+		setIsLoading(true);
+		setError(null);
 
-			try {
-				const response = await fetch('/api/bot/start', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ gameType, matchId, marketId, dryRun }),
-				});
+		try {
+			const response = await fetch('/api/bot/start', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ gameType, matchId, marketId, dryRun }),
+			});
 
-				const data = await response.json();
+			const data = await response.json();
 
-				if (!response.ok) {
-					throw new Error(data.error || 'Failed to start bot');
-				}
-
-				startTimeRef.current = Date.now();
-				setState(data.state);
-			} catch (err) {
-				setError(err instanceof Error ? err.message : 'Failed to start bot');
-				throw err;
-			} finally {
-				setIsLoading(false);
+			if (!response.ok) {
+				throw new Error(data.error || 'Failed to start bot');
 			}
-		},
-		[]
-	);
+
+			startTimeRef.current = Date.now();
+			setState(data.state);
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to start bot');
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
 
 	const stop = useCallback(async () => {
 		setIsLoading(true);

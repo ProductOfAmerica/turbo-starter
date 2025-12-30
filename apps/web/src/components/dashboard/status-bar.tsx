@@ -3,11 +3,11 @@
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { Card } from '@repo/ui/components/card';
-import { Switch } from '@repo/ui/components/switch';
 import { Label } from '@repo/ui/components/label';
+import { Switch } from '@repo/ui/components/switch';
+import { cn } from '@repo/ui/lib/utils';
 import { Loader2, Pause, Play, RotateCcw, Settings, Square } from 'lucide-react';
 import type { BotStatus, ConnectionStatus } from '@/services/types';
-import { cn } from '@repo/ui/lib/utils';
 
 interface StatusBarProps {
 	status: BotStatus;
@@ -33,10 +33,7 @@ function formatElapsed(seconds: number): string {
 	return `${minutes}:${secs.toString().padStart(2, '0')}`;
 }
 
-const statusConfig: Record<
-	BotStatus,
-	{ badge: string; dot: string; text: (elapsed: number) => string }
-> = {
+const statusConfig: Record<BotStatus, { badge: string; dot: string; text: (elapsed: number) => string }> = {
 	IDLE: {
 		badge: 'border-muted-foreground/50',
 		dot: 'bg-muted-foreground',
@@ -192,10 +189,7 @@ export function StatusBar({
 					disabled={status === 'RUNNING' || status === 'PAUSED'}
 				/>
 				{dryRun && (
-					<Badge
-						variant="secondary"
-						className="border-yellow-500/50 bg-yellow-500/10 text-yellow-600"
-					>
+					<Badge variant="secondary" className="border-yellow-500/50 bg-yellow-500/10 text-yellow-600">
 						SIMULATED
 					</Badge>
 				)}

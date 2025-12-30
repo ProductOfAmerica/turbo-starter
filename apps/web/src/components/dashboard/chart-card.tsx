@@ -1,37 +1,28 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Button } from '@repo/ui/components/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuCheckboxItem,
-	DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
+import { ChartContainer } from '@repo/ui/components/chart';
 import {
 	ContextMenu,
+	ContextMenuCheckboxItem,
 	ContextMenuContent,
 	ContextMenuItem,
 	ContextMenuSeparator,
-	ContextMenuCheckboxItem,
 	ContextMenuTrigger,
 } from '@repo/ui/components/context-menu';
-import { ChartContainer } from '@repo/ui/components/chart';
 import {
-	LineChart,
-	Line,
-	XAxis,
-	YAxis,
-	ReferenceLine,
-	ReferenceDot,
-	Tooltip,
-	ResponsiveContainer,
-} from 'recharts';
-import { Download, Eye, FileDown, Loader2, Maximize2, MoreHorizontal } from 'lucide-react';
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@repo/ui/components/dropdown-menu';
 import { cn } from '@repo/ui/lib/utils';
+import { Download, Eye, FileDown, Loader2, Maximize2, MoreHorizontal } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Line, LineChart, ReferenceDot, ReferenceLine, Tooltip, XAxis, YAxis } from 'recharts';
 import type { GameEvent, ProbabilityUpdate } from '@/services/types';
 
 type TimeRange = '1m' | '5m' | '15m' | 'all';
@@ -80,8 +71,14 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
 				{edge !== null && (
 					<div className="flex items-center justify-between gap-4 text-sm">
 						<span className="text-muted-foreground">Edge:</span>
-						<span className={cn('font-mono tabular-nums font-medium', edge > 0 ? 'text-green-600' : edge < 0 ? 'text-red-600' : '')}>
-							{edge > 0 ? '+' : ''}{edge.toFixed(1)}%
+						<span
+							className={cn(
+								'font-mono tabular-nums font-medium',
+								edge > 0 ? 'text-green-600' : edge < 0 ? 'text-red-600' : ''
+							)}
+						>
+							{edge > 0 ? '+' : ''}
+							{edge.toFixed(1)}%
 						</span>
 					</div>
 				)}
@@ -102,7 +99,7 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 			'1m': 60 * 1000,
 			'5m': 5 * 60 * 1000,
 			'15m': 15 * 60 * 1000,
-			'all': Infinity,
+			all: Infinity,
 		};
 		const cutoff = timeRange === 'all' ? 0 : now - rangeMs[timeRange];
 
@@ -110,16 +107,14 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 			.filter((h) => new Date(h.timestamp).getTime() >= cutoff)
 			.map((h) => {
 				const ts = new Date(h.timestamp).getTime();
-				const marketPoint = marketPriceHistory.find(
-					(m) => Math.abs(new Date(m.timestamp).getTime() - ts) < 5000
-				);
+				const marketPoint = marketPriceHistory.find((m) => Math.abs(new Date(m.timestamp).getTime() - ts) < 5000);
 				const market = marketPoint ? marketPoint.price * 100 : null;
 				return {
 					timestamp: ts,
 					time: formatTime(new Date(h.timestamp)),
 					model: h.posterior * 100,
 					market,
-					edge: market !== null ? (h.posterior * 100) - market : null,
+					edge: market !== null ? h.posterior * 100 - market : null,
 				};
 			});
 	}, [history, marketPriceHistory, timeRange]);
@@ -131,7 +126,7 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 			'1m': 60 * 1000,
 			'5m': 5 * 60 * 1000,
 			'15m': 15 * 60 * 1000,
-			'all': Infinity,
+			all: Infinity,
 		};
 		const cutoff = timeRange === 'all' ? 0 : now - rangeMs[timeRange];
 
@@ -182,10 +177,7 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 								key={range}
 								variant="ghost"
 								size="sm"
-								className={cn(
-									'h-7 px-2.5 text-xs',
-									timeRange === range && 'bg-background shadow-sm'
-								)}
+								className={cn('h-7 px-2.5 text-xs', timeRange === range && 'bg-background shadow-sm')}
 								onClick={() => setTimeRange(range)}
 							>
 								{range === 'all' ? 'All' : range.toUpperCase()}
@@ -200,24 +192,15 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
-							<DropdownMenuCheckboxItem
-								checked={showModelLine}
-								onCheckedChange={setShowModelLine}
-							>
+							<DropdownMenuCheckboxItem checked={showModelLine} onCheckedChange={setShowModelLine}>
 								<Eye className="mr-2 h-4 w-4" />
 								Toggle Model Line
 							</DropdownMenuCheckboxItem>
-							<DropdownMenuCheckboxItem
-								checked={showMarketLine}
-								onCheckedChange={setShowMarketLine}
-							>
+							<DropdownMenuCheckboxItem checked={showMarketLine} onCheckedChange={setShowMarketLine}>
 								<Eye className="mr-2 h-4 w-4" />
 								Toggle Market Line
 							</DropdownMenuCheckboxItem>
-							<DropdownMenuCheckboxItem
-								checked={showEventMarkers}
-								onCheckedChange={setShowEventMarkers}
-							>
+							<DropdownMenuCheckboxItem checked={showEventMarkers} onCheckedChange={setShowEventMarkers}>
 								<Eye className="mr-2 h-4 w-4" />
 								Toggle Event Markers
 							</DropdownMenuCheckboxItem>
@@ -241,10 +224,9 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 						<span className="text-sm">Loading chart data...</span>
 					</div>
 				) : (
-				<ContextMenu>
-					<ContextMenuTrigger>
-						<ChartContainer config={{}} className="h-[300px] w-full">
-							<ResponsiveContainer width="100%" height="100%">
+					<ContextMenu>
+						<ContextMenuTrigger>
+							<ChartContainer config={{}} className="h-[300px] w-full">
 								<LineChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
 									<ReferenceLine
 										y={50}
@@ -302,61 +284,51 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 										/>
 									))}
 								</LineChart>
-							</ResponsiveContainer>
-						</ChartContainer>
-					</ContextMenuTrigger>
-					<ContextMenuContent>
-						<ContextMenuItem onClick={handleResetZoom}>
-							<Maximize2 className="mr-2 h-4 w-4" />
-							Reset Zoom
-						</ContextMenuItem>
-						<ContextMenuSeparator />
-						<ContextMenuCheckboxItem
-							checked={showModelLine}
-							onCheckedChange={setShowModelLine}
-						>
-							Show Model Line
-						</ContextMenuCheckboxItem>
-						<ContextMenuCheckboxItem
-							checked={showMarketLine}
-							onCheckedChange={setShowMarketLine}
-						>
-							Show Market Line
-						</ContextMenuCheckboxItem>
-						<ContextMenuCheckboxItem
-							checked={showEventMarkers}
-							onCheckedChange={setShowEventMarkers}
-						>
-							Show Event Markers
-						</ContextMenuCheckboxItem>
-						<ContextMenuSeparator />
-						<ContextMenuItem onClick={handleExportPNG}>
-							<Download className="mr-2 h-4 w-4" />
-							Export as PNG
-						</ContextMenuItem>
-					</ContextMenuContent>
-				</ContextMenu>
+							</ChartContainer>
+						</ContextMenuTrigger>
+						<ContextMenuContent>
+							<ContextMenuItem onClick={handleResetZoom}>
+								<Maximize2 className="mr-2 h-4 w-4" />
+								Reset Zoom
+							</ContextMenuItem>
+							<ContextMenuSeparator />
+							<ContextMenuCheckboxItem checked={showModelLine} onCheckedChange={setShowModelLine}>
+								Show Model Line
+							</ContextMenuCheckboxItem>
+							<ContextMenuCheckboxItem checked={showMarketLine} onCheckedChange={setShowMarketLine}>
+								Show Market Line
+							</ContextMenuCheckboxItem>
+							<ContextMenuCheckboxItem checked={showEventMarkers} onCheckedChange={setShowEventMarkers}>
+								Show Event Markers
+							</ContextMenuCheckboxItem>
+							<ContextMenuSeparator />
+							<ContextMenuItem onClick={handleExportPNG}>
+								<Download className="mr-2 h-4 w-4" />
+								Export as PNG
+							</ContextMenuItem>
+						</ContextMenuContent>
+					</ContextMenu>
 				)}
 
 				{!isLoading && (
-				<div className="mt-4 flex items-center justify-center gap-6 text-sm">
-					<div className="flex items-center gap-2">
-						<div className="h-0.5 w-4 bg-primary" />
-						<span className="text-muted-foreground">Model</span>
+					<div className="mt-4 flex items-center justify-center gap-6 text-sm">
+						<div className="flex items-center gap-2">
+							<div className="h-0.5 w-4 bg-primary" />
+							<span className="text-muted-foreground">Model</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="h-0.5 w-4 border-t-2 border-dashed border-muted-foreground" />
+							<span className="text-muted-foreground">Market</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="h-2 w-2 rounded-full bg-blue-500" />
+							<span className="text-muted-foreground">Blue Event</span>
+						</div>
+						<div className="flex items-center gap-2">
+							<div className="h-2 w-2 rounded-full bg-red-500" />
+							<span className="text-muted-foreground">Red Event</span>
+						</div>
 					</div>
-					<div className="flex items-center gap-2">
-						<div className="h-0.5 w-4 border-t-2 border-dashed border-muted-foreground" />
-						<span className="text-muted-foreground">Market</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<div className="h-2 w-2 rounded-full bg-blue-500" />
-						<span className="text-muted-foreground">Blue Event</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<div className="h-2 w-2 rounded-full bg-red-500" />
-						<span className="text-muted-foreground">Red Event</span>
-					</div>
-				</div>
 				)}
 			</CardContent>
 		</Card>

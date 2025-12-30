@@ -9,13 +9,12 @@ export async function GET(request: Request) {
 	}
 
 	try {
-		const response = await fetch(`https://api.opendota.com/api/matches/${matchId}`);
+		const response = await fetch(`https://api.opendota.com/api/matches/${matchId}`, {
+			cache: 'no-store',
+		});
 
 		if (!response.ok) {
-			return NextResponse.json(
-				{ error: `OpenDota API error: ${response.status}` },
-				{ status: response.status }
-			);
+			return NextResponse.json({ error: `OpenDota API error: ${response.status}` }, { status: response.status });
 		}
 
 		const data = await response.json();

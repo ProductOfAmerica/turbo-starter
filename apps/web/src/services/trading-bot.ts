@@ -1,4 +1,4 @@
-import { parseEvents, isMatchComplete } from './event-parser';
+import { isMatchComplete, parseEvents } from './event-parser';
 import { fetchMarketPrices, placeOrder } from './polymarket';
 import { BayesianPredictor } from './predictor';
 import { evaluateTrade } from './trade-evaluator';
@@ -15,18 +15,9 @@ import type {
 	TradeExecution,
 } from './types';
 
-type BotEventType =
-	| 'stateChange'
-	| 'event'
-	| 'prices'
-	| 'trade'
-	| 'probability'
-	| 'error'
-	| 'matchComplete';
+type BotEventType = 'stateChange' | 'event' | 'prices' | 'trade' | 'probability' | 'error' | 'matchComplete';
 
-interface BotEventListener {
-	(type: BotEventType, data: unknown): void;
-}
+type BotEventListener = (type: BotEventType, data: unknown) => void;
 
 class TradingBotService {
 	private status: BotStatus = 'IDLE';
@@ -275,7 +266,12 @@ class TradingBotService {
 					if (this.predictor.update(event)) {
 						this.events.push(event);
 						const posterior = this.predictor.getPosterior();
-						this.probabilityHistory.push({ posterior, timestamp: new Date(), eventType: event.eventType, team: event.team });
+						this.probabilityHistory.push({
+							posterior,
+							timestamp: new Date(),
+							eventType: event.eventType,
+							team: event.team,
+						});
 						this.emit('event', { ...event, posterior });
 						this.emit('probability', { posterior, timestamp: new Date() });
 					}

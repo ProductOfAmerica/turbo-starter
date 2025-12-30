@@ -94,9 +94,7 @@ export function useTradingToasts({
 		if (events.length > prevEventCountRef.current) {
 			const newEvents = events.slice(prevEventCountRef.current);
 			for (const event of newEvents) {
-				const isSignificant = SIGNIFICANT_EVENTS.some(
-					(e) => event.eventType.toLowerCase().includes(e)
-				);
+				const isSignificant = SIGNIFICANT_EVENTS.some((e) => event.eventType.toLowerCase().includes(e));
 				if (isSignificant) {
 					const teamName = event.team === 'blue' || event.team === 'radiant' ? 'Blue' : 'Red';
 					toast(`${teamName} Team: ${event.eventType.toUpperCase()}`, {

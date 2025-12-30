@@ -68,7 +68,7 @@ export async function placeOrder(signal: TradeSignal, isDryRun: boolean): Promis
 	try {
 		const client = await initializeClient();
 		const tokenId =
-			signal.side === 'BUY' ? process.env.POLY_YES_TOKEN_ID! : process.env.POLY_NO_TOKEN_ID!;
+			signal.side === 'BUY' ? (process.env.POLY_YES_TOKEN_ID ?? '') : (process.env.POLY_NO_TOKEN_ID ?? '');
 
 		const order = await client.createOrder({
 			tokenID: tokenId,

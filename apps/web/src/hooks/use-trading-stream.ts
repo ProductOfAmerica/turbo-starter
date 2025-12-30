@@ -108,8 +108,14 @@ export function useTradingStream() {
 		});
 
 		eventSource.addEventListener('error', (e: MessageEvent) => {
-			const data = JSON.parse(e.data);
-			setState((prev) => ({ ...prev, error: data.message }));
+			if (e.data) {
+				try {
+					const data = JSON.parse(e.data);
+					setState((prev) => ({ ...prev, error: data.message }));
+				} catch {
+					// Ignore parse errors from non-JSON error events
+				}
+			}
 		});
 	}, []);
 

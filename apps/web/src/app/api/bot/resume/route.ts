@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { tradingBot } from '@/services/trading-bot';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST() {
 	try {
 		tradingBot.resume();
@@ -10,9 +12,6 @@ export async function POST() {
 			state: tradingBot.getState(),
 		});
 	} catch (err) {
-		return NextResponse.json(
-			{ error: err instanceof Error ? err.message : 'Failed to resume bot' },
-			{ status: 400 }
-		);
+		return NextResponse.json({ error: err instanceof Error ? err.message : 'Failed to resume bot' }, { status: 400 });
 	}
 }

@@ -1,19 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Toaster } from '@repo/ui/components/sonner';
-import { Header } from '@/components/dashboard/header';
-import { StatusBar } from '@/components/dashboard/status-bar';
-import { StatsCards } from '@/components/dashboard/stats-cards';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChartCard } from '@/components/dashboard/chart-card';
-import { EventsFeed } from '@/components/dashboard/events-feed';
-import { TradesFeed } from '@/components/dashboard/trades-feed';
-import { ConfigSheet } from '@/components/dashboard/config-sheet';
 import { CommandPalette } from '@/components/dashboard/command-palette';
+import { ConfigSheet } from '@/components/dashboard/config-sheet';
+import { EventsFeed } from '@/components/dashboard/events-feed';
+import { Header } from '@/components/dashboard/header';
+import { StatsCards } from '@/components/dashboard/stats-cards';
+import { StatusBar } from '@/components/dashboard/status-bar';
 import { StopDialog } from '@/components/dashboard/stop-dialog';
-import { useTradingStream } from '@/hooks/use-trading-stream';
+import { TradesFeed } from '@/components/dashboard/trades-feed';
 import { useBotState } from '@/hooks/use-bot-state';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
+import { useTradingStream } from '@/hooks/use-trading-stream';
 import { useTradingToasts } from '@/hooks/use-trading-toasts';
 import type { BotStatus, Config } from '@/services/types';
 
@@ -39,27 +39,10 @@ export default function DashboardPage() {
 	const prevBotStatusRef = useRef<BotStatus | null>(null);
 	const wasConnectedRef = useRef(false);
 
-	const {
-		state: botState,
-		stats: botStats,
-		start,
-		stop,
-		pause,
-		resume,
-		setDryRun,
-	} = useBotState();
+	const { state: botState, start, stop, pause, resume, setDryRun } = useBotState();
 
-	const {
-		isConnected,
-		posterior,
-		marketPrices,
-		events,
-		trades,
-		probabilityHistory,
-		connect,
-		disconnect,
-		reset,
-	} = useTradingStream();
+	const { isConnected, posterior, marketPrices, events, trades, probabilityHistory, connect, disconnect, reset } =
+		useTradingStream();
 
 	const matchInfo = config.matchId
 		? `Match ${config.matchId} · ${config.game === 'lol' ? 'League of Legends' : 'Dota 2'}`
@@ -281,9 +264,7 @@ export default function DashboardPage() {
 					<ChartCard
 						history={probabilityHistory}
 						marketPriceHistory={
-							marketPrices
-								? [{ timestamp: marketPrices.timestamp, price: marketPrices.yesPrice }]
-								: []
+							marketPrices ? [{ timestamp: marketPrices.timestamp, price: marketPrices.yesPrice }] : []
 						}
 						events={events}
 					/>
@@ -299,12 +280,7 @@ export default function DashboardPage() {
 				</div>
 			</main>
 
-			<ConfigSheet
-				open={settingsOpen}
-				onOpenChange={setSettingsOpen}
-				config={config}
-				onSave={handleSaveConfig}
-			/>
+			<ConfigSheet open={settingsOpen} onOpenChange={setSettingsOpen} config={config} onSave={handleSaveConfig} />
 
 			<CommandPalette
 				open={commandOpen}

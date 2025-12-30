@@ -10,8 +10,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@repo/ui/components/alert-dialog';
-import { AlertTriangle } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
+import { AlertTriangle } from 'lucide-react';
 
 interface StopDialogProps {
 	open: boolean;

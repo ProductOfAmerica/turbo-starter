@@ -17,18 +17,11 @@ export function Header({ matchInfo, onCommandOpen, onSettingsOpen }: HeaderProps
 				<div className="flex items-center gap-4">
 					<span className="font-semibold">Esports Trading Bot</span>
 					<Separator orientation="vertical" className="h-6" />
-					<span className="text-sm text-muted-foreground">
-						{matchInfo ?? 'No match selected'}
-					</span>
+					<span className="text-sm text-muted-foreground">{matchInfo ?? 'No match selected'}</span>
 				</div>
 
 				<div className="flex items-center gap-2">
-					<Button
-						variant="outline"
-						size="sm"
-						className="gap-2"
-						onClick={onCommandOpen}
-					>
+					<Button variant="outline" size="sm" className="gap-2" onClick={onCommandOpen}>
 						<Search className="h-4 w-4" />
 						<span className="hidden sm:inline">Search commands...</span>
 						<kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex">

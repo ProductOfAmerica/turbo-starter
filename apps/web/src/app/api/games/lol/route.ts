@@ -18,13 +18,11 @@ export async function GET(request: Request) {
 			headers: {
 				Authorization: `Bearer ${apiKey}`,
 			},
+			cache: 'no-store',
 		});
 
 		if (!response.ok) {
-			return NextResponse.json(
-				{ error: `PandaScore API error: ${response.status}` },
-				{ status: response.status }
-			);
+			return NextResponse.json({ error: `PandaScore API error: ${response.status}` }, { status: response.status });
 		}
 
 		const data = await response.json();

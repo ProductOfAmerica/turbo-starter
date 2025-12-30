@@ -1,5 +1,7 @@
 import { tradingBot } from '@/services/trading-bot';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
 	const encoder = new TextEncoder();
 
@@ -42,7 +44,7 @@ export async function GET() {
 				});
 			}
 
-			const unsubscribe = tradingBot.subscribe((type, data) => {
+			(controller as unknown as { _unsubscribe?: () => void })._unsubscribe = tradingBot.subscribe((type, data) => {
 				try {
 					switch (type) {
 						case 'stateChange':
@@ -76,19 +78,39 @@ export async function GET() {
 				}
 			});
 
-			const checkInterval = setInterval(() => {
-				const currentState = tradingBot.getState();
-				if (currentState.status === 'STOPPED' || currentState.status === 'IDLE') {
-					clearInterval(checkInterval);
-					unsubscribe();
-					controller.close();
-				}
-			}, 5000);
-
-			return () => {
-				clearInterval(checkInterval);
-				unsubscribe();
+			(controller as unknown as { _checkInterval?: ReturnType<typeof setInterval> })._checkInterval = setInterval(
+				() => {
+					const currentState = tradingBot.getState();
+					if (currentState.status === 'STOPPED' || currentState.status === 'IDLE') {
+						const ctrl = controller as unknown as {
+							_checkInterval?: ReturnType<typeof setInterval>;
+							_unsubscribe?: () => void;
+							_closed?: boolean;
+						};
+						if (ctrl._checkInterval) clearInterval(ctrl._checkInterval);
+						if (ctrl._unsubscribe) ctrl._unsubscribe();
+						if (!ctrl._closed) {
+							ctrl._closed = true;
+							try {
+								controller.close();
+							} catch {
+								// Already closed
+							}
+						}
+					}
+				},
+				5000
+			);
+		},
+		cancel(controller) {
+			const ctrl = controller as unknown as {
+				_checkInterval?: ReturnType<typeof setInterval>;
+				_unsubscribe?: () => void;
+				_closed?: boolean;
 			};
+			ctrl._closed = true;
+			if (ctrl._checkInterval) clearInterval(ctrl._checkInterval);
+			if (ctrl._unsubscribe) ctrl._unsubscribe();
 		},
 	});
 

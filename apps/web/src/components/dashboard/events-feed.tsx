@@ -1,17 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
-import { ScrollArea } from '@repo/ui/components/scroll-area';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuTrigger,
-} from '@repo/ui/components/dropdown-menu';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import {
 	ContextMenu,
 	ContextMenuContent,
@@ -19,9 +10,18 @@ import {
 	ContextMenuSeparator,
 	ContextMenuTrigger,
 } from '@repo/ui/components/context-menu';
-import { Copy, Filter, LineChart, Radio } from 'lucide-react';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuTrigger,
+} from '@repo/ui/components/dropdown-menu';
+import { ScrollArea } from '@repo/ui/components/scroll-area';
 import { cn } from '@repo/ui/lib/utils';
-import type { GameEvent, EventType } from '@/services/types';
+import { Copy, Filter, LineChart, Radio } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { EventType, GameEvent } from '@/services/types';
 
 type EventFilter = 'all' | 'kills' | 'objectives' | 'structures';
 
@@ -70,17 +70,13 @@ function getEventDescription(event: GameEvent): string {
 	const details = event.details as Record<string, unknown> | undefined;
 	switch (event.eventType) {
 		case 'kill':
-			return details?.killer && details?.victim
-				? `${details.killer} → ${details.victim}`
-				: 'Kill secured';
+			return details?.killer && details?.victim ? `${details.killer} → ${details.victim}` : 'Kill secured';
 		case 'dragon':
 			return details?.dragonType ? `${details.dragonType} Drake` : 'Dragon';
 		case 'baron':
 			return 'Baron Nashor';
 		case 'tower':
-			return details?.lane && details?.tier
-				? `${details.lane} ${details.tier} Tower`
-				: 'Tower destroyed';
+			return details?.lane && details?.tier ? `${details.lane} ${details.tier} Tower` : 'Tower destroyed';
 		case 'inhibitor':
 			return details?.lane ? `${details.lane} Inhibitor` : 'Inhibitor destroyed';
 		case 'roshan':
@@ -154,12 +150,7 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 				</div>
 				<div className="flex items-center gap-2">
 					{newCount > 0 && !isAtBottom && (
-						<Button
-							variant="ghost"
-							size="sm"
-							className="h-7 text-xs"
-							onClick={scrollToBottom}
-						>
+						<Button variant="ghost" size="sm" className="h-7 text-xs" onClick={scrollToBottom}>
 							{newCount} new ↓
 						</Button>
 					)}
@@ -224,9 +215,7 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 													{getEventDescription(event)}
 												</p>
 												{getEventDetail(event) && (
-													<p className="mt-0.5 text-xs text-muted-foreground">
-														{getEventDetail(event)}
-													</p>
+													<p className="mt-0.5 text-xs text-muted-foreground">{getEventDetail(event)}</p>
 												)}
 											</div>
 											<Button
@@ -244,11 +233,19 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 											<LineChart className="mr-2 h-4 w-4" />
 											Show on Chart
 										</ContextMenuItem>
-										<ContextMenuItem onClick={() => setFilter(
-											event.eventType === 'kill' ? 'kills' :
-											['dragon', 'baron', 'roshan'].includes(event.eventType) ? 'objectives' :
-											['tower', 'inhibitor'].includes(event.eventType) ? 'structures' : 'all'
-										)}>
+										<ContextMenuItem
+											onClick={() =>
+												setFilter(
+													event.eventType === 'kill'
+														? 'kills'
+														: ['dragon', 'baron', 'roshan'].includes(event.eventType)
+															? 'objectives'
+															: ['tower', 'inhibitor'].includes(event.eventType)
+																? 'structures'
+																: 'all'
+												)
+											}
+										>
 											<Filter className="mr-2 h-4 w-4" />
 											Filter to {eventTypeLabels[event.eventType] || event.eventType}
 										</ContextMenuItem>

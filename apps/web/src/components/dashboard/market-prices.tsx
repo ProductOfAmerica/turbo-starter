@@ -29,12 +29,8 @@ export function MarketPrices({ yesPrice, noPrice, lastUpdate }: MarketPricesProp
 					</div>
 					<Progress value={yesPercent} className="h-3" />
 					<div className="flex justify-between text-lg font-bold">
-						<span className="text-green-500">
-							{yesPrice !== null ? formatPrice(yesPrice) : '--'}
-						</span>
-						<span className="text-red-500">
-							{noPrice !== null ? formatPrice(noPrice) : '--'}
-						</span>
+						<span className="text-green-500">{yesPrice !== null ? formatPrice(yesPrice) : '--'}</span>
+						<span className="text-red-500">{noPrice !== null ? formatPrice(noPrice) : '--'}</span>
 					</div>
 				</div>
 
@@ -47,9 +43,7 @@ export function MarketPrices({ yesPrice, noPrice, lastUpdate }: MarketPricesProp
 					</div>
 					<div className="text-center">
 						<p className="text-xs text-muted-foreground">Implied Prob (NO)</p>
-						<p className="text-lg font-semibold">
-							{noPrice !== null ? `${(noPrice * 100).toFixed(1)}%` : '--'}
-						</p>
+						<p className="text-lg font-semibold">{noPrice !== null ? `${(noPrice * 100).toFixed(1)}%` : '--'}</p>
 					</div>
 				</div>
 			</CardContent>

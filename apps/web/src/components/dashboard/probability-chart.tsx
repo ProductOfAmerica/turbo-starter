@@ -1,8 +1,8 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@repo/ui/components/chart';
-import { Line, LineChart, XAxis, YAxis, CartesianGrid, ReferenceLine } from 'recharts';
+import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@repo/ui/components/chart';
+import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from 'recharts';
 import type { ProbabilityUpdate } from '@/services/types';
 
 interface ProbabilityChartProps {

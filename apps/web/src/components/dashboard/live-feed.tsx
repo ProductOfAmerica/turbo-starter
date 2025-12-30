@@ -1,7 +1,7 @@
 'use client';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { ScrollArea } from '@repo/ui/components/scroll-area';
 import type { GameEvent } from '@/services/types';
 
@@ -40,22 +40,15 @@ export function LiveFeed({ events }: LiveFeedProps) {
 			<CardContent>
 				<ScrollArea className="h-[300px] pr-4">
 					{reversedEvents.length === 0 ? (
-						<p className="text-muted-foreground text-center py-8">
-							Waiting for events...
-						</p>
+						<p className="text-muted-foreground text-center py-8">Waiting for events...</p>
 					) : (
 						<div className="space-y-3">
 							{reversedEvents.map((event) => (
-								<div
-									key={event.eventId}
-									className="flex items-center gap-3 p-2 rounded-lg bg-muted/50"
-								>
+								<div key={event.eventId} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
 									<Badge className={`${eventColors[event.eventType]} text-white`}>
 										{event.eventType.toUpperCase()}
 									</Badge>
-									<span className={`font-medium ${teamColors[event.team]}`}>
-										{event.team.toUpperCase()}
-									</span>
+									<span className={`font-medium ${teamColors[event.team]}`}>{event.team.toUpperCase()}</span>
 									<span className="text-xs text-muted-foreground ml-auto">
 										{new Date(event.timestamp).toLocaleTimeString()}
 									</span>

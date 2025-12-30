@@ -1,24 +1,29 @@
 'use client';
 
-import { useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
-import { ScrollArea } from '@repo/ui/components/scroll-area';
-import { Separator } from '@repo/ui/components/separator';
-import {
-	HoverCard,
-	HoverCardContent,
-	HoverCardTrigger,
-} from '@repo/ui/components/hover-card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@repo/ui/components/dropdown-menu';
-import { CheckCircle, ExternalLink, FileDown, Loader2, MoreHorizontal, Trash2, TrendingUp, XCircle } from 'lucide-react';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@repo/ui/components/hover-card';
+import { ScrollArea } from '@repo/ui/components/scroll-area';
+import { Separator } from '@repo/ui/components/separator';
 import { cn } from '@repo/ui/lib/utils';
+import {
+	CheckCircle,
+	ExternalLink,
+	FileDown,
+	Loader2,
+	MoreHorizontal,
+	Trash2,
+	TrendingUp,
+	XCircle,
+} from 'lucide-react';
+import { useMemo } from 'react';
 import type { TradeExecution } from '@/services/types';
 
 interface TradesFeedProps {
@@ -77,10 +82,12 @@ export function TradesFeed({ trades, edgeThreshold = 0.05 }: TradesFeedProps) {
 				<div>
 					<CardTitle className="text-base font-medium">Trade Executions</CardTitle>
 					<CardDescription>
-						<span className="font-mono tabular-nums">{trades.length}</span> today · {' '}
-						<span className="font-mono tabular-nums">{summary.wins}</span> won · {' '}
-						<span className="font-mono tabular-nums">{summary.losses}</span> lost · {' '}
-						<span className={cn('font-mono tabular-nums', summary.totalPnL >= 0 ? 'text-green-600' : 'text-red-600')}>
+						<span className="font-mono tabular-nums">{trades.length}</span> today ·{' '}
+						<span className="font-mono tabular-nums">{summary.wins}</span> won ·{' '}
+						<span className="font-mono tabular-nums">{summary.losses}</span> lost ·{' '}
+						<span
+							className={cn('font-mono tabular-nums', summary.totalPnL >= 0 ? 'text-green-600' : 'text-red-600')}
+						>
 							{formatCurrency(summary.totalPnL)}
 						</span>
 					</CardDescription>
@@ -149,9 +156,7 @@ export function TradesFeed({ trades, edgeThreshold = 0.05 }: TradesFeedProps) {
 													)}
 												</div>
 												<div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
-													<span className="font-mono tabular-nums">
-														Edge: {formatPercent(trade.edge)}
-													</span>
+													<span className="font-mono tabular-nums">Edge: {formatPercent(trade.edge)}</span>
 													<span>·</span>
 													<span className="font-mono tabular-nums">
 														{new Date(trade.timestamp).toLocaleTimeString([], {

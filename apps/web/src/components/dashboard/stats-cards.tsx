@@ -1,10 +1,10 @@
 'use client';
 
-import { Card, CardContent } from '@repo/ui/components/card';
 import { Badge } from '@repo/ui/components/badge';
+import { Card, CardContent } from '@repo/ui/components/card';
 import { Skeleton } from '@repo/ui/components/skeleton';
-import { Activity, Brain, DollarSign, TrendingUp, Wallet, Zap } from 'lucide-react';
 import { cn } from '@repo/ui/lib/utils';
+import { Activity, Brain, DollarSign, TrendingUp, Wallet, Zap } from 'lucide-react';
 
 interface StatsCardsProps {
 	pnl: number;
@@ -63,8 +63,8 @@ function StatCardSkeleton() {
 export function StatsCardsSkeleton() {
 	return (
 		<div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-			{Array.from({ length: 6 }).map((_, i) => (
-				<StatCardSkeleton key={i} />
+			{['pnl', 'model', 'market', 'edge', 'position', 'activity'].map((id) => (
+				<StatCardSkeleton key={id} />
 			))}
 		</div>
 	);
@@ -105,11 +105,17 @@ export function StatsCards({
 						<span className="text-sm font-medium text-muted-foreground">Total P&L</span>
 						<TrendingUp className={cn('h-4 w-4', isPositive ? 'text-green-600' : 'text-red-600')} />
 					</div>
-					<div className={cn('mt-2 text-2xl font-bold font-mono tabular-nums', isPositive ? 'text-green-600' : 'text-red-600')}>
+					<div
+						className={cn(
+							'mt-2 text-2xl font-bold font-mono tabular-nums',
+							isPositive ? 'text-green-600' : 'text-red-600'
+						)}
+					>
 						{formatCurrency(pnl)}
 					</div>
 					<p className="mt-1 text-xs text-muted-foreground">
-						<span className="font-mono tabular-nums">{tradeCount}</span> trades · <span className="font-mono tabular-nums">{winRate.toFixed(0)}</span>% win rate
+						<span className="font-mono tabular-nums">{tradeCount}</span> trades ·{' '}
+						<span className="font-mono tabular-nums">{winRate.toFixed(0)}</span>% win rate
 					</p>
 				</CardContent>
 			</Card>
@@ -121,13 +127,16 @@ export function StatsCards({
 						<span className="text-sm font-medium text-muted-foreground">Model</span>
 						<Brain className="h-4 w-4 text-muted-foreground" />
 					</div>
-					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">
-						{formatPercent(modelProbability)}
-					</div>
+					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">{formatPercent(modelProbability)}</div>
 					<div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
 						<span className={cn('h-2 w-2 rounded-full', modelProbability > 0.5 ? 'bg-blue-500' : 'bg-red-500')} />
 						<span>{teamFavored} favored</span>
-						<span className={cn('ml-auto font-mono tabular-nums', modelProbabilityDelta > 0 ? 'text-green-600' : modelProbabilityDelta < 0 ? 'text-red-600' : '')}>
+						<span
+							className={cn(
+								'ml-auto font-mono tabular-nums',
+								modelProbabilityDelta > 0 ? 'text-green-600' : modelProbabilityDelta < 0 ? 'text-red-600' : ''
+							)}
+						>
 							{modelProbabilityDelta > 0 ? '▲' : modelProbabilityDelta < 0 ? '▼' : ''}
 							{modelProbabilityDelta !== 0 && formatPercent(Math.abs(modelProbabilityDelta))}
 						</span>
@@ -146,7 +155,8 @@ export function StatsCards({
 						{yesPrice !== null ? formatPrice(yesPrice) : '--'}
 					</div>
 					<p className="mt-1 text-xs text-muted-foreground">
-						YES <span className="font-mono tabular-nums">{yesPrice !== null ? formatPrice(yesPrice) : '--'}</span> / NO <span className="font-mono tabular-nums">{noPrice !== null ? formatPrice(noPrice) : '--'}</span>
+						YES <span className="font-mono tabular-nums">{yesPrice !== null ? formatPrice(yesPrice) : '--'}</span>{' '}
+						/ NO <span className="font-mono tabular-nums">{noPrice !== null ? formatPrice(noPrice) : '--'}</span>
 					</p>
 				</CardContent>
 			</Card>
@@ -207,9 +217,7 @@ export function StatsCards({
 						<span className="text-sm font-medium text-muted-foreground">Activity</span>
 						<Activity className="h-4 w-4 text-muted-foreground" />
 					</div>
-					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">
-						{tradeCount}
-					</div>
+					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">{tradeCount}</div>
 					<p className="mt-1 text-xs text-muted-foreground">
 						trades today · <span className="font-mono tabular-nums">{eventCount}</span> events
 					</p>

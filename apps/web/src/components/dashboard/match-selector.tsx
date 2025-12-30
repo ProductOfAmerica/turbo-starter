@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
+import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select';
-import { Badge } from '@repo/ui/components/badge';
 import { Play, Square } from 'lucide-react';
+import { useState } from 'react';
 import type { GameType } from '@/services/types';
 
 interface MatchSelectorProps {
@@ -47,11 +47,7 @@ export function MatchSelector({ isRunning, isDryRun, onStart, onStop }: MatchSel
 				<div className="grid gap-4 md:grid-cols-3">
 					<div className="space-y-2">
 						<Label htmlFor="gameType">Game</Label>
-						<Select
-							value={gameType}
-							onValueChange={(v) => setGameType(v as GameType)}
-							disabled={isRunning}
-						>
+						<Select value={gameType} onValueChange={(v) => setGameType(v as GameType)} disabled={isRunning}>
 							<SelectTrigger id="gameType">
 								<SelectValue />
 							</SelectTrigger>

@@ -1,28 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetFooter,
-	SheetHeader,
-	SheetTitle,
-} from '@repo/ui/components/sheet';
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
-import { Slider } from '@repo/ui/components/slider';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select';
 import { Separator } from '@repo/ui/components/separator';
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@repo/ui/components/select';
-import { CheckCircle, Loader2, XCircle } from 'lucide-react';
+import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@repo/ui/components/sheet';
+import { Slider } from '@repo/ui/components/slider';
 import { cn } from '@repo/ui/lib/utils';
+import { CheckCircle, Loader2, XCircle } from 'lucide-react';
+import { useState } from 'react';
 import type { Config, GameType } from '@/services/types';
 
 type ValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
@@ -80,9 +67,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 			<SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]">
 				<SheetHeader>
 					<SheetTitle>Configuration</SheetTitle>
-					<SheetDescription>
-						Configure match tracking and trading parameters
-					</SheetDescription>
+					<SheetDescription>Configure match tracking and trading parameters</SheetDescription>
 				</SheetHeader>
 
 				<div className="space-y-8 py-6">
@@ -137,11 +122,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 									onClick={handleVerifyMatch}
 									disabled={matchValidation === 'validating' || !localConfig.matchId}
 								>
-									{matchValidation === 'validating' ? (
-										<Loader2 className="h-4 w-4 animate-spin" />
-									) : (
-										'Verify'
-									)}
+									{matchValidation === 'validating' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Verify'}
 								</Button>
 							</div>
 							<p className="text-sm text-muted-foreground">
@@ -155,13 +136,9 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 								id="marketId"
 								placeholder="Auto-detect from match"
 								value={localConfig.marketId ?? ''}
-								onChange={(e) =>
-									setLocalConfig({ ...localConfig, marketId: e.target.value || undefined })
-								}
+								onChange={(e) => setLocalConfig({ ...localConfig, marketId: e.target.value || undefined })}
 							/>
-							<p className="text-sm text-muted-foreground">
-								Override automatic market detection
-							</p>
+							<p className="text-sm text-muted-foreground">Override automatic market detection</p>
 						</div>
 					</div>
 
@@ -186,9 +163,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 								max={20}
 								step={0.5}
 							/>
-							<p className="text-sm text-muted-foreground">
-								Minimum edge required to execute trades
-							</p>
+							<p className="text-sm text-muted-foreground">Minimum edge required to execute trades</p>
 						</div>
 
 						<div className="space-y-3">
@@ -199,9 +174,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 								min={1}
 								max={1000}
 								value={localConfig.orderSize}
-								onChange={(e) =>
-									setLocalConfig({ ...localConfig, orderSize: Number(e.target.value) })
-								}
+								onChange={(e) => setLocalConfig({ ...localConfig, orderSize: Number(e.target.value) })}
 							/>
 						</div>
 
@@ -213,22 +186,16 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 								min={10}
 								max={10000}
 								value={localConfig.maxPosition}
-								onChange={(e) =>
-									setLocalConfig({ ...localConfig, maxPosition: Number(e.target.value) })
-								}
+								onChange={(e) => setLocalConfig({ ...localConfig, maxPosition: Number(e.target.value) })}
 							/>
-							<p className="text-sm text-muted-foreground">
-								Maximum total exposure before pausing trades
-							</p>
+							<p className="text-sm text-muted-foreground">Maximum total exposure before pausing trades</p>
 						</div>
 
 						<div className="space-y-3">
 							<Label htmlFor="pollingInterval">Polling Interval</Label>
 							<Select
 								value={String(localConfig.pollingInterval)}
-								onValueChange={(v) =>
-									setLocalConfig({ ...localConfig, pollingInterval: Number(v) })
-								}
+								onValueChange={(v) => setLocalConfig({ ...localConfig, pollingInterval: Number(v) })}
 							>
 								<SelectTrigger id="pollingInterval">
 									<SelectValue />
@@ -245,16 +212,11 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 					<Separator />
 
 					<div className="space-y-4">
-						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-							API Status
-						</h3>
+						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">API Status</h3>
 
 						<div className="space-y-2">
 							{apiStatuses.map((api) => (
-								<div
-									key={api.name}
-									className="flex items-center justify-between rounded-md border px-3 py-2"
-								>
+								<div key={api.name} className="flex items-center justify-between rounded-md border px-3 py-2">
 									<div className="flex items-center gap-2">
 										<span
 											className={cn(
@@ -266,11 +228,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 										/>
 										<span className="text-sm font-medium">{api.name}</span>
 									</div>
-									{api.detail && (
-										<span className="font-mono text-xs text-muted-foreground">
-											{api.detail}
-										</span>
-									)}
+									{api.detail && <span className="font-mono text-xs text-muted-foreground">{api.detail}</span>}
 								</div>
 							))}
 						</div>
