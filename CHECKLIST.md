@@ -8,19 +8,19 @@
 - [x] Update index.ts exports
 
 ## Phase 2: Stat Cards (6 total)
-- [ ] P&L Card (accent border, win rate, colored value)
-- [ ] Model Probability Card (team indicator, delta)
-- [ ] Market Price Card (YES/NO prices)
-- [ ] Edge Card (tradeable indicator, threshold ring)
-- [ ] Position Card (shares, direction badge, exposure)
-- [ ] Activity Card (trade count, event count)
+- [x] P&L Card (accent border, win rate, colored value)
+- [x] Model Probability Card (team indicator, delta)
+- [x] Market Price Card (YES/NO prices)
+- [x] Edge Card (tradeable indicator, threshold ring)
+- [x] Position Card (shares, direction badge, exposure)
+- [x] Activity Card (trade count, event count)
 
 ## Phase 3: Chart Card
-- [ ] Time range selector (1m, 5m, 15m, All)
-- [ ] More options dropdown (export, toggle lines)
-- [ ] Chart context menu
-- [ ] Legend (Model, Market, Blue Event, Red Event)
-- [ ] Custom tooltip with edge display
+- [x] Time range selector (1m, 5m, 15m, All)
+- [x] More options dropdown (export, toggle lines)
+- [x] Chart context menu
+- [x] Legend (Model, Market, Blue Event, Red Event)
+- [x] Custom tooltip with edge display
 
 ## Phase 4: Feeds
 - [ ] Events Feed with filter dropdown

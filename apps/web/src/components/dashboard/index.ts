@@ -1,5 +1,6 @@
 export { StatsCards } from './stats-cards';
 export { ProbabilityChart } from './probability-chart';
+export { ChartCard } from './chart-card';
 export { LiveFeed } from './live-feed';
 export { TradeLog } from './trade-log';
 export { MarketPrices } from './market-prices';

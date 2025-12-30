@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Header } from '@/components/dashboard/header';
 import { StatusBar } from '@/components/dashboard/status-bar';
 import { StatsCards } from '@/components/dashboard/stats-cards';
-import { ProbabilityChart } from '@/components/dashboard/probability-chart';
+import { ChartCard } from '@/components/dashboard/chart-card';
 import { LiveFeed } from '@/components/dashboard/live-feed';
 import { TradeLog } from '@/components/dashboard/trade-log';
 import { useTradingStream } from '@/hooks/use-trading-stream';
 import type { BotStatus } from '@/services/types';
+
+const EDGE_THRESHOLD = 0.05;
 
 export default function DashboardPage() {
 	const [commandOpen, setCommandOpen] = useState(false);
@@ -30,6 +32,45 @@ export default function DashboardPage() {
 	} = useTradingStream();
 
 	const matchInfo = 'T1 vs G2 · League of Legends';
+
+	const stats = useMemo(() => {
+		const yesPrice = marketPrices?.yesPrice ?? null;
+		const noPrice = marketPrices?.noPrice ?? null;
+		const edge = yesPrice !== null ? posterior - yesPrice : 0;
+
+		const winCount = trades.filter((t) => t.success).length;
+		const pnl = trades.reduce((sum, t) => {
+			if (!t.success) return sum;
+			return sum + (t.side === 'BUY' ? -t.price * t.size : t.price * t.size);
+		}, 0);
+
+		const position = trades.reduce((sum, t) => {
+			if (!t.success) return sum;
+			return sum + (t.side === 'BUY' ? t.size : -t.size);
+		}, 0);
+
+		const exposure = Math.abs(position) * (yesPrice ?? 0.5);
+
+		const prevProbability = probabilityHistory.length > 1
+			? probabilityHistory[probabilityHistory.length - 2]?.posterior ?? posterior
+			: posterior;
+		const modelProbabilityDelta = posterior - prevProbability;
+
+		return {
+			pnl,
+			tradeCount: trades.length,
+			winCount,
+			modelProbability: posterior,
+			modelProbabilityDelta,
+			yesPrice,
+			noPrice,
+			edge,
+			edgeThreshold: EDGE_THRESHOLD,
+			position,
+			exposure,
+			eventCount: events.length,
+		};
+	}, [posterior, marketPrices, trades, events, probabilityHistory]);
 
 	const handleStart = () => {
 		setBotStatus('STARTING');
@@ -88,17 +129,16 @@ export default function DashboardPage() {
 					onDryRunChange={setDryRun}
 				/>
 
-				<StatsCards
-					posterior={posterior}
-					yesPrice={marketPrices?.yesPrice ?? null}
-					noPrice={marketPrices?.noPrice ?? null}
-					eventCount={events.length}
-					tradeCount={trades.length}
-				/>
+				<StatsCards {...stats} />
 
-				<ProbabilityChart
+				<ChartCard
 					history={probabilityHistory}
-					marketPrice={marketPrices?.yesPrice}
+					marketPriceHistory={
+						marketPrices
+							? [{ timestamp: marketPrices.timestamp, price: marketPrices.yesPrice }]
+							: []
+					}
+					events={events}
 				/>
 
 				<div className="grid gap-6 lg:grid-cols-2">
