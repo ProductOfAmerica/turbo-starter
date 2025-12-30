@@ -9,3 +9,6 @@ export { MarketPrices } from './market-prices';
 export { MatchSelector } from './match-selector';
 export { Header } from './header';
 export { StatusBar } from './status-bar';
+export { ConfigSheet } from './config-sheet';
+export { CommandPalette } from './command-palette';
+export { StopDialog } from './stop-dialog';
