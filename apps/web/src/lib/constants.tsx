@@ -1,60 +1,58 @@
-import { Container, Package, Palette, Rocket, Sparkles, Zap } from 'lucide-react';
+import { Activity, BarChart3, Bot, Gamepad2, Shield, Zap } from 'lucide-react';
 
 export const features = [
 	{
+		icon: <Activity className="w-5 h-5" aria-hidden="true" />,
+		title: 'Real-time Events',
+		description: 'Live game event streaming from PandaScore and OpenDota APIs',
+	},
+	{
+		icon: <BarChart3 className="w-5 h-5" aria-hidden="true" />,
+		title: 'Bayesian Predictions',
+		description: 'Dynamic probability updates based on kills, objectives, and map control',
+	},
+	{
+		icon: <Bot className="w-5 h-5" aria-hidden="true" />,
+		title: 'Auto Trading',
+		description: 'Automatic order execution when edge threshold is detected',
+	},
+	{
+		icon: <Gamepad2 className="w-5 h-5" aria-hidden="true" />,
+		title: 'Multi-Game Support',
+		description: 'Track League of Legends and Dota 2 professional matches',
+	},
+	{
 		icon: <Zap className="w-5 h-5" aria-hidden="true" />,
-		title: 'Lightning Fast',
-		description: 'Optimized builds with intelligent caching and parallel execution',
+		title: 'Live Dashboard',
+		description: 'Real-time probability charts, trade logs, and market prices',
 	},
 	{
-		icon: <Palette className="w-5 h-5" aria-hidden="true" />,
-		title: 'Modern UI',
-		description: 'Pre-configured Shadcn UI components with Tailwind CSS',
-	},
-	{
-		icon: <Rocket className="w-5 h-5" aria-hidden="true" />,
-		title: 'Production Ready',
-		description: 'Next.js 16 with Turbopack for optimal performance',
-	},
-	{
-		icon: <Sparkles className="w-5 h-5" aria-hidden="true" />,
-		title: 'Developer Experience',
-		description: 'Biome.js for fast, unified linting and formatting',
-	},
-	{
-		icon: <Container className="w-5 h-5" aria-hidden="true" />,
-		title: 'Containerized',
-		description: 'Docker Compose setup for consistent development',
-	},
-	{
-		icon: <Package className="w-5 h-5" aria-hidden="true" />,
-		title: 'Monorepo Structure',
-		description: 'Efficient workspace management with pnpm',
+		icon: <Shield className="w-5 h-5" aria-hidden="true" />,
+		title: 'Dry Run Mode',
+		description: 'Test strategies safely without risking real funds',
 	},
 ];
 
 export const techStack = [
+	{ name: 'Polymarket', color: 'bg-[#7C3AED] text-white', url: 'https://polymarket.com' },
 	{ name: 'Next.js 16', color: 'bg-black text-white dark:bg-white dark:text-black', url: 'https://nextjs.org' },
-	{ name: 'Turborepo', color: 'bg-linear-to-r from-[#FF1E56] to-[#0196FF] text-white', url: 'https://turbo.build' },
-	{
-		name: 'Shadcn UI',
-		color: 'bg-[#0a0a0a] text-white dark:bg-zinc-100 dark:text-[#0a0a0a]',
-		url: 'https://ui.shadcn.com',
-	},
-	{
-		name: 'Tailwind CSS',
-		color: 'bg-[#38bdf8] text-black',
-		url: 'https://tailwindcss.com',
-	},
-	{ name: 'Biome.js', color: 'bg-[#60a5fa] text-black', url: 'https://biomejs.dev' },
+	{ name: 'PandaScore', color: 'bg-[#FF6B35] text-white', url: 'https://pandascore.co' },
+	{ name: 'OpenDota', color: 'bg-[#7C3AED] text-white', url: 'https://www.opendota.com' },
 	{ name: 'TypeScript', color: 'bg-[#3178c6] text-white', url: 'https://www.typescriptlang.org' },
-	{ name: 'Docker', color: 'bg-[#1d63ed] text-white', url: 'https://www.docker.com' },
-	{ name: 'pnpm', color: 'bg-[#f69220] text-black', url: 'https://pnpm.io' },
+	{ name: 'Recharts', color: 'bg-[#22C55E] text-white', url: 'https://recharts.org' },
 ];
 
-export const commands = [
-	{ cmd: 'pnpm build', desc: 'Build all packages and apps' },
-	{ cmd: 'pnpm lint', desc: 'Check code quality across the monorepo' },
-	{ cmd: 'pnpm format-write', desc: 'Auto-format all code with Biome' },
-	{ cmd: 'pnpm docker', desc: 'Run the entire stack with Docker' },
+export const eventTypes = [
+	{ type: 'kill', label: 'Champion Kill', game: 'lol' },
+	{ type: 'dragon', label: 'Dragon', game: 'lol' },
+	{ type: 'baron', label: 'Baron Nashor', game: 'lol' },
+	{ type: 'tower', label: 'Tower', game: 'both' },
+	{ type: 'inhibitor', label: 'Inhibitor/Barracks', game: 'both' },
+	{ type: 'roshan', label: 'Roshan', game: 'dota' },
 ];
+
+export const tradingConfig = {
+	edgeThreshold: 0.05,
+	defaultOrderSize: 10.0,
+	pollInterval: 2000,
+};
