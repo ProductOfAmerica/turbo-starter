@@ -6,12 +6,12 @@ A modern, turbocharged monorepo template for building Next.js apps with ease. Pa
 **Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project—all
 wrapped in a Docker-friendly setup.
 
-[![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
+[![Stars](https://img.shields.io/github/stars/ProductOfAmerica/trading-bot?style=social)](https://github.com/ProductOfAmerica/trading-bot)
 [![Node.js](https://img.shields.io/badge/Node.js-v20.19.2+-green)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-v10.6.2-orange)](https://pnpm.io/)
 [![nextjs](https://img.shields.io/badge/Next.js-16.0.10-blue?logo=nextdotjs)](https://nextjs.org/)
 [![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.1.11-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-[![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
+[![Build Status](https://github.com/ProductOfAmerica/trading-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/trading-bot/actions)
 
 ---
 
@@ -54,8 +54,8 @@ Perfect for developers who want a cutting-edge stack without the setup hassle.
 ### Setup
 
 ```bash
-git clone https://github.com/ProductOfAmerica/turbo-starter.git
-cd turbo-starter
+git clone https://github.com/ProductOfAmerica/trading-bot.git
+cd trading-bot
 pnpm install
 ```
 
@@ -108,7 +108,7 @@ pnpm lint:fix     # Auto-fix issues
 
 Love this starter? Star it, fork it, or submit a PR! Let’s make it even better together.
 
-- [Issues](https://github.com/ProductOfAmerica/turbo-starter/issues)
+- [Issues](https://github.com/ProductOfAmerica/trading-bot/issues)
 - [Docs](https://turbo.build/repo/docs)
 
 ---
