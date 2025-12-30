@@ -42,7 +42,7 @@ export function StopDialog({
 
 	return (
 		<AlertDialog open={open} onOpenChange={onOpenChange}>
-			<AlertDialogContent>
+			<AlertDialogContent onOverlayClick={() => onOpenChange(false)}>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Stop Trading Bot?</AlertDialogTitle>
 					<AlertDialogDescription asChild>
