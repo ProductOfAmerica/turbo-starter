@@ -11,8 +11,9 @@ import { ConfigSheet } from '@/components/dashboard/config-sheet';
 import { CommandPalette } from '@/components/dashboard/command-palette';
 import { StopDialog } from '@/components/dashboard/stop-dialog';
 import { useTradingStream } from '@/hooks/use-trading-stream';
+import { useBotState } from '@/hooks/use-bot-state';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
-import type { BotStatus, Config } from '@/services/types';
+import type { Config } from '@/services/types';
 
 const DEFAULT_CONFIG: Config = {
 	game: 'lol',
@@ -28,14 +29,21 @@ export default function DashboardPage() {
 	const [commandOpen, setCommandOpen] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [stopDialogOpen, setStopDialogOpen] = useState(false);
-	const [botStatus, setBotStatus] = useState<BotStatus>('IDLE');
-	const [dryRun, setDryRun] = useState(true);
-	const [elapsed, setElapsed] = useState(0);
 	const [config, setConfig] = useState<Config>(DEFAULT_CONFIG);
 
 	const chartRef = useRef<HTMLDivElement>(null);
 	const eventsRef = useRef<HTMLDivElement>(null);
 	const tradesRef = useRef<HTMLDivElement>(null);
+
+	const {
+		state: botState,
+		stats: botStats,
+		start,
+		stop,
+		pause,
+		resume,
+		setDryRun,
+	} = useBotState();
 
 	const {
 		isConnected,
@@ -99,47 +107,63 @@ export default function DashboardPage() {
 		return 'FLAT' as const;
 	}, [stats.position]);
 
-	const handleStart = useCallback(() => {
-		setBotStatus('STARTING');
-		setTimeout(() => {
-			setBotStatus('RUNNING');
+	const handleStart = useCallback(async () => {
+		try {
+			await start(config.game, config.matchId || 'demo-match', config.marketId, botState.dryRun);
 			connect(config.game, config.matchId || 'demo-match', config.marketId);
-		}, 1500);
-	}, [connect, config]);
+		} catch {
+			// Error handled by useBotState
+		}
+	}, [start, connect, config, botState.dryRun]);
 
-	const handlePause = useCallback(() => {
-		setBotStatus('PAUSED');
-	}, []);
+	const handlePause = useCallback(async () => {
+		try {
+			await pause();
+		} catch {
+			// Error handled by useBotState
+		}
+	}, [pause]);
 
-	const handleResume = useCallback(() => {
-		setBotStatus('RUNNING');
-	}, []);
+	const handleResume = useCallback(async () => {
+		try {
+			await resume();
+		} catch {
+			// Error handled by useBotState
+		}
+	}, [resume]);
 
 	const handleStopRequest = useCallback(() => {
 		setStopDialogOpen(true);
 	}, []);
 
-	const handleStopConfirm = useCallback(() => {
-		setBotStatus('STOPPING');
-		setTimeout(() => {
-			setBotStatus('STOPPED');
+	const handleStopConfirm = useCallback(async () => {
+		try {
+			await stop();
 			disconnect();
 			reset();
-		}, 1000);
-	}, [disconnect, reset]);
+		} catch {
+			// Error handled by useBotState
+		}
+	}, [stop, disconnect, reset]);
 
-	const handleRetry = useCallback(() => {
-		setBotStatus('STARTING');
-		setTimeout(() => setBotStatus('RUNNING'), 1500);
-	}, []);
+	const handleRetry = useCallback(async () => {
+		await handleStart();
+	}, [handleStart]);
 
 	const handleConfigure = useCallback(() => {
 		setSettingsOpen(true);
 	}, []);
 
 	const handleToggleDryRun = useCallback(() => {
-		setDryRun((prev) => !prev);
-	}, []);
+		setDryRun(!botState.dryRun);
+	}, [setDryRun, botState.dryRun]);
+
+	const handleDryRunChange = useCallback(
+		(value: boolean) => {
+			setDryRun(value);
+		},
+		[setDryRun]
+	);
 
 	const handleSaveConfig = useCallback((newConfig: Config) => {
 		setConfig(newConfig);
@@ -163,7 +187,6 @@ export default function DashboardPage() {
 	}, [trades]);
 
 	const handleExportChart = useCallback(() => {
-		// Chart export would require access to the Recharts ref
 		console.log('Export chart');
 	}, []);
 
@@ -183,16 +206,16 @@ export default function DashboardPage() {
 		setCommandOpen(true);
 	}, []);
 
-	const canStart = botStatus === 'IDLE' || botStatus === 'STOPPED';
-	const canTogglePlayPause = botStatus === 'RUNNING' || botStatus === 'PAUSED';
+	const canStart = botState.status === 'IDLE' || botState.status === 'STOPPED';
+	const canTogglePlayPause = botState.status === 'RUNNING' || botState.status === 'PAUSED';
 
 	const handleTogglePlayPause = useCallback(() => {
-		if (botStatus === 'RUNNING') {
+		if (botState.status === 'RUNNING') {
 			handlePause();
-		} else if (botStatus === 'PAUSED') {
+		} else if (botState.status === 'PAUSED') {
 			handleResume();
 		}
-	}, [botStatus, handlePause, handleResume]);
+	}, [botState.status, handlePause, handleResume]);
 
 	useKeyboardShortcuts({
 		onCommandPalette: () => setCommandOpen(true),
@@ -216,17 +239,17 @@ export default function DashboardPage() {
 
 			<main className="mx-auto max-w-7xl flex-1 space-y-6 overflow-auto p-6">
 				<StatusBar
-					status={botStatus}
-					connection={isConnected ? 'connected' : 'disconnected'}
-					elapsed={elapsed}
-					dryRun={dryRun}
+					status={botState.status}
+					connection={isConnected ? 'connected' : botState.connection}
+					elapsed={botState.elapsed}
+					dryRun={botState.dryRun}
 					onStart={handleStart}
 					onPause={handlePause}
 					onResume={handleResume}
 					onStop={handleStopRequest}
 					onRetry={handleRetry}
 					onConfigure={handleConfigure}
-					onDryRunChange={setDryRun}
+					onDryRunChange={handleDryRunChange}
 				/>
 
 				<StatsCards {...stats} />
@@ -263,8 +286,8 @@ export default function DashboardPage() {
 			<CommandPalette
 				open={commandOpen}
 				onOpenChange={setCommandOpen}
-				botStatus={botStatus}
-				dryRun={dryRun}
+				botStatus={botState.status}
+				dryRun={botState.dryRun}
 				onStart={handleStart}
 				onPause={handlePause}
 				onResume={handleResume}

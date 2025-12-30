@@ -1,122 +1,94 @@
-import { parseEvents, isMatchComplete } from '@/services/event-parser';
-import { fetchMarketPrices } from '@/services/polymarket';
-import { BayesianPredictor } from '@/services/predictor';
-import { evaluateTrade } from '@/services/trade-evaluator';
-import type { GameType, TradeExecution } from '@/services/types';
+import { tradingBot } from '@/services/trading-bot';
 
-const POLL_INTERVAL = Number(process.env.POLL_INTERVAL) || 2000;
-
-export async function GET(request: Request) {
-	const { searchParams } = new URL(request.url);
-	const gameType = searchParams.get('gameType') as GameType;
-	const matchId = searchParams.get('matchId');
-	const marketId = searchParams.get('marketId') || process.env.POLYMARKET_ID;
-	const isDryRun = process.env.DRY_RUN === 'true';
-
-	if (!gameType || !matchId) {
-		return new Response(JSON.stringify({ error: 'Missing gameType or matchId' }), {
-			status: 400,
-			headers: { 'Content-Type': 'application/json' },
-		});
-	}
-
+export async function GET() {
 	const encoder = new TextEncoder();
-	const predictor = new BayesianPredictor();
 
 	const stream = new ReadableStream({
-		async start(controller) {
+		start(controller) {
 			const sendEvent = (type: string, data: unknown) => {
 				controller.enqueue(encoder.encode(`event: ${type}\ndata: ${JSON.stringify(data)}\n\n`));
 			};
 
-			sendEvent('connected', { gameType, matchId, isDryRun });
+			const state = tradingBot.getState();
+			sendEvent('connected', {
+				gameType: state.gameType,
+				matchId: state.matchId,
+				isDryRun: state.dryRun,
+			});
 
-			let isRunning = true;
+			for (const event of tradingBot.getEvents()) {
+				sendEvent('event', event);
+			}
 
-			const poll = async () => {
-				while (isRunning) {
-					try {
-						const gameApiUrl =
-							gameType === 'lol'
-								? `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/games/lol?matchId=${matchId}`
-								: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/games/dota?matchId=${matchId}`;
+			for (const trade of tradingBot.getTrades()) {
+				sendEvent('trade', { execution: trade });
+			}
 
-						const gameResponse = await fetch(gameApiUrl);
-						if (!gameResponse.ok) {
-							sendEvent('error', { message: 'Failed to fetch game data' });
-							await sleep(POLL_INTERVAL);
-							continue;
-						}
+			const prices = tradingBot.getMarketPrices();
+			if (prices) {
+				sendEvent('prices', {
+					yesPrice: prices.yesPrice,
+					noPrice: prices.noPrice,
+					timestamp: prices.timestamp.toISOString(),
+				});
+			}
 
-						const gameData = await gameResponse.json();
+			const history = tradingBot.getProbabilityHistory();
+			if (history.length > 0) {
+				sendEvent('state', {
+					posterior: history[history.length - 1]?.posterior ?? 0.5,
+					updateCount: history.length,
+					history: history.slice(-50),
+				});
+			}
 
-						if (isMatchComplete(gameData, gameType)) {
-							sendEvent('matchComplete', { posterior: predictor.getPosterior() });
-							isRunning = false;
+			const unsubscribe = tradingBot.subscribe((type, data) => {
+				try {
+					switch (type) {
+						case 'stateChange':
+							sendEvent('botState', data);
 							break;
-						}
-
-						const events = parseEvents(gameData, gameType);
-						for (const event of events) {
-							if (predictor.update(event)) {
-								sendEvent('event', {
-									...event,
-									posterior: predictor.getPosterior(),
-								});
-							}
-						}
-
-						if (marketId) {
-							const prices = await fetchMarketPrices(marketId);
-							if (prices) {
-								sendEvent('prices', {
-									...prices,
-									timestamp: new Date().toISOString(),
-								});
-
-								const signal = evaluateTrade(predictor.getPosterior(), {
-									yesPrice: prices.yesPrice,
-									noPrice: prices.noPrice,
-									timestamp: new Date(),
-								});
-
-								if (signal) {
-									const execution: TradeExecution = {
-										id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-										side: signal.side,
-										price: signal.price,
-										size: signal.size,
-										timestamp: new Date(),
-										simulated: isDryRun,
-										success: true,
-									};
-
-									sendEvent('trade', {
-										signal,
-										execution,
-									});
-								}
-							}
-						}
-
-						sendEvent('state', {
-							posterior: predictor.getPosterior(),
-							updateCount: predictor.getUpdateCount(),
-							history: predictor.getHistory().slice(-50),
-						});
-					} catch (error) {
-						sendEvent('error', {
-							message: error instanceof Error ? error.message : 'Unknown error',
-						});
+						case 'event':
+							sendEvent('event', data);
+							break;
+						case 'prices':
+							sendEvent('prices', data);
+							break;
+						case 'trade':
+							sendEvent('trade', data);
+							break;
+						case 'probability':
+							sendEvent('state', {
+								posterior: (data as { posterior: number }).posterior,
+								updateCount: tradingBot.getProbabilityHistory().length,
+								history: tradingBot.getProbabilityHistory().slice(-50),
+							});
+							break;
+						case 'error':
+							sendEvent('error', data);
+							break;
+						case 'matchComplete':
+							sendEvent('matchComplete', data);
+							break;
 					}
-
-					await sleep(POLL_INTERVAL);
+				} catch {
+					// Stream closed
 				}
+			});
 
-				controller.close();
+			const checkInterval = setInterval(() => {
+				const currentState = tradingBot.getState();
+				if (currentState.status === 'STOPPED' || currentState.status === 'IDLE') {
+					clearInterval(checkInterval);
+					unsubscribe();
+					controller.close();
+				}
+			}, 5000);
+
+			return () => {
+				clearInterval(checkInterval);
+				unsubscribe();
 			};
-
-			poll();
 		},
 	});
 
@@ -127,8 +99,4 @@ export async function GET(request: Request) {
 			Connection: 'keep-alive',
 		},
 	});
-}
-
-function sleep(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
 }
