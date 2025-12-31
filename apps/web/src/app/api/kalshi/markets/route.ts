@@ -21,15 +21,23 @@ export async function GET(request: Request) {
 	const status = searchParams.get('status') || 'open';
 	const category = searchParams.get('category');
 	const limit = searchParams.get('limit') || '50';
+	const minVolume = parseInt(searchParams.get('minVolume') || '0', 10);
+	const mode = searchParams.get('mode') || 'demo';
 
 	const demoApiKeyId = process.env.KALSHI_DEMO_API_KEY_ID;
 	const prodApiKeyId = process.env.KALSHI_API_KEY_ID;
 
-	if (!demoApiKeyId && !prodApiKeyId) {
-		return NextResponse.json({ error: 'Kalshi API credentials not configured' }, { status: 500 });
+	const useDemo = mode === 'demo';
+	const apiKey = useDemo ? demoApiKeyId : prodApiKeyId;
+
+	if (!apiKey) {
+		return NextResponse.json(
+			{ error: `Kalshi ${useDemo ? 'demo' : 'production'} API credentials not configured` },
+			{ status: 500 }
+		);
 	}
 
-	const baseUrl = demoApiKeyId
+	const baseUrl = useDemo
 		? 'https://demo-api.kalshi.co/trade-api/v2'
 		: 'https://api.elections.kalshi.com/trade-api/v2';
 
@@ -90,11 +98,15 @@ export async function GET(request: Request) {
 			}
 		}
 
+		if (minVolume > 0) {
+			markets = markets.filter((m: { volume24h: number }) => m.volume24h >= minVolume);
+		}
+
 		markets = markets.slice(0, parseInt(limit, 10));
 
 		return NextResponse.json({
 			markets,
-			source: demoApiKeyId ? 'demo' : 'production',
+			source: useDemo ? 'demo' : 'production',
 		});
 	} catch (error) {
 		console.error('Failed to fetch Kalshi markets:', error);

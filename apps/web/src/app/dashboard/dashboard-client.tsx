@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChartCard } from '@/components/dashboard/chart-card';
 import { CommandPalette } from '@/components/dashboard/command-palette';
 import { ConfigSheet } from '@/components/dashboard/config-sheet';
+import { ConfigSheetV2 } from '@/components/dashboard/config-sheet-v2';
 import { EventsFeed } from '@/components/dashboard/events-feed';
 import { Header } from '@/components/dashboard/header';
 import { StatsCards } from '@/components/dashboard/stats-cards';
@@ -15,6 +16,7 @@ import { useBotState } from '@/hooks/use-bot-state';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { useTradingStream } from '@/hooks/use-trading-stream';
 import { useTradingToasts } from '@/hooks/use-trading-toasts';
+import type { StrategyName } from '@/services/strategies';
 import type { BotState, BotStatus, Config } from '@/services/types';
 
 const DEFAULT_CONFIG: Config = {
@@ -32,8 +34,11 @@ interface DashboardClientProps {
 export function DashboardClient({ initialBotState, initialConfig }: DashboardClientProps) {
 	const [commandOpen, setCommandOpen] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
+	const [settingsV2Open, setSettingsV2Open] = useState(false);
 	const [stopDialogOpen, setStopDialogOpen] = useState(false);
 	const [config, setConfig] = useState<Config>(initialConfig || DEFAULT_CONFIG);
+	const [currentStrategy, setCurrentStrategy] = useState<StrategyName>('market-maker');
+	const availableStrategies: StrategyName[] = ['market-maker', 'momentum'];
 
 	const chartRef = useRef<HTMLDivElement>(null);
 	const eventsRef = useRef<HTMLDivElement>(null);
@@ -199,6 +204,21 @@ export function DashboardClient({ initialBotState, initialConfig }: DashboardCli
 		setConfig(newConfig);
 	}, []);
 
+	const handleStrategyChange = useCallback(async (strategy: StrategyName) => {
+		try {
+			const res = await fetch('/api/bot/strategy', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ strategy }),
+			});
+			if (res.ok) {
+				setCurrentStrategy(strategy);
+			}
+		} catch (err) {
+			console.error('Failed to change strategy:', err);
+		}
+	}, []);
+
 	const handleExportTrades = useCallback(() => {
 		const csv = [
 			'Time,Side,Price,Size,Status',
@@ -291,6 +311,8 @@ export function DashboardClient({ initialBotState, initialConfig }: DashboardCli
 				matchInfo={marketInfo}
 				onCommandOpen={() => setCommandOpen(true)}
 				onSettingsOpen={() => setSettingsOpen(true)}
+				onSettingsV2Open={() => setSettingsV2Open(true)}
+				apiStatus={{ name: 'Kalshi', status: 'connected' }}
 			/>
 
 			<main className="mx-auto max-w-7xl flex-1 space-y-6 overflow-auto p-6">
@@ -298,7 +320,6 @@ export function DashboardClient({ initialBotState, initialConfig }: DashboardCli
 					status={botState.status}
 					connection={isConnected ? 'connected' : botState.connection}
 					elapsed={botState.elapsed}
-					dryRun={botState.dryRun}
 					tickerCount={tickerCount}
 					canStart={canStart}
 					missingMatchId={!config.marketTicker}
@@ -308,7 +329,6 @@ export function DashboardClient({ initialBotState, initialConfig }: DashboardCli
 					onStop={handleStopRequest}
 					onRetry={handleRetry}
 					onConfigure={handleConfigure}
-					onDryRunChange={handleDryRunChange}
 				/>
 
 				<StatsCards {...stats} bidPrice={quotes?.bid} askPrice={quotes?.ask} />
@@ -333,7 +353,31 @@ export function DashboardClient({ initialBotState, initialConfig }: DashboardCli
 				</div>
 			</main>
 
-			<ConfigSheet open={settingsOpen} onOpenChange={setSettingsOpen} config={config} onSave={handleSaveConfig} />
+			<ConfigSheet
+				open={settingsOpen}
+				onOpenChange={setSettingsOpen}
+				config={config}
+				onSave={handleSaveConfig}
+				currentStrategy={currentStrategy}
+				availableStrategies={availableStrategies}
+				onStrategyChange={handleStrategyChange}
+				isBotRunning={botState.status === 'RUNNING' || botState.status === 'PAUSED'}
+				dryRun={botState.dryRun}
+				onDryRunChange={handleDryRunChange}
+			/>
+
+			<ConfigSheetV2
+				open={settingsV2Open}
+				onOpenChange={setSettingsV2Open}
+				config={config}
+				onSave={handleSaveConfig}
+				currentStrategy={currentStrategy}
+				availableStrategies={availableStrategies}
+				onStrategyChange={handleStrategyChange}
+				isBotRunning={botState.status === 'RUNNING' || botState.status === 'PAUSED'}
+				dryRun={botState.dryRun}
+				onDryRunChange={handleDryRunChange}
+			/>
 
 			<CommandPalette
 				open={commandOpen}

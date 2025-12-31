@@ -4,26 +4,28 @@ import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@repo/ui/components/popover';
 import { Separator } from '@repo/ui/components/separator';
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@repo/ui/components/sheet';
 import { Slider } from '@repo/ui/components/slider';
+import { Switch } from '@repo/ui/components/switch';
 import { cn } from '@repo/ui/lib/utils';
-import { ArrowDownAZ, Loader2, RefreshCw } from 'lucide-react';
+import { ArrowDownAZ, BarChart3, Layers, Loader2, RefreshCw } from 'lucide-react';
 import { useCallback, useEffect, useState, useTransition } from 'react';
+import type { StrategyName } from '@/services/strategies';
 import type { Config, KalshiMarket } from '@/services/types';
-
-interface ApiStatus {
-	name: string;
-	status: 'connected' | 'error' | 'checking';
-	detail?: string;
-}
 
 interface ConfigSheetProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	config: Config;
 	onSave: (config: Config) => void;
+	currentStrategy: StrategyName;
+	availableStrategies: StrategyName[];
+	onStrategyChange: (strategy: StrategyName) => void;
+	isBotRunning: boolean;
+	dryRun: boolean;
+	onDryRunChange: (checked: boolean) => void;
 }
 
 const defaultConfig: Config = {
@@ -33,20 +35,42 @@ const defaultConfig: Config = {
 	maxPosition: 100,
 };
 
-export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetProps) {
+const strategyDescriptions: Record<StrategyName, string> = {
+	'market-maker': 'EMA-based market making with inventory skew',
+	momentum: 'Trend-following based on price momentum',
+};
+
+export function ConfigSheet({
+	open,
+	onOpenChange,
+	config,
+	onSave,
+	currentStrategy,
+	availableStrategies,
+	onStrategyChange,
+	isBotRunning,
+	dryRun,
+	onDryRunChange,
+}: ConfigSheetProps) {
 	const [localConfig, setLocalConfig] = useState<Config>(config);
 	const [markets, setMarkets] = useState<KalshiMarket[]>([]);
 	const [isPending, startTransition] = useTransition();
 	const [categoryFilter, setCategoryFilter] = useState<string>('all');
 	const [sortBy, setSortBy] = useState<'volume24h' | 'spread' | 'openInterest'>('volume24h');
 	const [minVolume, setMinVolume] = useState<number>(0);
-	const [apiStatuses] = useState<ApiStatus[]>([{ name: 'Kalshi', status: 'connected' }]);
+	const [categoryOpen, setCategoryOpen] = useState(false);
+	const [sortOpen, setSortOpen] = useState(false);
+	const [volumeOpen, setVolumeOpen] = useState(false);
 
-	const fetchMarkets = useCallback(async (category: string) => {
+	const fetchMarkets = useCallback(async (category: string, minVol: number, isDryRun: boolean) => {
 		try {
 			const params = new URLSearchParams({ status: 'open', limit: '50' });
+			params.set('mode', isDryRun ? 'demo' : 'prod');
 			if (category !== 'all') {
 				params.set('category', category);
+			}
+			if (minVol > 0) {
+				params.set('minVolume', String(minVol));
 			}
 			const res = await fetch(`/api/kalshi/markets?${params}`);
 			if (res.ok) {
@@ -68,9 +92,9 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 
 	useEffect(() => {
 		if (open) {
-			fetchMarkets(categoryFilter);
+			fetchMarkets(categoryFilter, minVolume, dryRun);
 		}
-	}, [categoryFilter, open, fetchMarkets]);
+	}, [categoryFilter, minVolume, dryRun, open, fetchMarkets]);
 
 	const handleSelectMarket = (market: KalshiMarket) => {
 		setLocalConfig({ ...localConfig, marketTicker: market.ticker });
@@ -94,14 +118,12 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 
 	const formatPrice = (price: number) => `${Math.round(price * 100)}¢`;
 
-	const filteredAndSortedMarkets = markets
-		.filter((m) => m.volume24h >= minVolume)
-		.sort((a, b) => {
-			if (sortBy === 'volume24h') return b.volume24h - a.volume24h;
-			if (sortBy === 'spread') return a.spreadBps - b.spreadBps;
-			if (sortBy === 'openInterest') return b.openInterest - a.openInterest;
-			return 0;
-		});
+	const filteredAndSortedMarkets = [...markets].sort((a, b) => {
+		if (sortBy === 'volume24h') return b.volume24h - a.volume24h;
+		if (sortBy === 'spread') return a.spreadBps - b.spreadBps;
+		if (sortBy === 'openInterest') return b.openInterest - a.openInterest;
+		return 0;
+	});
 
 	return (
 		<Sheet open={open} onOpenChange={handleOpenChange}>
@@ -112,6 +134,30 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 				</SheetHeader>
 
 				<div className="space-y-8 py-6">
+					<div className="flex items-center justify-between rounded-md border px-4 py-3">
+						<div className="space-y-0.5">
+							<Label htmlFor="dry-run-config">Dry Run Mode</Label>
+							<p className="text-sm text-muted-foreground">
+								{dryRun ? 'Using demo API (simulated trades)' : 'Using production API (real trades)'}
+							</p>
+						</div>
+						<div className="flex items-center gap-2">
+							{dryRun && (
+								<Badge variant="secondary" className="border-yellow-500/50 bg-yellow-500/10 text-yellow-600">
+									DEMO
+								</Badge>
+							)}
+							<Switch
+								id="dry-run-config"
+								checked={dryRun}
+								onCheckedChange={onDryRunChange}
+								disabled={isBotRunning}
+							/>
+						</div>
+					</div>
+
+					<Separator />
+
 					<div className="space-y-4">
 						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
 							Market Selection
@@ -119,66 +165,121 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
-								<Label>Category</Label>
-								<Select value={categoryFilter} onValueChange={setCategoryFilter}>
-									<SelectTrigger className="w-[140px]">
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="all">All Markets</SelectItem>
-										<SelectItem value="weather">Weather</SelectItem>
-										<SelectItem value="economics">Economic Data</SelectItem>
-										<SelectItem value="sports">Sports Totals</SelectItem>
-									</SelectContent>
-								</Select>
-							</div>
-
-							<div className="flex items-center justify-between">
-								<Label>Sort By</Label>
-								<Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
-									<SelectTrigger className="w-[140px]">
-										<ArrowDownAZ className="mr-2 h-4 w-4" />
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="volume24h">Volume (24h)</SelectItem>
-										<SelectItem value="spread">Spread (Tight)</SelectItem>
-										<SelectItem value="openInterest">Open Interest</SelectItem>
-									</SelectContent>
-								</Select>
-							</div>
-
-							<div className="flex items-center justify-between">
-								<Label>Min Volume (24h)</Label>
-								<Select value={String(minVolume)} onValueChange={(v) => setMinVolume(Number(v))}>
-									<SelectTrigger className="w-[140px]">
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="0">Any</SelectItem>
-										<SelectItem value="100">100+</SelectItem>
-										<SelectItem value="1000">1,000+</SelectItem>
-										<SelectItem value="10000">10,000+</SelectItem>
-									</SelectContent>
-								</Select>
-							</div>
-						</div>
-
-						<div className="space-y-3">
-							<div className="flex items-center justify-between">
 								<Label>Available Markets</Label>
-								<Button
-									variant="ghost"
-									size="sm"
-									onClick={() => fetchMarkets(categoryFilter)}
-									disabled={isPending}
-								>
-									{isPending ? (
-										<Loader2 className="h-4 w-4 animate-spin" />
-									) : (
-										<RefreshCw className="h-4 w-4" />
-									)}
-								</Button>
+								<div className="flex items-center gap-1">
+									<Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+										<PopoverTrigger asChild>
+											<Button
+												variant="ghost"
+												size="sm"
+												className={cn(categoryFilter !== 'all' && 'text-primary')}
+											>
+												<Layers className="h-4 w-4" />
+											</Button>
+										</PopoverTrigger>
+										<PopoverContent className="w-40 p-2" align="end">
+											<div className="space-y-1">
+												<p className="px-2 py-1 text-xs font-medium text-muted-foreground">Category</p>
+												{['all', 'weather', 'economics', 'sports'].map((cat) => (
+													<button
+														key={cat}
+														type="button"
+														onClick={() => {
+															setCategoryFilter(cat);
+															setCategoryOpen(false);
+														}}
+														className={cn(
+															'w-full rounded px-2 py-1.5 text-left text-sm hover:bg-accent',
+															categoryFilter === cat && 'bg-accent text-accent-foreground'
+														)}
+													>
+														{cat === 'all' ? 'All Markets' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+													</button>
+												))}
+											</div>
+										</PopoverContent>
+									</Popover>
+
+									<Popover open={sortOpen} onOpenChange={setSortOpen}>
+										<PopoverTrigger asChild>
+											<Button variant="ghost" size="sm">
+												<ArrowDownAZ className="h-4 w-4" />
+											</Button>
+										</PopoverTrigger>
+										<PopoverContent className="w-40 p-2" align="end">
+											<div className="space-y-1">
+												<p className="px-2 py-1 text-xs font-medium text-muted-foreground">Sort By</p>
+												{[
+													{ value: 'volume24h', label: 'Volume (24h)' },
+													{ value: 'spread', label: 'Spread (Tight)' },
+													{ value: 'openInterest', label: 'Open Interest' },
+												].map((opt) => (
+													<button
+														key={opt.value}
+														type="button"
+														onClick={() => {
+															setSortBy(opt.value as typeof sortBy);
+															setSortOpen(false);
+														}}
+														className={cn(
+															'w-full rounded px-2 py-1.5 text-left text-sm hover:bg-accent',
+															sortBy === opt.value && 'bg-accent text-accent-foreground'
+														)}
+													>
+														{opt.label}
+													</button>
+												))}
+											</div>
+										</PopoverContent>
+									</Popover>
+
+									<Popover open={volumeOpen} onOpenChange={setVolumeOpen}>
+										<PopoverTrigger asChild>
+											<Button variant="ghost" size="sm" className={cn(minVolume > 0 && 'text-primary')}>
+												<BarChart3 className="h-4 w-4" />
+											</Button>
+										</PopoverTrigger>
+										<PopoverContent className="w-40 p-2" align="end">
+											<div className="space-y-1">
+												<p className="px-2 py-1 text-xs font-medium text-muted-foreground">Min Volume</p>
+												{[
+													{ value: 0, label: 'Any' },
+													{ value: 100, label: '100+' },
+													{ value: 1000, label: '1,000+' },
+													{ value: 10000, label: '10,000+' },
+												].map((opt) => (
+													<button
+														key={opt.value}
+														type="button"
+														onClick={() => {
+															setMinVolume(opt.value);
+															setVolumeOpen(false);
+														}}
+														className={cn(
+															'w-full rounded px-2 py-1.5 text-left text-sm hover:bg-accent',
+															minVolume === opt.value && 'bg-accent text-accent-foreground'
+														)}
+													>
+														{opt.label}
+													</button>
+												))}
+											</div>
+										</PopoverContent>
+									</Popover>
+
+									<Button
+										variant="ghost"
+										size="sm"
+										onClick={() => fetchMarkets(categoryFilter, minVolume, dryRun)}
+										disabled={isPending}
+									>
+										{isPending ? (
+											<Loader2 className="h-4 w-4 animate-spin" />
+										) : (
+											<RefreshCw className="h-4 w-4" />
+										)}
+									</Button>
+								</div>
 							</div>
 
 							<div className="relative min-h-[300px] max-h-[300px] overflow-y-auto pr-1">
@@ -247,6 +348,43 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 
 					<div className="space-y-4">
 						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+							Trading Strategy
+						</h3>
+
+						<div className="space-y-3">
+							<div className="space-y-2">
+								{availableStrategies.map((strategy) => (
+									<button
+										key={strategy}
+										type="button"
+										onClick={() => !isBotRunning && onStrategyChange(strategy)}
+										disabled={isBotRunning}
+										className={cn(
+											'w-full rounded-md border p-3 text-left transition-colors',
+											currentStrategy === strategy ? 'border-primary bg-accent' : 'hover:bg-accent',
+											isBotRunning && 'cursor-not-allowed opacity-50'
+										)}
+									>
+										<div className="flex items-center justify-between">
+											<span className="font-medium text-sm capitalize">{strategy.replace('-', ' ')}</span>
+											{currentStrategy === strategy && (
+												<Badge variant="secondary" className="text-xs">
+													Active
+												</Badge>
+											)}
+										</div>
+										<p className="mt-1 text-xs text-muted-foreground">{strategyDescriptions[strategy]}</p>
+									</button>
+								))}
+							</div>
+							{isBotRunning && <p className="text-xs text-muted-foreground">Stop the bot to change strategy</p>}
+						</div>
+					</div>
+
+					<Separator />
+
+					<div className="space-y-4">
+						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
 							Trading Parameters
 						</h3>
 
@@ -290,31 +428,6 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 								onChange={(e) => setLocalConfig({ ...localConfig, maxPosition: Number(e.target.value) })}
 							/>
 							<p className="text-sm text-muted-foreground">Maximum total exposure before pausing trades</p>
-						</div>
-					</div>
-
-					<Separator />
-
-					<div className="space-y-4">
-						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">API Status</h3>
-
-						<div className="space-y-2">
-							{apiStatuses.map((api) => (
-								<div key={api.name} className="flex items-center justify-between rounded-md border px-3 py-2">
-									<div className="flex items-center gap-2">
-										<span
-											className={cn(
-												'h-2 w-2 rounded-full',
-												api.status === 'connected' && 'bg-green-500',
-												api.status === 'error' && 'bg-destructive',
-												api.status === 'checking' && 'animate-pulse bg-yellow-500'
-											)}
-										/>
-										<span className="text-sm font-medium">{api.name}</span>
-									</div>
-									{api.detail && <span className="font-mono text-xs text-muted-foreground">{api.detail}</span>}
-								</div>
-							))}
 						</div>
 					</div>
 				</div>

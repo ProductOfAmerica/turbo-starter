@@ -3,8 +3,6 @@
 import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { Card } from '@repo/ui/components/card';
-import { Label } from '@repo/ui/components/label';
-import { Switch } from '@repo/ui/components/switch';
 import { cn } from '@repo/ui/lib/utils';
 import { Activity, Loader2, Pause, Play, RotateCcw, Settings, Square } from 'lucide-react';
 import type { BotStatus, ConnectionStatus } from '@/services/types';
@@ -13,7 +11,6 @@ interface StatusBarProps {
 	status: BotStatus;
 	connection: ConnectionStatus;
 	elapsed: number;
-	dryRun: boolean;
 	tickerCount: number;
 	canStart: boolean;
 	missingMatchId: boolean;
@@ -23,7 +20,6 @@ interface StatusBarProps {
 	onStop: () => void;
 	onRetry: () => void;
 	onConfigure: () => void;
-	onDryRunChange: (checked: boolean) => void;
 }
 
 function formatElapsed(seconds: number): string {
@@ -78,7 +74,6 @@ export function StatusBar({
 	status,
 	connection,
 	elapsed,
-	dryRun,
 	tickerCount,
 	canStart,
 	missingMatchId,
@@ -88,7 +83,6 @@ export function StatusBar({
 	onStop,
 	onRetry,
 	onConfigure,
-	onDryRunChange,
 }: StatusBarProps) {
 	const config = statusConfig[status];
 
@@ -206,23 +200,6 @@ export function StatusBar({
 							Configure
 						</Button>
 					</>
-				)}
-			</div>
-
-			<div className="flex items-center gap-3">
-				<Label htmlFor="dry-run" className="text-sm text-muted-foreground">
-					Dry Run
-				</Label>
-				<Switch
-					id="dry-run"
-					checked={dryRun}
-					onCheckedChange={onDryRunChange}
-					disabled={status === 'RUNNING' || status === 'PAUSED'}
-				/>
-				{dryRun && (
-					<Badge variant="secondary" className="border-yellow-500/50 bg-yellow-500/10 text-yellow-600">
-						SIMULATED
-					</Badge>
 				)}
 			</div>
 		</Card>
