@@ -14,6 +14,8 @@ const nextConfig = {
 	output: process.env.IS_DOCKER ? 'standalone' : undefined,
 	transpilePackages: ['@repo/ui'],
 	outputFileTracingRoot: path.join(__dirname, '../../'),
+	serverExternalPackages: ['ws'],
+	cacheComponents: true,
 	experimental: {
 		optimizePackageImports: ['lucide-react'],
 	},

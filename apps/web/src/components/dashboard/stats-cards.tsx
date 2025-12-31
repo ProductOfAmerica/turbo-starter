@@ -4,7 +4,7 @@ import { Badge } from '@repo/ui/components/badge';
 import { Card, CardContent } from '@repo/ui/components/card';
 import { Skeleton } from '@repo/ui/components/skeleton';
 import { cn } from '@repo/ui/lib/utils';
-import { Activity, Brain, DollarSign, TrendingUp, Wallet, Zap } from 'lucide-react';
+import { Activity, ArrowDownUp, DollarSign, TrendingUp, Wallet, Zap } from 'lucide-react';
 
 interface StatsCardsProps {
 	pnl: number;
@@ -19,6 +19,8 @@ interface StatsCardsProps {
 	position: number;
 	exposure: number;
 	eventCount: number;
+	bidPrice?: number | null;
+	askPrice?: number | null;
 	isLoading?: boolean;
 }
 
@@ -63,7 +65,7 @@ function StatCardSkeleton() {
 export function StatsCardsSkeleton() {
 	return (
 		<div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-			{['pnl', 'model', 'market', 'edge', 'position', 'activity'].map((id) => (
+			{['pnl', 'quotes', 'market', 'spread', 'position', 'activity'].map((id) => (
 				<StatCardSkeleton key={id} />
 			))}
 		</div>
@@ -75,14 +77,15 @@ export function StatsCards({
 	tradeCount,
 	winCount,
 	modelProbability,
-	modelProbabilityDelta,
 	yesPrice,
 	noPrice,
-	edge,
-	edgeThreshold,
+	edge: _edge,
+	edgeThreshold: _edgeThreshold,
 	position,
 	exposure,
 	eventCount,
+	bidPrice,
+	askPrice,
 	isLoading = false,
 }: StatsCardsProps) {
 	if (isLoading) {
@@ -91,13 +94,13 @@ export function StatsCards({
 
 	const winRate = tradeCount > 0 ? (winCount / tradeCount) * 100 : 0;
 	const isPositive = pnl >= 0;
-	const isTradeable = Math.abs(edge) >= edgeThreshold;
-	const teamFavored = modelProbability > 0.5 ? 'Blue' : 'Red';
+	const spread = bidPrice != null && askPrice != null ? askPrice - bidPrice : 0;
+	const spreadBps = spread * 10000;
 	const positionDirection = getPositionDirection(position);
+	const inventoryPct = Math.abs(position) > 0 ? Math.min(100, (Math.abs(position) / 100) * 100) : 0;
 
 	return (
 		<div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-			{/* P&L Card */}
 			<Card className={cn('relative overflow-hidden', isPositive ? 'border-green-500/20' : 'border-red-500/20')}>
 				<div className={cn('absolute inset-x-0 top-0 h-1', isPositive ? 'bg-green-500' : 'bg-red-500')} />
 				<CardContent className="p-4">
@@ -120,31 +123,27 @@ export function StatsCards({
 				</CardContent>
 			</Card>
 
-			{/* Model Probability Card */}
 			<Card>
 				<CardContent className="p-4">
 					<div className="flex items-center justify-between">
-						<span className="text-sm font-medium text-muted-foreground">Model</span>
-						<Brain className="h-4 w-4 text-muted-foreground" />
+						<span className="text-sm font-medium text-muted-foreground">My Quotes</span>
+						<ArrowDownUp className="h-4 w-4 text-muted-foreground" />
 					</div>
-					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">{formatPercent(modelProbability)}</div>
-					<div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-						<span className={cn('h-2 w-2 rounded-full', modelProbability > 0.5 ? 'bg-blue-500' : 'bg-red-500')} />
-						<span>{teamFavored} favored</span>
-						<span
-							className={cn(
-								'ml-auto font-mono tabular-nums',
-								modelProbabilityDelta > 0 ? 'text-green-600' : modelProbabilityDelta < 0 ? 'text-red-600' : ''
-							)}
-						>
-							{modelProbabilityDelta > 0 ? '▲' : modelProbabilityDelta < 0 ? '▼' : ''}
-							{modelProbabilityDelta !== 0 && formatPercent(Math.abs(modelProbabilityDelta))}
+					<div className="mt-2 flex items-baseline gap-2">
+						<span className="text-lg font-bold font-mono tabular-nums text-green-600">
+							{bidPrice != null ? formatPrice(bidPrice) : '--'}
+						</span>
+						<span className="text-muted-foreground">/</span>
+						<span className="text-lg font-bold font-mono tabular-nums text-red-600">
+							{askPrice != null ? formatPrice(askPrice) : '--'}
 						</span>
 					</div>
+					<p className="mt-1 text-xs text-muted-foreground">
+						Bid / Ask · Mid <span className="font-mono tabular-nums">{formatPercent(modelProbability)}</span>
+					</p>
 				</CardContent>
 			</Card>
 
-			{/* Market Price Card */}
 			<Card>
 				<CardContent className="p-4">
 					<div className="flex items-center justify-between">
@@ -161,34 +160,30 @@ export function StatsCards({
 				</CardContent>
 			</Card>
 
-			{/* Edge Card */}
-			<Card className={cn(isTradeable && 'ring-2 ring-green-500/50')}>
+			<Card className={cn(spreadBps > 0 && 'ring-1 ring-blue-500/30')}>
 				<CardContent className="p-4">
 					<div className="flex items-center justify-between">
-						<span className="text-sm font-medium text-muted-foreground">Edge</span>
-						<Zap className={cn('h-4 w-4', isTradeable ? 'text-green-600' : 'text-muted-foreground')} />
+						<span className="text-sm font-medium text-muted-foreground">Spread</span>
+						<Zap className={cn('h-4 w-4', spreadBps > 100 ? 'text-blue-600' : 'text-muted-foreground')} />
 					</div>
-					<div className={cn('mt-2 text-2xl font-bold font-mono tabular-nums', isTradeable && 'text-green-600')}>
-						{formatPercent(edge, true)}
+					<div
+						className={cn('mt-2 text-2xl font-bold font-mono tabular-nums', spreadBps > 100 && 'text-blue-600')}
+					>
+						{spreadBps.toFixed(0)} <span className="text-base font-normal">bps</span>
 					</div>
 					<div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-						{isTradeable ? (
-							<>
-								<span className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-								<span className="text-green-600 font-medium">Tradeable</span>
-							</>
-						) : (
-							<span>Below {formatPercent(edgeThreshold)} threshold</span>
-						)}
+						<span>Edge per fill: </span>
+						<span className="font-mono tabular-nums text-green-600">
+							{spread > 0 ? `+${formatPrice(spread / 2)}` : '--'}
+						</span>
 					</div>
 				</CardContent>
 			</Card>
 
-			{/* Position Card */}
 			<Card>
 				<CardContent className="p-4">
 					<div className="flex items-center justify-between">
-						<span className="text-sm font-medium text-muted-foreground">Position</span>
+						<span className="text-sm font-medium text-muted-foreground">Inventory</span>
 						<Wallet className="h-4 w-4 text-muted-foreground" />
 					</div>
 					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">
@@ -205,21 +200,29 @@ export function StatsCards({
 						>
 							{positionDirection}
 						</Badge>
-						<span className="font-mono tabular-nums">${exposure.toFixed(2)}</span> exposure
+						<div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+							<div
+								className={cn(
+									'h-full rounded-full transition-all',
+									inventoryPct > 70 ? 'bg-amber-500' : 'bg-blue-500'
+								)}
+								style={{ width: `${inventoryPct}%` }}
+							/>
+						</div>
+						<span className="font-mono tabular-nums">{inventoryPct.toFixed(0)}%</span>
 					</div>
 				</CardContent>
 			</Card>
 
-			{/* Activity Card */}
 			<Card>
 				<CardContent className="p-4">
 					<div className="flex items-center justify-between">
 						<span className="text-sm font-medium text-muted-foreground">Activity</span>
 						<Activity className="h-4 w-4 text-muted-foreground" />
 					</div>
-					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">{tradeCount}</div>
+					<div className="mt-2 text-2xl font-bold font-mono tabular-nums">{eventCount}</div>
 					<p className="mt-1 text-xs text-muted-foreground">
-						trades today · <span className="font-mono tabular-nums">{eventCount}</span> events
+						fills · <span className="font-mono tabular-nums">${exposure.toFixed(2)}</span> exposure
 					</p>
 				</CardContent>
 			</Card>

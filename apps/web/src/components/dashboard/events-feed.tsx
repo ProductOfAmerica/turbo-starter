@@ -21,76 +21,88 @@ import { ScrollArea } from '@repo/ui/components/scroll-area';
 import { cn } from '@repo/ui/lib/utils';
 import { Copy, Filter, LineChart, Radio } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { EventType, GameEvent } from '@/services/types';
+import type { EventType, TradeEvent } from '@/services/types';
 
-type EventFilter = 'all' | 'kills' | 'objectives' | 'structures';
+type EventFilter = 'all' | 'trades' | 'quotes' | 'market';
 
 interface EventsFeedProps {
-	events: GameEvent[];
-	onShowOnChart?: (event: GameEvent) => void;
+	events: TradeEvent[];
+	onShowOnChart?: (event: TradeEvent) => void;
 }
 
 const eventTypeLabels: Record<EventType, string> = {
-	kill: 'Kill',
-	dragon: 'Dragon',
-	baron: 'Baron',
-	tower: 'Tower',
-	inhibitor: 'Inhibitor',
-	roshan: 'Roshan',
+	trade: 'Trade',
+	fill: 'Fill',
+	quote_update: 'Quote',
+	price_move: 'Price Move',
+	volume_spike: 'Volume Spike',
+	spread_change: 'Spread Change',
 };
 
 const eventBadgeColors: Record<EventType, string> = {
-	kill: 'bg-red-500',
-	dragon: 'bg-orange-500',
-	baron: 'bg-purple-500',
-	tower: 'bg-blue-500',
-	inhibitor: 'bg-pink-500',
-	roshan: 'bg-yellow-500',
+	trade: 'bg-green-500',
+	fill: 'bg-blue-500',
+	quote_update: 'bg-slate-500',
+	price_move: 'bg-amber-500',
+	volume_spike: 'bg-cyan-500',
+	spread_change: 'bg-purple-500',
 };
 
-const teamBorderColors: Record<string, string> = {
-	blue: 'border-l-blue-500',
-	radiant: 'border-l-blue-500',
-	team1: 'border-l-blue-500',
-	red: 'border-l-red-500',
-	dire: 'border-l-red-500',
-	team2: 'border-l-red-500',
+const sideBorderColors: Record<string, string> = {
+	yes: 'border-l-green-500',
+	no: 'border-l-red-500',
 	unknown: 'border-l-muted-foreground',
 };
 
-function filterEvents(events: GameEvent[], filter: EventFilter): GameEvent[] {
+function filterEvents(events: TradeEvent[], filter: EventFilter): TradeEvent[] {
 	if (filter === 'all') return events;
-	if (filter === 'kills') return events.filter((e) => e.eventType === 'kill');
-	if (filter === 'objectives') return events.filter((e) => ['dragon', 'baron', 'roshan'].includes(e.eventType));
-	if (filter === 'structures') return events.filter((e) => ['tower', 'inhibitor'].includes(e.eventType));
+	if (filter === 'trades') return events.filter((e) => ['trade', 'fill'].includes(e.eventType));
+	if (filter === 'quotes') return events.filter((e) => e.eventType === 'quote_update');
+	if (filter === 'market')
+		return events.filter((e) => ['price_move', 'volume_spike', 'spread_change'].includes(e.eventType));
 	return events;
 }
 
-function getEventDescription(event: GameEvent): string {
+function getEventDescription(event: TradeEvent): string {
 	const details = event.details as Record<string, unknown> | undefined;
 	switch (event.eventType) {
-		case 'kill':
-			return details?.killer && details?.victim ? `${details.killer} → ${details.victim}` : 'Kill secured';
-		case 'dragon':
-			return details?.dragonType ? `${details.dragonType} Drake` : 'Dragon';
-		case 'baron':
-			return 'Baron Nashor';
-		case 'tower':
-			return details?.lane && details?.tier ? `${details.lane} ${details.tier} Tower` : 'Tower destroyed';
-		case 'inhibitor':
-			return details?.lane ? `${details.lane} Inhibitor` : 'Inhibitor destroyed';
-		case 'roshan':
-			return 'Roshan';
+		case 'trade':
+		case 'fill':
+			if (details?.price && details?.size) {
+				return `${details.size} @ ${(Number(details.price) * 100).toFixed(1)}¢`;
+			}
+			return event.side === 'yes' ? 'YES' : 'NO';
+		case 'quote_update':
+			if (details?.bid && details?.ask) {
+				return `Bid ${(Number(details.bid) * 100).toFixed(1)}¢ / Ask ${(Number(details.ask) * 100).toFixed(1)}¢`;
+			}
+			return 'Quote updated';
+		case 'price_move':
+			if (details?.delta) {
+				const delta = Number(details.delta) * 100;
+				return `${delta > 0 ? '+' : ''}${delta.toFixed(1)}¢`;
+			}
+			return 'Price moved';
+		case 'volume_spike':
+			if (details?.volume) {
+				return `${details.volume} contracts`;
+			}
+			return 'Volume spike';
+		case 'spread_change':
+			if (details?.spread) {
+				return `Spread: ${(Number(details.spread) * 100).toFixed(1)}¢`;
+			}
+			return 'Spread changed';
 		default:
 			return event.eventType;
 	}
 }
 
-function getEventDetail(event: GameEvent): string | null {
+function getEventDetail(event: TradeEvent): string | null {
 	const details = event.details as Record<string, unknown> | undefined;
 	if (!details) return null;
 	if (details.detail) return String(details.detail);
-	if (event.eventType === 'kill' && details.isFirstBlood) return 'First Blood';
+	if (event.eventType === 'fill' && details.orderId) return `Order ${String(details.orderId).slice(0, 8)}`;
 	return null;
 }
 
@@ -136,8 +148,8 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 		}
 	}, []);
 
-	const handleCopyDetails = (event: GameEvent) => {
-		const text = `${event.eventType.toUpperCase()} - ${event.team} - ${getEventDescription(event)}`;
+	const handleCopyDetails = (event: TradeEvent) => {
+		const text = `${event.eventType.toUpperCase()} - ${event.side.toUpperCase()} - ${getEventDescription(event)}`;
 		navigator.clipboard.writeText(text);
 	};
 
@@ -145,8 +157,8 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 		<Card className="flex flex-col">
 			<CardHeader className="flex flex-row items-center justify-between pb-2">
 				<div>
-					<CardTitle className="text-base font-medium">Game Events</CardTitle>
-					<CardDescription>Real-time match feed</CardDescription>
+					<CardTitle className="text-base font-medium">Trade Activity</CardTitle>
+					<CardDescription>Real-time market events</CardDescription>
 				</div>
 				<div className="flex items-center gap-2">
 					{newCount > 0 && !isAtBottom && (
@@ -164,9 +176,9 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 						<DropdownMenuContent align="end">
 							<DropdownMenuRadioGroup value={filter} onValueChange={(v) => setFilter(v as EventFilter)}>
 								<DropdownMenuRadioItem value="all">All Events</DropdownMenuRadioItem>
-								<DropdownMenuRadioItem value="kills">Kills</DropdownMenuRadioItem>
-								<DropdownMenuRadioItem value="objectives">Objectives</DropdownMenuRadioItem>
-								<DropdownMenuRadioItem value="structures">Structures</DropdownMenuRadioItem>
+								<DropdownMenuRadioItem value="trades">Trades & Fills</DropdownMenuRadioItem>
+								<DropdownMenuRadioItem value="quotes">Quote Updates</DropdownMenuRadioItem>
+								<DropdownMenuRadioItem value="market">Market Events</DropdownMenuRadioItem>
 							</DropdownMenuRadioGroup>
 						</DropdownMenuContent>
 					</DropdownMenu>
@@ -181,9 +193,7 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 									<Radio className="h-6 w-6 text-muted-foreground" />
 								</div>
 								<p className="font-medium">Waiting for events</p>
-								<p className="mt-1 text-sm text-muted-foreground">
-									Events will appear when the match goes live
-								</p>
+								<p className="mt-1 text-sm text-muted-foreground">Events will appear when trading begins</p>
 							</div>
 						) : (
 							reversedEvents.map((event) => (
@@ -192,7 +202,7 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 										<div
 											className={cn(
 												'group flex gap-3 rounded-lg border-l-2 p-2 transition-colors hover:bg-muted/50',
-												teamBorderColors[event.team] || 'border-l-muted-foreground'
+												sideBorderColors[event.side] || 'border-l-muted-foreground'
 											)}
 										>
 											<span className="w-16 shrink-0 text-xs font-mono tabular-nums text-muted-foreground">
@@ -205,11 +215,9 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 											<div className="min-w-0 flex-1">
 												<div className="flex items-center gap-2">
 													<Badge className={cn('text-white', eventBadgeColors[event.eventType])}>
-														{eventTypeLabels[event.eventType] || event.eventType.toUpperCase()}
+														{eventTypeLabels[event.eventType]}
 													</Badge>
-													<span className="text-sm font-medium">
-														{event.team.charAt(0).toUpperCase() + event.team.slice(1)}
-													</span>
+													<span className="text-sm font-medium">{event.side.toUpperCase()}</span>
 												</div>
 												<p className="mt-0.5 truncate text-sm text-muted-foreground">
 													{getEventDescription(event)}
@@ -236,18 +244,16 @@ export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 										<ContextMenuItem
 											onClick={() =>
 												setFilter(
-													event.eventType === 'kill'
-														? 'kills'
-														: ['dragon', 'baron', 'roshan'].includes(event.eventType)
-															? 'objectives'
-															: ['tower', 'inhibitor'].includes(event.eventType)
-																? 'structures'
-																: 'all'
+													['trade', 'fill'].includes(event.eventType)
+														? 'trades'
+														: event.eventType === 'quote_update'
+															? 'quotes'
+															: 'market'
 												)
 											}
 										>
 											<Filter className="mr-2 h-4 w-4" />
-											Filter to {eventTypeLabels[event.eventType] || event.eventType}
+											Filter to {eventTypeLabels[event.eventType]}
 										</ContextMenuItem>
 										<ContextMenuSeparator />
 										<ContextMenuItem onClick={() => handleCopyDetails(event)}>

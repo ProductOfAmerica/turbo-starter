@@ -1,30 +1,21 @@
 import { NextResponse } from 'next/server';
 import { tradingBot } from '@/services/trading-bot';
-import type { GameType } from '@/services/types';
-
-export const dynamic = 'force-dynamic';
 
 interface StartRequest {
-	gameType: GameType;
-	matchId: string;
-	marketId?: string;
+	marketTicker: string;
 	dryRun?: boolean;
 }
 
 export async function POST(request: Request) {
 	try {
 		const body = (await request.json()) as StartRequest;
-		const { gameType, matchId, marketId, dryRun = true } = body;
+		const { marketTicker, dryRun = true } = body;
 
-		if (!gameType || !matchId) {
-			return NextResponse.json({ error: 'Missing gameType or matchId' }, { status: 400 });
+		if (!marketTicker) {
+			return NextResponse.json({ error: 'Missing marketTicker' }, { status: 400 });
 		}
 
-		if (gameType !== 'lol' && gameType !== 'dota') {
-			return NextResponse.json({ error: 'Invalid gameType' }, { status: 400 });
-		}
-
-		await tradingBot.start(gameType, matchId, marketId, dryRun);
+		await tradingBot.start(marketTicker, dryRun);
 
 		return NextResponse.json({
 			success: true,

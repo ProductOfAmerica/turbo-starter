@@ -1,19 +1,21 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BotState, GameType, Stats } from '@/services/types';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import type { BotState, Stats } from '@/services/types';
 
 interface UseBotStateReturn {
 	state: BotState;
 	stats: Stats;
 	isLoading: boolean;
 	error: string | null;
-	start: (gameType: GameType, matchId: string, marketId?: string, dryRun?: boolean) => Promise<void>;
+	start: (marketTicker: string, dryRun?: boolean) => Promise<void>;
 	stop: () => Promise<void>;
+	flatten: () => Promise<void>;
 	pause: () => Promise<void>;
 	resume: () => Promise<void>;
 	setDryRun: (dryRun: boolean) => void;
 	refresh: () => Promise<void>;
+	updateFromStream: (streamState: BotState) => void;
 }
 
 const initialState: BotState = {
@@ -22,8 +24,7 @@ const initialState: BotState = {
 	error: null,
 	dryRun: true,
 	elapsed: 0,
-	matchId: null,
-	gameType: null,
+	marketTicker: null,
 };
 
 const initialStats: Stats = {
@@ -45,14 +46,14 @@ const initialStats: Stats = {
 	eventCount: 0,
 };
 
-export function useBotState(): UseBotStateReturn {
-	const [state, setState] = useState<BotState>(initialState);
+export function useBotState(serverState?: BotState | null): UseBotStateReturn {
+	const [state, setState] = useState<BotState>(serverState || initialState);
 	const [stats, setStats] = useState<Stats>(initialStats);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const [, startTransition] = useTransition();
 
 	const elapsedIntervalRef = useRef<NodeJS.Timeout | null>(null);
-	const statusIntervalRef = useRef<NodeJS.Timeout | null>(null);
 	const startTimeRef = useRef<number | null>(null);
 	const initialElapsedRef = useRef<number>(0);
 
@@ -63,13 +64,19 @@ export function useBotState(): UseBotStateReturn {
 				throw new Error('Failed to fetch status');
 			}
 			const data = await response.json();
-			setState(data.state);
-			setStats(data.stats);
+			startTransition(() => {
+				setState(data.state);
+				setStats(data.stats);
+			});
 			return data;
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to fetch status');
 			return null;
 		}
+	}, []);
+
+	const updateFromStream = useCallback((streamState: BotState) => {
+		setState(streamState);
 	}, []);
 
 	useEffect(() => {
@@ -88,18 +95,10 @@ export function useBotState(): UseBotStateReturn {
 					setState((prev) => ({ ...prev, elapsed }));
 				}
 			}, 1000);
-
-			statusIntervalRef.current = setInterval(() => {
-				fetchStatus();
-			}, 2000);
 		} else {
 			if (elapsedIntervalRef.current) {
 				clearInterval(elapsedIntervalRef.current);
 				elapsedIntervalRef.current = null;
-			}
-			if (statusIntervalRef.current) {
-				clearInterval(statusIntervalRef.current);
-				statusIntervalRef.current = null;
 			}
 			if (state.status === 'IDLE' || state.status === 'STOPPED') {
 				startTimeRef.current = null;
@@ -110,17 +109,14 @@ export function useBotState(): UseBotStateReturn {
 			if (elapsedIntervalRef.current) {
 				clearInterval(elapsedIntervalRef.current);
 			}
-			if (statusIntervalRef.current) {
-				clearInterval(statusIntervalRef.current);
-			}
 		};
-	}, [state.status, fetchStatus]);
+	}, [state.status]);
 
 	useEffect(() => {
 		fetchStatus();
 	}, [fetchStatus]);
 
-	const start = useCallback(async (gameType: GameType, matchId: string, marketId?: string, dryRun = true) => {
+	const start = useCallback(async (marketTicker: string, dryRun = true) => {
 		setIsLoading(true);
 		setError(null);
 
@@ -128,7 +124,7 @@ export function useBotState(): UseBotStateReturn {
 			const response = await fetch('/api/bot/start', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ gameType, matchId, marketId, dryRun }),
+				body: JSON.stringify({ marketTicker, dryRun }),
 			});
 
 			const data = await response.json();
@@ -138,7 +134,7 @@ export function useBotState(): UseBotStateReturn {
 			}
 
 			startTimeRef.current = Date.now();
-			setState(data.state);
+			startTransition(() => setState(data.state));
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to start bot');
 			throw err;
@@ -160,9 +156,31 @@ export function useBotState(): UseBotStateReturn {
 			}
 
 			startTimeRef.current = null;
-			setState(data.state);
+			startTransition(() => setState(data.state));
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to stop bot');
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
+
+	const flatten = useCallback(async () => {
+		setIsLoading(true);
+		setError(null);
+
+		try {
+			const response = await fetch('/api/bot/flatten', { method: 'POST' });
+			const data = await response.json();
+
+			if (!response.ok) {
+				throw new Error(data.error || 'Failed to flatten and stop');
+			}
+
+			startTimeRef.current = null;
+			startTransition(() => setState(data.state));
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Failed to flatten and stop');
 			throw err;
 		} finally {
 			setIsLoading(false);
@@ -181,7 +199,7 @@ export function useBotState(): UseBotStateReturn {
 				throw new Error(data.error || 'Failed to pause bot');
 			}
 
-			setState(data.state);
+			startTransition(() => setState(data.state));
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to pause bot');
 			throw err;
@@ -202,7 +220,7 @@ export function useBotState(): UseBotStateReturn {
 				throw new Error(data.error || 'Failed to resume bot');
 			}
 
-			setState(data.state);
+			startTransition(() => setState(data.state));
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Failed to resume bot');
 			throw err;
@@ -211,8 +229,17 @@ export function useBotState(): UseBotStateReturn {
 		}
 	}, []);
 
-	const setDryRun = useCallback((dryRun: boolean) => {
+	const setDryRun = useCallback(async (dryRun: boolean) => {
 		setState((prev) => ({ ...prev, dryRun }));
+		try {
+			await fetch('/api/bot/dry-run', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ dryRun }),
+			});
+		} catch {
+			// Ignore errors, local state is already updated
+		}
 	}, []);
 
 	const refresh = useCallback(async () => {
@@ -226,9 +253,11 @@ export function useBotState(): UseBotStateReturn {
 		error,
 		start,
 		stop,
+		flatten,
 		pause,
 		resume,
 		setDryRun,
 		refresh,
+		updateFromStream,
 	};
 }

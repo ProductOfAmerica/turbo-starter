@@ -1,21 +1,31 @@
-import { isMatchComplete, parseEvents } from './event-parser';
-import { fetchMarketPrices, placeOrder } from './polymarket';
-import { BayesianPredictor } from './predictor';
-import { evaluateTrade } from './trade-evaluator';
+import { fetchMarketPrices, initializeClient, placeOrder } from './kalshi';
+import { kalshiWs, type TickerUpdate } from './kalshi-ws';
+import { scenarioRunner } from './scenario-runner';
+import { createStrategy, getAvailableStrategies, type StrategyName } from './strategies';
 import type {
 	BotState,
 	BotStatus,
 	Config,
 	ConnectionStatus,
-	GameEvent,
-	GameType,
 	MarketPrices,
 	ProbabilityUpdate,
 	Stats,
+	StrategyState,
+	TradeEvent,
 	TradeExecution,
+	TradingStrategy,
 } from './types';
 
-type BotEventType = 'stateChange' | 'event' | 'prices' | 'trade' | 'probability' | 'error' | 'matchComplete';
+type BotEventType =
+	| 'stateChange'
+	| 'event'
+	| 'prices'
+	| 'trade'
+	| 'probability'
+	| 'error'
+	| 'marketClosed'
+	| 'quotes'
+	| 'tickerCount';
 
 type BotEventListener = (type: BotEventType, data: unknown) => void;
 
@@ -25,27 +35,27 @@ class TradingBotService {
 	private error: string | null = null;
 	private dryRun = true;
 	private startTime: number | null = null;
-	private matchId: string | null = null;
-	private marketId: string | null = null;
-	private gameType: GameType | null = null;
+	private marketTicker: string | null = null;
 
-	private predictor: BayesianPredictor | null = null;
-	private events: GameEvent[] = [];
+	private events: TradeEvent[] = [];
 	private trades: TradeExecution[] = [];
 	private probabilityHistory: ProbabilityUpdate[] = [];
 	private marketPrices: MarketPrices | null = null;
 
-	private pollInterval: NodeJS.Timeout | null = null;
+	private wsTickerHandler: ((data: TickerUpdate) => void) | null = null;
 	private config: Config = {
-		game: 'lol',
-		matchId: '',
+		marketTicker: '',
 		edgeThreshold: 5,
 		orderSize: 10,
 		maxPosition: 100,
-		pollingInterval: 2000,
 	};
 
+	private strategy: TradingStrategy;
 	private listeners: Set<BotEventListener> = new Set();
+
+	constructor() {
+		this.strategy = createStrategy('market-maker');
+	}
 
 	subscribe(listener: BotEventListener): () => void {
 		this.listeners.add(listener);
@@ -75,60 +85,73 @@ class TradingBotService {
 			error: this.error,
 			dryRun: this.dryRun,
 			elapsed: this.startTime ? Math.floor((Date.now() - this.startTime) / 1000) : 0,
-			matchId: this.matchId,
-			gameType: this.gameType,
+			marketTicker: this.marketTicker,
 		};
 	}
 
 	getStats(): Stats {
+		const strategyState = this.strategy.getState();
 		const yesPrice = this.marketPrices?.yesPrice ?? 0.5;
 		const noPrice = this.marketPrices?.noPrice ?? 0.5;
-		const posterior = this.predictor?.getPosterior() ?? 0.5;
-		const edge = yesPrice !== null ? posterior - yesPrice : 0;
 
 		const successfulTrades = this.trades.filter((t) => t.success);
-		const winCount = successfulTrades.length;
-		const lossCount = this.trades.length - winCount;
+		const wins = successfulTrades.filter((t) => {
+			const avgPrice =
+				this.trades.filter((tr) => tr.success).reduce((sum, tr) => sum + tr.price, 0) / successfulTrades.length;
+			return t.side === 'SELL' ? t.price > avgPrice : t.price < avgPrice;
+		});
 
-		const pnl = this.trades.reduce((sum, t) => {
-			if (!t.success) return sum;
-			return sum + (t.side === 'BUY' ? -t.price * t.size : t.price * t.size);
-		}, 0);
-
-		const position = this.trades.reduce((sum, t) => {
-			if (!t.success) return sum;
-			return sum + (t.side === 'BUY' ? t.size : -t.size);
-		}, 0);
-
-		const exposure = Math.abs(position) * yesPrice;
-
-		const prevProbability =
-			this.probabilityHistory.length > 1
-				? (this.probabilityHistory[this.probabilityHistory.length - 2]?.posterior ?? posterior)
-				: posterior;
-		const modelProbabilityDelta = posterior - prevProbability;
+		const realizedPnl = strategyState.pnl;
+		const unrealizedPnl = this.strategy.getUnrealizedPnL(yesPrice);
+		const totalPnl = realizedPnl + unrealizedPnl;
 
 		return {
-			pnl,
-			pnlPercent: exposure > 0 ? (pnl / exposure) * 100 : 0,
+			pnl: totalPnl,
+			pnlPercent:
+				Math.abs(strategyState.inventory) > 0
+					? (totalPnl / (Math.abs(strategyState.inventory) * yesPrice)) * 100
+					: 0,
 			tradeCount: this.trades.length,
-			winCount,
-			lossCount,
-			winRate: this.trades.length > 0 ? winCount / this.trades.length : 0,
-			modelProbability: posterior,
-			modelProbabilityDelta,
+			winCount: wins.length,
+			lossCount: successfulTrades.length - wins.length,
+			winRate: successfulTrades.length > 0 ? wins.length / successfulTrades.length : 0,
+			modelProbability: strategyState.theoreticalMid,
+			modelProbabilityDelta: strategyState.theoreticalMid - strategyState.midPrice,
 			marketPrice: yesPrice,
 			yesPrice,
 			noPrice,
-			edge,
+			edge:
+				strategyState.bidPrice && strategyState.askPrice
+					? (strategyState.askPrice - strategyState.bidPrice) / 2
+					: 0,
 			edgeThreshold: this.config.edgeThreshold / 100,
-			position,
-			exposure,
-			eventCount: this.events.length,
+			position: strategyState.inventory,
+			exposure: Math.abs(strategyState.inventory) * yesPrice,
+			eventCount: strategyState.fills,
 		};
 	}
 
-	getEvents(): GameEvent[] {
+	getStrategyState(): StrategyState {
+		return this.strategy.getState();
+	}
+
+	getStrategyName(): string {
+		return this.strategy.name;
+	}
+
+	getAvailableStrategies(): StrategyName[] {
+		return getAvailableStrategies();
+	}
+
+	setStrategy(name: StrategyName): void {
+		if (this.status !== 'IDLE' && this.status !== 'STOPPED') {
+			throw new Error(`Cannot change strategy while bot is ${this.status}`);
+		}
+		this.strategy = createStrategy(name);
+		console.log(`[BOT] Strategy changed to: ${name}`);
+	}
+
+	getEvents(): TradeEvent[] {
 		return [...this.events];
 	}
 
@@ -150,36 +173,151 @@ class TradingBotService {
 
 	setConfig(config: Config): void {
 		this.config = { ...config };
+		this.strategy.updateConfig({
+			orderSize: config.orderSize,
+			maxInventory: config.maxPosition,
+			minEdgeBps: config.edgeThreshold * 10,
+		});
 	}
 
-	async start(gameType: GameType, matchId: string, marketId?: string, dryRun = true): Promise<void> {
+	setStrategyConfig(config: Record<string, unknown>): void {
+		this.strategy.updateConfig(config);
+	}
+
+	async start(marketTicker: string, dryRun = true): Promise<void> {
 		if (this.status !== 'IDLE' && this.status !== 'STOPPED') {
 			throw new Error(`Cannot start bot from ${this.status} state`);
 		}
 
 		this.setStatus('STARTING');
-		this.gameType = gameType;
-		this.matchId = matchId;
-		this.marketId = marketId ?? null;
+		this.marketTicker = marketTicker;
 		this.dryRun = dryRun;
 		this.error = null;
 
-		this.predictor = new BayesianPredictor();
 		this.events = [];
 		this.trades = [];
-		this.probabilityHistory = [{ posterior: 0.5, timestamp: new Date() }];
+		this.probabilityHistory = [];
 		this.marketPrices = null;
 
+		this.strategy.reset();
+		this.strategy.updateConfig({
+			orderSize: this.config.orderSize,
+			maxInventory: this.config.maxPosition,
+			minEdgeBps: this.config.edgeThreshold * 10,
+		});
+
 		try {
+			initializeClient(dryRun);
 			this.startTime = Date.now();
 			this.setConnection('connected');
 			this.setStatus('RUNNING');
-
-			this.startPolling();
+			await this.startWebSocket(dryRun);
 		} catch (err) {
+			console.error('[BOT] Failed to start:', err);
 			this.error = err instanceof Error ? err.message : 'Failed to start bot';
+			this.setConnection('disconnected');
 			this.setStatus('ERROR');
 			this.emit('error', { message: this.error });
+			throw err;
+		}
+	}
+
+	private async startWebSocket(dryRun: boolean): Promise<void> {
+		console.log('[BOT] Connecting to WebSocket...');
+		await kalshiWs.connect(dryRun);
+		console.log('[BOT] WebSocket connected');
+
+		this.wsTickerHandler = (data: TickerUpdate) => {
+			if (data.marketTicker !== this.marketTicker) return;
+			this.handlePriceUpdate(data.yesAsk, data.noAsk);
+		};
+
+		kalshiWs.on('ticker', this.wsTickerHandler);
+		kalshiWs.on('orderbook', (data: { marketTicker: string; yesAsk: number; noAsk: number }) => {
+			console.log(`[BOT] Orderbook event received: ${data.marketTicker} YES=${data.yesAsk} NO=${data.noAsk}`);
+			if (data.marketTicker !== this.marketTicker) return;
+			console.log(`[BOT] Processing orderbook for ${data.marketTicker}`);
+			this.handlePriceUpdate(data.yesAsk, data.noAsk);
+		});
+		kalshiWs.on('tickerCount', (count: number) => {
+			this.emit('tickerCount', { count });
+		});
+
+		if (this.marketTicker) {
+			kalshiWs.subscribeToMarket(this.marketTicker);
+			console.log(`[BOT] Subscribed to ${this.marketTicker}`);
+
+			if (dryRun) {
+				this.startScenarioRunner(this.marketTicker);
+			}
+		}
+	}
+
+	private startScenarioRunner(ticker: string): void {
+		console.log('[BOT] Starting ScenarioRunner for demo mode...');
+		scenarioRunner
+			.runScenario('spread-tighten', ticker)
+			.then((result) => {
+				console.log('[BOT] ScenarioRunner result:', result.success ? 'success' : 'failed');
+				if (!result.success) {
+					console.error('[BOT] Scenario steps:', result.steps);
+				}
+			})
+			.catch((err) => {
+				console.error('[BOT] ScenarioRunner error:', err);
+			});
+	}
+
+	private stopWebSocket(): void {
+		if (this.wsTickerHandler) {
+			kalshiWs.off('ticker', this.wsTickerHandler);
+			this.wsTickerHandler = null;
+		}
+		if (this.marketTicker) {
+			kalshiWs.unsubscribeFromMarket(this.marketTicker);
+		}
+		kalshiWs.disconnect();
+
+		if (this.dryRun) {
+			scenarioRunner.cancelAll().catch((err) => {
+				console.error('[BOT] Failed to cancel scenario orders:', err);
+			});
+		}
+	}
+
+	private async handlePriceUpdate(yesPrice: number, noPrice: number): Promise<void> {
+		console.log(`[BOT] handlePriceUpdate called: YES=${yesPrice} NO=${noPrice} status=${this.status}`);
+		if (this.status !== 'RUNNING') return;
+
+		this.marketPrices = { yesPrice, noPrice, timestamp: new Date() };
+		this.emit('prices', { yesPrice, noPrice, timestamp: new Date().toISOString() });
+		console.log(`[BOT] Emitted prices`);
+
+		const signal = this.strategy.evaluateTrade(yesPrice, noPrice);
+		const strategyState = this.strategy.getState();
+
+		this.emit('quotes', {
+			bid: strategyState.bidPrice,
+			ask: strategyState.askPrice,
+			mid: strategyState.theoreticalMid,
+			inventory: strategyState.inventory,
+		});
+
+		this.probabilityHistory.push({
+			posterior: strategyState.theoreticalMid,
+			timestamp: new Date(),
+		});
+		this.emit('probability', { posterior: strategyState.theoreticalMid, timestamp: new Date() });
+
+		if (signal) {
+			const execution = await placeOrder(signal, this.marketTicker || '');
+
+			if (execution.success) {
+				this.strategy.onFill(signal.side, execution.price, signal.size);
+			}
+
+			this.trades.push(execution);
+			this.emit('trade', { signal, execution });
 		}
 	}
 
@@ -189,7 +327,47 @@ class TradingBotService {
 		}
 
 		this.setStatus('STOPPING');
-		this.stopPolling();
+		this.stopWebSocket();
+
+		await new Promise((resolve) => setTimeout(resolve, 500));
+
+		this.setConnection('disconnected');
+		this.startTime = null;
+		this.setStatus('STOPPED');
+	}
+
+	private async closePosition(): Promise<void> {
+		const strategyState = this.strategy.getState();
+		const position = strategyState.inventory;
+
+		if (position === 0) return;
+
+		const prices = await fetchMarketPrices(this.marketTicker || '');
+		if (!prices) return;
+
+		const side = position > 0 ? 'SELL' : 'BUY';
+		const size = Math.abs(position);
+		const price = prices.yesPrice;
+
+		console.log(`[FLATTEN] Closing ${size} contracts (${side}) @ ${(price * 100).toFixed(1)}¢`);
+
+		const execution = await placeOrder({ side, price, size, edge: 0 }, this.marketTicker || '');
+		if (!execution.success) return;
+
+		this.strategy.onFill(side, execution.price, size);
+		this.trades.push(execution);
+		this.emit('trade', { signal: { side, price, size, edge: 0 }, execution });
+	}
+
+	async flattenAndStop(): Promise<void> {
+		if (this.status !== 'RUNNING' && this.status !== 'PAUSED') {
+			throw new Error(`Cannot flatten from ${this.status} state`);
+		}
+
+		this.setStatus('STOPPING');
+		this.stopWebSocket();
+
+		await this.closePosition();
 
 		await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -203,7 +381,6 @@ class TradingBotService {
 			throw new Error(`Cannot pause bot from ${this.status} state`);
 		}
 
-		this.stopPolling();
 		this.setStatus('PAUSED');
 	}
 
@@ -213,7 +390,6 @@ class TradingBotService {
 		}
 
 		this.setStatus('RUNNING');
-		this.startPolling();
 	}
 
 	setDryRun(dryRun: boolean): void {
@@ -221,109 +397,18 @@ class TradingBotService {
 		this.emit('stateChange', this.getState());
 	}
 
-	private startPolling(): void {
-		if (this.pollInterval) {
-			clearInterval(this.pollInterval);
-		}
-
-		this.poll();
-		this.pollInterval = setInterval(() => this.poll(), this.config.pollingInterval);
-	}
-
-	private stopPolling(): void {
-		if (this.pollInterval) {
-			clearInterval(this.pollInterval);
-			this.pollInterval = null;
-		}
-	}
-
-	private async poll(): Promise<void> {
-		if (this.status !== 'RUNNING') return;
-
-		try {
-			const gameApiUrl =
-				this.gameType === 'lol'
-					? `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/games/lol?matchId=${this.matchId}`
-					: `${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/games/dota?matchId=${this.matchId}`;
-
-			const gameResponse = await fetch(gameApiUrl);
-			if (!gameResponse.ok) {
-				this.emit('error', { message: 'Failed to fetch game data' });
-				return;
-			}
-
-			const gameData = await gameResponse.json();
-
-			if (this.gameType && isMatchComplete(gameData, this.gameType)) {
-				this.emit('matchComplete', { posterior: this.predictor?.getPosterior() ?? 0.5 });
-				await this.stop();
-				return;
-			}
-
-			if (this.gameType && this.predictor) {
-				const events = parseEvents(gameData, this.gameType);
-				for (const event of events) {
-					if (this.predictor.update(event)) {
-						this.events.push(event);
-						const posterior = this.predictor.getPosterior();
-						this.probabilityHistory.push({
-							posterior,
-							timestamp: new Date(),
-							eventType: event.eventType,
-							team: event.team,
-						});
-						this.emit('event', { ...event, posterior });
-						this.emit('probability', { posterior, timestamp: new Date() });
-					}
-				}
-			}
-
-			if (this.marketId) {
-				const prices = await fetchMarketPrices(this.marketId);
-				if (prices) {
-					this.marketPrices = { ...prices, timestamp: new Date() };
-					this.emit('prices', { ...prices, timestamp: new Date().toISOString() });
-
-					if (this.predictor) {
-						const signal = evaluateTrade(this.predictor.getPosterior(), {
-							yesPrice: prices.yesPrice,
-							noPrice: prices.noPrice,
-							timestamp: new Date(),
-						});
-
-						if (signal && Math.abs(signal.edge) >= this.config.edgeThreshold / 100) {
-							const position = this.getStats().position;
-							if (Math.abs(position) < this.config.maxPosition) {
-								const execution = await placeOrder(
-									{ ...signal, size: Math.min(signal.size, this.config.orderSize) },
-									this.dryRun
-								);
-								this.trades.push(execution);
-								this.emit('trade', { signal, execution });
-							}
-						}
-					}
-				}
-			}
-		} catch (err) {
-			this.emit('error', { message: err instanceof Error ? err.message : 'Unknown error' });
-		}
-	}
-
 	reset(): void {
-		this.stopPolling();
+		this.stopWebSocket();
 		this.status = 'IDLE';
 		this.connection = 'disconnected';
 		this.error = null;
 		this.startTime = null;
-		this.matchId = null;
-		this.marketId = null;
-		this.gameType = null;
-		this.predictor = null;
+		this.marketTicker = null;
 		this.events = [];
 		this.trades = [];
 		this.probabilityHistory = [];
 		this.marketPrices = null;
+		this.strategy.reset();
 		this.emit('stateChange', this.getState());
 	}
 }

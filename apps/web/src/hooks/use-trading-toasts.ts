@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import type { BotStatus, GameEvent, TradeExecution } from '@/services/types';
+import type { BotStatus, TradeEvent, TradeExecution } from '@/services/types';
 
 interface TradingToastsConfig {
 	botStatus: BotStatus;
@@ -11,11 +11,11 @@ interface TradingToastsConfig {
 	wasConnected: boolean;
 	dryRun: boolean;
 	trades: TradeExecution[];
-	events: GameEvent[];
+	events: TradeEvent[];
 	pnl: number;
 }
 
-const SIGNIFICANT_EVENTS = ['baron', 'dragon', 'roshan', 'aegis', 'elder'];
+const SIGNIFICANT_EVENTS = ['volume_spike', 'spread_change'];
 
 export function useTradingToasts({
 	botStatus,
@@ -94,11 +94,11 @@ export function useTradingToasts({
 		if (events.length > prevEventCountRef.current) {
 			const newEvents = events.slice(prevEventCountRef.current);
 			for (const event of newEvents) {
-				const isSignificant = SIGNIFICANT_EVENTS.some((e) => event.eventType.toLowerCase().includes(e));
+				const isSignificant = SIGNIFICANT_EVENTS.includes(event.eventType);
 				if (isSignificant) {
-					const teamName = event.team === 'blue' || event.team === 'radiant' ? 'Blue' : 'Red';
-					toast(`${teamName} Team: ${event.eventType.toUpperCase()}`, {
-						description: `Probability may shift significantly`,
+					const sideName = event.side === 'yes' ? 'YES' : 'NO';
+					toast(`${sideName}: ${event.eventType.toUpperCase().replace('_', ' ')}`, {
+						description: `Market activity detected`,
 					});
 				}
 			}

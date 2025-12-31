@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
 	return {
-		name: 'Turbo Starter',
-		short_name: 'TurboStarter',
+		name: 'Kalshi Trading Bot',
+		short_name: 'KalshiBot',
 		icons: [
 			{
 				src: '/web-app-manifest-192x192.png',

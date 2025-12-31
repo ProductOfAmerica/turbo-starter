@@ -6,7 +6,7 @@ import { Card } from '@repo/ui/components/card';
 import { Label } from '@repo/ui/components/label';
 import { Switch } from '@repo/ui/components/switch';
 import { cn } from '@repo/ui/lib/utils';
-import { Loader2, Pause, Play, RotateCcw, Settings, Square } from 'lucide-react';
+import { Activity, Loader2, Pause, Play, RotateCcw, Settings, Square } from 'lucide-react';
 import type { BotStatus, ConnectionStatus } from '@/services/types';
 
 interface StatusBarProps {
@@ -14,6 +14,9 @@ interface StatusBarProps {
 	connection: ConnectionStatus;
 	elapsed: number;
 	dryRun: boolean;
+	tickerCount: number;
+	canStart: boolean;
+	missingMatchId: boolean;
 	onStart: () => void;
 	onPause: () => void;
 	onResume: () => void;
@@ -76,6 +79,9 @@ export function StatusBar({
 	connection,
 	elapsed,
 	dryRun,
+	tickerCount,
+	canStart,
+	missingMatchId,
 	onStart,
 	onPause,
 	onResume,
@@ -107,14 +113,30 @@ export function StatusBar({
 					{connection === 'reconnecting' && 'Reconnecting...'}
 					{connection === 'disconnected' && 'Disconnected'}
 				</div>
+
+				{tickerCount > 0 && (
+					<div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+						<Activity className="h-3 w-3" />
+						<span className="font-mono tabular-nums">{tickerCount.toLocaleString()}</span>
+					</div>
+				)}
 			</div>
 
 			<div className="flex items-center gap-2">
 				{status === 'IDLE' && (
-					<Button onClick={onStart}>
-						<Play className="mr-2 h-4 w-4" />
-						Start Bot
-					</Button>
+					<>
+						{missingMatchId && <span className="text-sm text-muted-foreground">Enter Match ID to start</span>}
+						<Button onClick={onStart} disabled={!canStart}>
+							<Play className="mr-2 h-4 w-4" />
+							Start Bot
+						</Button>
+						{missingMatchId && (
+							<Button variant="secondary" onClick={onConfigure}>
+								<Settings className="mr-2 h-4 w-4" />
+								Configure
+							</Button>
+						)}
+					</>
 				)}
 
 				{status === 'STARTING' && (
@@ -158,10 +180,19 @@ export function StatusBar({
 				)}
 
 				{status === 'STOPPED' && (
-					<Button onClick={onStart}>
-						<Play className="mr-2 h-4 w-4" />
-						Start Bot
-					</Button>
+					<>
+						{missingMatchId && <span className="text-sm text-muted-foreground">Enter Match ID to start</span>}
+						<Button onClick={onStart} disabled={!canStart}>
+							<Play className="mr-2 h-4 w-4" />
+							Start Bot
+						</Button>
+						{missingMatchId && (
+							<Button variant="secondary" onClick={onConfigure}>
+								<Settings className="mr-2 h-4 w-4" />
+								Configure
+							</Button>
+						)}
+					</>
 				)}
 
 				{status === 'ERROR' && (

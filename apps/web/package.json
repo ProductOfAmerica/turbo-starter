@@ -14,6 +14,7 @@
 		"@repo/ui": "workspace:*",
 		"@vercel/analytics": "^1.6.1",
 		"ethers": "5.8.0",
+		"kalshi-typescript": "^3.3.0",
 		"lucide-react": "^0.562.0",
 		"next": "16.1.1",
 		"next-themes": "^0.4.6",
@@ -22,7 +23,8 @@
 		"recharts": "^2.15.4",
 		"sharp": "^0.34.5",
 		"sonner": "^2.0.7",
-		"web-vitals": "^5.1.0"
+		"web-vitals": "^5.1.0",
+		"ws": "^8.18.3"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^16.1.1",
@@ -31,6 +33,7 @@
 		"@types/node": "^20.3.1",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
+		"@types/ws": "^8.18.1",
 		"cross-env": "^10.1.0",
 		"schema-dts": "^1.1.5",
 		"tailwindcss": "^4.1.18",

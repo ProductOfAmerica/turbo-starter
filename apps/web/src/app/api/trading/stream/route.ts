@@ -1,7 +1,5 @@
 import { tradingBot } from '@/services/trading-bot';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET() {
 	const encoder = new TextEncoder();
 
@@ -13,8 +11,7 @@ export async function GET() {
 
 			const state = tradingBot.getState();
 			sendEvent('connected', {
-				gameType: state.gameType,
-				matchId: state.matchId,
+				marketTicker: state.marketTicker,
 				isDryRun: state.dryRun,
 			});
 
@@ -60,17 +57,19 @@ export async function GET() {
 							sendEvent('trade', data);
 							break;
 						case 'probability':
-							sendEvent('state', {
-								posterior: (data as { posterior: number }).posterior,
-								updateCount: tradingBot.getProbabilityHistory().length,
-								history: tradingBot.getProbabilityHistory().slice(-50),
-							});
+							sendEvent('probability', data);
 							break;
 						case 'error':
 							sendEvent('error', data);
 							break;
-						case 'matchComplete':
-							sendEvent('matchComplete', data);
+						case 'marketClosed':
+							sendEvent('marketClosed', data);
+							break;
+						case 'quotes':
+							sendEvent('quotes', data);
+							break;
+						case 'tickerCount':
+							sendEvent('tickerCount', data);
 							break;
 					}
 				} catch {

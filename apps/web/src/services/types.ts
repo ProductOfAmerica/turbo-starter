@@ -1,12 +1,10 @@
-export type GameType = 'lol' | 'dota';
+export type EventType = 'trade' | 'fill' | 'quote_update' | 'price_move' | 'volume_spike' | 'spread_change';
 
-export type EventType = 'kill' | 'dragon' | 'baron' | 'tower' | 'inhibitor' | 'roshan';
+export type Side = 'yes' | 'no' | 'unknown';
 
-export type Team = 'blue' | 'red' | 'radiant' | 'dire' | 'team1' | 'team2' | 'unknown';
-
-export interface GameEvent {
+export interface TradeEvent {
 	eventType: EventType;
-	team: Team;
+	side: Side;
 	timestamp: Date;
 	eventId: string;
 	details: unknown;
@@ -40,15 +38,14 @@ export interface ProbabilityUpdate {
 	posterior: number;
 	timestamp: Date;
 	eventType?: EventType;
-	team?: Team;
+	side?: Side;
 }
 
 export interface TradingState {
-	gameType: GameType | null;
-	matchId: string | null;
+	marketTicker: string | null;
 	posterior: number;
 	marketPrices: MarketPrices | null;
-	events: GameEvent[];
+	events: TradeEvent[];
 	trades: TradeExecution[];
 	probabilityHistory: ProbabilityUpdate[];
 	isRunning: boolean;
@@ -65,8 +62,7 @@ export interface BotState {
 	error: string | null;
 	dryRun: boolean;
 	elapsed: number;
-	matchId: string | null;
-	gameType: GameType | null;
+	marketTicker: string | null;
 }
 
 export interface Stats {
@@ -96,11 +92,46 @@ export interface ChartDataPoint {
 }
 
 export interface Config {
-	game: GameType;
-	matchId: string;
-	marketId?: string;
+	marketTicker: string;
 	edgeThreshold: number;
 	orderSize: number;
 	maxPosition: number;
-	pollingInterval: number;
+}
+
+export interface KalshiMarket {
+	ticker: string;
+	title: string;
+	subtitle: string;
+	status: 'open' | 'closed' | 'settled';
+	yesBid: number;
+	yesAsk: number;
+	yesPrice: number;
+	noPrice: number;
+	spread: number;
+	spreadBps: number;
+	volume: number;
+	volume24h: number;
+	openInterest: number;
+	category: string;
+	expirationDate: string;
+}
+
+export interface StrategyState {
+	inventory: number;
+	pnl: number;
+	midPrice: number;
+	theoreticalMid: number;
+	bidPrice: number | null;
+	askPrice: number | null;
+	fills: number;
+}
+
+export interface TradingStrategy {
+	readonly name: string;
+	evaluateTrade(yesPrice: number, noPrice: number): TradeSignal | null;
+	onFill(side: 'BUY' | 'SELL', price: number, size: number): void;
+	getState(): StrategyState;
+	getUnrealizedPnL(currentPrice: number): number;
+	reset(): void;
+	updateConfig(config: Record<string, unknown>): void;
 }

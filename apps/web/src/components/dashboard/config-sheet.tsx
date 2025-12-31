@@ -1,5 +1,6 @@
 'use client';
 
+import { Badge } from '@repo/ui/components/badge';
 import { Button } from '@repo/ui/components/button';
 import { Input } from '@repo/ui/components/input';
 import { Label } from '@repo/ui/components/label';
@@ -8,11 +9,9 @@ import { Separator } from '@repo/ui/components/separator';
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from '@repo/ui/components/sheet';
 import { Slider } from '@repo/ui/components/slider';
 import { cn } from '@repo/ui/lib/utils';
-import { CheckCircle, Loader2, XCircle } from 'lucide-react';
-import { useState } from 'react';
-import type { Config, GameType } from '@/services/types';
-
-type ValidationState = 'idle' | 'validating' | 'valid' | 'invalid';
+import { ArrowDownAZ, Loader2, RefreshCw } from 'lucide-react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
+import type { Config, KalshiMarket } from '@/services/types';
 
 interface ApiStatus {
 	name: string;
@@ -28,33 +27,57 @@ interface ConfigSheetProps {
 }
 
 const defaultConfig: Config = {
-	game: 'lol',
-	matchId: '',
-	marketId: undefined,
+	marketTicker: '',
 	edgeThreshold: 5,
 	orderSize: 10,
 	maxPosition: 100,
-	pollingInterval: 2000,
 };
 
 export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetProps) {
 	const [localConfig, setLocalConfig] = useState<Config>(config);
-	const [matchValidation, setMatchValidation] = useState<ValidationState>('idle');
-	const [apiStatuses] = useState<ApiStatus[]>([
-		{ name: 'Polymarket', status: 'connected', detail: '0x1234...5678' },
-		{ name: 'PandaScore', status: 'connected' },
-		{ name: 'OpenDota', status: 'connected' },
-	]);
+	const [markets, setMarkets] = useState<KalshiMarket[]>([]);
+	const [isPending, startTransition] = useTransition();
+	const [categoryFilter, setCategoryFilter] = useState<string>('all');
+	const [sortBy, setSortBy] = useState<'volume24h' | 'spread' | 'openInterest'>('volume24h');
+	const [minVolume, setMinVolume] = useState<number>(0);
+	const [apiStatuses] = useState<ApiStatus[]>([{ name: 'Kalshi', status: 'connected' }]);
 
-	const handleVerifyMatch = async () => {
-		setMatchValidation('validating');
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		setMatchValidation(localConfig.matchId.length > 3 ? 'valid' : 'invalid');
+	const fetchMarkets = useCallback(async (category: string) => {
+		try {
+			const params = new URLSearchParams({ status: 'open', limit: '50' });
+			if (category !== 'all') {
+				params.set('category', category);
+			}
+			const res = await fetch(`/api/kalshi/markets?${params}`);
+			if (res.ok) {
+				const data = await res.json();
+				startTransition(() => {
+					setMarkets(data.markets || []);
+				});
+			}
+		} catch (err) {
+			console.error('Failed to fetch markets:', err);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (open) {
+			setLocalConfig(config);
+		}
+	}, [open, config]);
+
+	useEffect(() => {
+		if (open) {
+			fetchMarkets(categoryFilter);
+		}
+	}, [categoryFilter, open, fetchMarkets]);
+
+	const handleSelectMarket = (market: KalshiMarket) => {
+		setLocalConfig({ ...localConfig, marketTicker: market.ticker });
 	};
 
 	const handleReset = () => {
 		setLocalConfig(defaultConfig);
-		setMatchValidation('idle');
 	};
 
 	const handleSave = () => {
@@ -62,83 +85,161 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 		onOpenChange(false);
 	};
 
+	const handleOpenChange = (newOpen: boolean) => {
+		if (!newOpen) {
+			onSave(localConfig);
+		}
+		onOpenChange(newOpen);
+	};
+
+	const formatPrice = (price: number) => `${Math.round(price * 100)}¢`;
+
+	const filteredAndSortedMarkets = markets
+		.filter((m) => m.volume24h >= minVolume)
+		.sort((a, b) => {
+			if (sortBy === 'volume24h') return b.volume24h - a.volume24h;
+			if (sortBy === 'spread') return a.spreadBps - b.spreadBps;
+			if (sortBy === 'openInterest') return b.openInterest - a.openInterest;
+			return 0;
+		});
+
 	return (
-		<Sheet open={open} onOpenChange={onOpenChange}>
-			<SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]">
+		<Sheet open={open} onOpenChange={handleOpenChange}>
+			<SheetContent className="w-[500px] overflow-y-auto sm:w-[640px]">
 				<SheetHeader>
 					<SheetTitle>Configuration</SheetTitle>
-					<SheetDescription>Configure match tracking and trading parameters</SheetDescription>
+					<SheetDescription>Select a Kalshi market and configure trading parameters</SheetDescription>
 				</SheetHeader>
 
 				<div className="space-y-8 py-6">
 					<div className="space-y-4">
 						<h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-							Match Configuration
+							Market Selection
 						</h3>
 
 						<div className="space-y-3">
-							<Label htmlFor="game">Game</Label>
-							<Select
-								value={localConfig.game}
-								onValueChange={(v) => setLocalConfig({ ...localConfig, game: v as GameType })}
-							>
-								<SelectTrigger id="game">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="lol">League of Legends</SelectItem>
-									<SelectItem value="dota">Dota 2</SelectItem>
-								</SelectContent>
-							</Select>
+							<div className="flex items-center justify-between">
+								<Label>Category</Label>
+								<Select value={categoryFilter} onValueChange={setCategoryFilter}>
+									<SelectTrigger className="w-[140px]">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="all">All Markets</SelectItem>
+										<SelectItem value="weather">Weather</SelectItem>
+										<SelectItem value="economics">Economic Data</SelectItem>
+										<SelectItem value="sports">Sports Totals</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
+
+							<div className="flex items-center justify-between">
+								<Label>Sort By</Label>
+								<Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
+									<SelectTrigger className="w-[140px]">
+										<ArrowDownAZ className="mr-2 h-4 w-4" />
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="volume24h">Volume (24h)</SelectItem>
+										<SelectItem value="spread">Spread (Tight)</SelectItem>
+										<SelectItem value="openInterest">Open Interest</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
+
+							<div className="flex items-center justify-between">
+								<Label>Min Volume (24h)</Label>
+								<Select value={String(minVolume)} onValueChange={(v) => setMinVolume(Number(v))}>
+									<SelectTrigger className="w-[140px]">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="0">Any</SelectItem>
+										<SelectItem value="100">100+</SelectItem>
+										<SelectItem value="1000">1,000+</SelectItem>
+										<SelectItem value="10000">10,000+</SelectItem>
+									</SelectContent>
+								</Select>
+							</div>
 						</div>
 
 						<div className="space-y-3">
-							<Label htmlFor="matchId">Match ID</Label>
-							<div className="flex gap-2">
-								<div className="relative flex-1">
-									<Input
-										id="matchId"
-										placeholder="Enter match ID"
-										value={localConfig.matchId}
-										onChange={(e) => {
-											setLocalConfig({ ...localConfig, matchId: e.target.value });
-											setMatchValidation('idle');
-										}}
-										className={cn(
-											'pr-8',
-											matchValidation === 'valid' && 'border-green-500',
-											matchValidation === 'invalid' && 'border-destructive'
-										)}
-									/>
-									{matchValidation === 'valid' && (
-										<CheckCircle className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-green-500" />
-									)}
-									{matchValidation === 'invalid' && (
-										<XCircle className="absolute right-2 top-1/2 h-4 w-4 -translate-y-1/2 text-destructive" />
-									)}
-								</div>
+							<div className="flex items-center justify-between">
+								<Label>Available Markets</Label>
 								<Button
-									variant="secondary"
-									onClick={handleVerifyMatch}
-									disabled={matchValidation === 'validating' || !localConfig.matchId}
+									variant="ghost"
+									size="sm"
+									onClick={() => fetchMarkets(categoryFilter)}
+									disabled={isPending}
 								>
-									{matchValidation === 'validating' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Verify'}
+									{isPending ? (
+										<Loader2 className="h-4 w-4 animate-spin" />
+									) : (
+										<RefreshCw className="h-4 w-4" />
+									)}
 								</Button>
 							</div>
-							<p className="text-sm text-muted-foreground">
-								Find match IDs on PandaScore or the game&apos;s esports site
-							</p>
+
+							<div className="relative min-h-[300px] max-h-[300px] overflow-y-auto pr-1">
+								{isPending && (
+									<div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80">
+										<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+									</div>
+								)}
+								{filteredAndSortedMarkets.length > 0 ? (
+									<div className="space-y-2">
+										{filteredAndSortedMarkets.map((market) => (
+											<button
+												key={market.ticker}
+												type="button"
+												onClick={() => handleSelectMarket(market)}
+												className={cn(
+													'w-full rounded-md border p-3 text-left transition-colors hover:bg-accent',
+													localConfig.marketTicker === market.ticker && 'border-primary bg-accent'
+												)}
+											>
+												<div className="flex items-center justify-between">
+													<span className="font-medium text-sm">{market.title}</span>
+													<div className="flex items-center gap-2">
+														<Badge variant="outline" className="font-mono text-xs">
+															{market.spreadBps}bps
+														</Badge>
+														<Badge variant="secondary" className="font-mono text-xs">
+															{formatPrice(market.yesPrice)}
+														</Badge>
+													</div>
+												</div>
+												<div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+													<span>{market.subtitle}</span>
+													<span>·</span>
+													<span className="capitalize">{market.category}</span>
+												</div>
+												<div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+													<span className="font-mono">{market.ticker}</span>
+													<span>·</span>
+													<span>24h: {market.volume24h.toLocaleString()}</span>
+													<span>·</span>
+													<span>OI: {market.openInterest.toLocaleString()}</span>
+												</div>
+											</button>
+										))}
+									</div>
+								) : (
+									<p className="py-2 text-center text-sm text-muted-foreground">No markets available</p>
+								)}
+							</div>
 						</div>
 
 						<div className="space-y-3">
-							<Label htmlFor="marketId">Market ID (Optional)</Label>
+							<Label htmlFor="marketTicker">Market Ticker</Label>
 							<Input
-								id="marketId"
-								placeholder="Auto-detect from match"
-								value={localConfig.marketId ?? ''}
-								onChange={(e) => setLocalConfig({ ...localConfig, marketId: e.target.value || undefined })}
+								id="marketTicker"
+								placeholder="Select above or enter manually"
+								value={localConfig.marketTicker}
+								onChange={(e) => setLocalConfig({ ...localConfig, marketTicker: e.target.value })}
+								className={cn(localConfig.marketTicker && 'border-green-500')}
 							/>
-							<p className="text-sm text-muted-foreground">Override automatic market detection</p>
 						</div>
 					</div>
 
@@ -152,7 +253,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">
 								<Label>Edge Threshold</Label>
-								<span className="text-sm font-mono tabular-nums text-muted-foreground">
+								<span className="font-mono text-sm tabular-nums text-muted-foreground">
 									{localConfig.edgeThreshold.toFixed(1)}%
 								</span>
 							</div>
@@ -190,23 +291,6 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 							/>
 							<p className="text-sm text-muted-foreground">Maximum total exposure before pausing trades</p>
 						</div>
-
-						<div className="space-y-3">
-							<Label htmlFor="pollingInterval">Polling Interval</Label>
-							<Select
-								value={String(localConfig.pollingInterval)}
-								onValueChange={(v) => setLocalConfig({ ...localConfig, pollingInterval: Number(v) })}
-							>
-								<SelectTrigger id="pollingInterval">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="1000">1s</SelectItem>
-									<SelectItem value="2000">2s</SelectItem>
-									<SelectItem value="5000">5s</SelectItem>
-								</SelectContent>
-							</Select>
-						</div>
 					</div>
 
 					<Separator />
@@ -223,7 +307,7 @@ export function ConfigSheet({ open, onOpenChange, config, onSave }: ConfigSheetP
 												'h-2 w-2 rounded-full',
 												api.status === 'connected' && 'bg-green-500',
 												api.status === 'error' && 'bg-destructive',
-												api.status === 'checking' && 'bg-yellow-500 animate-pulse'
+												api.status === 'checking' && 'animate-pulse bg-yellow-500'
 											)}
 										/>
 										<span className="text-sm font-medium">{api.name}</span>

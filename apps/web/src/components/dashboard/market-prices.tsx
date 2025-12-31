@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/card';
 import { Progress } from '@repo/ui/components/progress';
-import { formatPrice } from '@/services/trade-evaluator';
+import { formatPrice } from '@/lib/utils';
 
 interface MarketPricesProps {
 	yesPrice: number | null;

@@ -1,21 +1,20 @@
 export const siteConfig = {
-	name: 'Esports Trading Bot',
+	name: 'Kalshi Trading Bot',
 	description:
-		'Real-time esports prediction trading bot for Polymarket. Bayesian probability updates from live LoL and Dota 2 match events.',
-	url: 'https://esports-trading.vercel.app/',
+		'Automated market-making trading bot for Kalshi prediction markets. Real-time order management and position tracking.',
+	url: 'https://kalshi-trading.vercel.app/',
 	ogImage: '/og.webp',
 	author: {
 		name: 'ProductOfAmerica',
 		url: 'https://github.com/ProductOfAmerica',
 	},
 	keywords: [
-		'Esports',
+		'Kalshi',
 		'Trading Bot',
-		'Polymarket',
-		'League of Legends',
-		'Dota 2',
+		'Market Making',
 		'Prediction Markets',
-		'Bayesian',
+		'Automated Trading',
 		'Real-time',
+		'Order Management',
 	],
 };

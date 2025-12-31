@@ -1,15 +1,25 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { GameEvent, GameType, MarketPrices, ProbabilityUpdate, TradeExecution } from '@/services/types';
+import type { BotState, MarketPrices, ProbabilityUpdate, TradeEvent, TradeExecution } from '@/services/types';
+
+interface Quotes {
+	bid: number | null;
+	ask: number | null;
+	mid: number;
+	inventory: number;
+}
 
 interface TradingStreamState {
 	isConnected: boolean;
 	posterior: number;
 	marketPrices: MarketPrices | null;
-	events: GameEvent[];
+	quotes: Quotes | null;
+	events: TradeEvent[];
 	trades: TradeExecution[];
 	probabilityHistory: ProbabilityUpdate[];
+	botState: BotState | null;
+	tickerCount: number;
 	error: string | null;
 }
 
@@ -18,26 +28,25 @@ export function useTradingStream() {
 		isConnected: false,
 		posterior: 0.5,
 		marketPrices: null,
+		quotes: null,
 		events: [],
 		trades: [],
 		probabilityHistory: [{ posterior: 0.5, timestamp: new Date() }],
+		botState: null,
+		tickerCount: 0,
 		error: null,
 	});
 
 	const eventSourceRef = useRef<EventSource | null>(null);
 
-	const connect = useCallback((gameType: GameType, matchId: string, marketId?: string) => {
+	const connect = useCallback((marketTicker: string) => {
 		if (eventSourceRef.current) {
 			eventSourceRef.current.close();
 		}
 
 		const params = new URLSearchParams({
-			gameType,
-			matchId,
+			marketTicker,
 		});
-		if (marketId) {
-			params.set('marketId', marketId);
-		}
 
 		const eventSource = new EventSource(`/api/trading/stream?${params.toString()}`);
 		eventSourceRef.current = eventSource;
@@ -80,11 +89,52 @@ export function useTradingStream() {
 			}));
 		});
 
+		eventSource.addEventListener('probability', (e) => {
+			const data = JSON.parse(e.data);
+			setState((prev) => ({
+				...prev,
+				posterior: data.posterior,
+				probabilityHistory: [
+					...prev.probabilityHistory,
+					{ posterior: data.posterior, timestamp: new Date(data.timestamp) },
+				],
+			}));
+		});
+
 		eventSource.addEventListener('trade', (e) => {
 			const data = JSON.parse(e.data);
 			setState((prev) => ({
 				...prev,
 				trades: [...prev.trades, data.execution],
+			}));
+		});
+
+		eventSource.addEventListener('quotes', (e) => {
+			const data = JSON.parse(e.data);
+			setState((prev) => ({
+				...prev,
+				quotes: {
+					bid: data.bid,
+					ask: data.ask,
+					mid: data.mid,
+					inventory: data.inventory,
+				},
+			}));
+		});
+
+		eventSource.addEventListener('botState', (e) => {
+			const data = JSON.parse(e.data);
+			setState((prev) => ({
+				...prev,
+				botState: data,
+			}));
+		});
+
+		eventSource.addEventListener('tickerCount', (e) => {
+			const data = JSON.parse(e.data);
+			setState((prev) => ({
+				...prev,
+				tickerCount: data.count,
 			}));
 		});
 
@@ -100,9 +150,9 @@ export function useTradingStream() {
 			}));
 		});
 
-		eventSource.addEventListener('matchComplete', (e) => {
+		eventSource.addEventListener('marketClosed', (e) => {
 			const data = JSON.parse(e.data);
-			console.log('Match complete:', data);
+			console.log('Market closed:', data);
 			eventSource.close();
 			setState((prev) => ({ ...prev, isConnected: false }));
 		});
@@ -133,9 +183,12 @@ export function useTradingStream() {
 			isConnected: false,
 			posterior: 0.5,
 			marketPrices: null,
+			quotes: null,
 			events: [],
 			trades: [],
 			probabilityHistory: [{ posterior: 0.5, timestamp: new Date() }],
+			botState: null,
+			tickerCount: 0,
 			error: null,
 		});
 	}, [disconnect]);

@@ -23,14 +23,14 @@ import { cn } from '@repo/ui/lib/utils';
 import { Download, Eye, FileDown, Loader2, Maximize2, MoreHorizontal } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Line, LineChart, ReferenceDot, ReferenceLine, Tooltip, XAxis, YAxis } from 'recharts';
-import type { GameEvent, ProbabilityUpdate } from '@/services/types';
+import type { ProbabilityUpdate, TradeEvent } from '@/services/types';
 
 type TimeRange = '1m' | '5m' | '15m' | 'all';
 
 interface ChartCardProps {
 	history: ProbabilityUpdate[];
 	marketPriceHistory: Array<{ timestamp: Date; price: number }>;
-	events: GameEvent[];
+	events: TradeEvent[];
 	isLoading?: boolean;
 }
 
@@ -143,7 +143,7 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 				return {
 					timestamp: ts,
 					y: nearestPoint ? nearestPoint.posterior * 100 : 50,
-					team: e.team,
+					side: e.side,
 					type: e.eventType,
 				};
 			});
@@ -167,7 +167,7 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 		<Card>
 			<CardHeader className="flex flex-row items-center justify-between pb-2">
 				<div>
-					<CardTitle className="text-base font-medium">Win Probability Over Time</CardTitle>
+					<CardTitle className="text-base font-medium">Probability Over Time</CardTitle>
 					<CardDescription>Model prediction vs market price</CardDescription>
 				</div>
 				<div className="flex items-center gap-2">
@@ -278,7 +278,7 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 											x={formatTime(new Date(marker.timestamp))}
 											y={marker.y}
 											r={4}
-											fill={marker.team === 'blue' || marker.team === 'radiant' ? '#3b82f6' : '#ef4444'}
+											fill={marker.side === 'yes' ? '#22c55e' : '#ef4444'}
 											stroke="white"
 											strokeWidth={2}
 										/>
@@ -321,12 +321,12 @@ export function ChartCard({ history, marketPriceHistory, events, isLoading = fal
 							<span className="text-muted-foreground">Market</span>
 						</div>
 						<div className="flex items-center gap-2">
-							<div className="h-2 w-2 rounded-full bg-blue-500" />
-							<span className="text-muted-foreground">Blue Event</span>
+							<div className="h-2 w-2 rounded-full bg-green-500" />
+							<span className="text-muted-foreground">YES</span>
 						</div>
 						<div className="flex items-center gap-2">
 							<div className="h-2 w-2 rounded-full bg-red-500" />
-							<span className="text-muted-foreground">Red Event</span>
+							<span className="text-muted-foreground">NO</span>
 						</div>
 					</div>
 				)}

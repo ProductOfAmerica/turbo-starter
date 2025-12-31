@@ -3,13 +3,16 @@ import { tradingBot } from '@/services/trading-bot';
 
 export async function POST() {
 	try {
-		await tradingBot.stop();
+		await tradingBot.flattenAndStop();
 
 		return NextResponse.json({
 			success: true,
 			state: tradingBot.getState(),
 		});
 	} catch (err) {
-		return NextResponse.json({ error: err instanceof Error ? err.message : 'Failed to stop bot' }, { status: 400 });
+		return NextResponse.json(
+			{ error: err instanceof Error ? err.message : 'Failed to flatten and stop' },
+			{ status: 400 }
+		);
 	}
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-	title: 'Dashboard | Esports Trading Bot',
-	description: 'Real-time esports trading dashboard',
+	title: 'Dashboard | Kalshi Trading Bot',
+	description: 'Real-time Kalshi prediction market trading dashboard',
 };
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

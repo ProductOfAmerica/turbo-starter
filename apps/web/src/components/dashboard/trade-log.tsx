@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo
 import { ScrollArea } from '@repo/ui/components/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@repo/ui/components/table';
 import { CheckCircle, XCircle } from 'lucide-react';
-import { formatPrice } from '@/services/trade-evaluator';
+import { formatPrice } from '@/lib/utils';
 import type { TradeExecution } from '@/services/types';
 
 interface TradeLogProps {

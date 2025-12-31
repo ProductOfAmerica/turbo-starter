@@ -17,6 +17,7 @@ interface StopDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	onConfirm: () => void;
+	onFlattenAndStop: () => void;
 	sessionPnL: number;
 	position: number;
 	positionDirection: 'LONG' | 'SHORT' | 'FLAT';
@@ -31,12 +32,18 @@ export function StopDialog({
 	open,
 	onOpenChange,
 	onConfirm,
+	onFlattenAndStop,
 	sessionPnL,
 	position,
 	positionDirection,
 }: StopDialogProps) {
 	const handleConfirm = () => {
 		onConfirm();
+		onOpenChange(false);
+	};
+
+	const handleFlatten = () => {
+		onFlattenAndStop();
 		onOpenChange(false);
 	};
 
@@ -72,19 +79,27 @@ export function StopDialog({
 							{positionDirection !== 'FLAT' && (
 								<div className="flex items-center gap-2 text-sm text-yellow-600">
 									<AlertTriangle className="h-4 w-4" />
-									<span>Open positions will remain open on Polymarket</span>
+									<span>You have open positions</span>
 								</div>
 							)}
 						</div>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter>
+				<AlertDialogFooter className="flex-col sm:flex-row gap-2">
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
+					{positionDirection !== 'FLAT' && (
+						<AlertDialogAction
+							onClick={handleFlatten}
+							className="bg-primary text-primary-foreground hover:bg-primary/90"
+						>
+							Flatten & Stop
+						</AlertDialogAction>
+					)}
 					<AlertDialogAction
 						onClick={handleConfirm}
 						className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
 					>
-						Stop Bot
+						{positionDirection !== 'FLAT' ? 'Keep Position & Stop' : 'Stop Bot'}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

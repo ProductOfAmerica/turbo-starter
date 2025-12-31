@@ -26,7 +26,7 @@ export const baseMetadata: Metadata = {
 				url: siteConfig.ogImage,
 				width: 1200,
 				height: 630,
-				alt: `${siteConfig.name} - Modern Monorepo Template`,
+				alt: `${siteConfig.name} - Automated Prediction Market Trading`,
 			},
 		],
 	},

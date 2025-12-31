@@ -1,4 +1,4 @@
-# Esports Trading Bot
+# Kalshi Trading Bot
 
 ## Commands
 
@@ -42,7 +42,6 @@ Read `docs/refactoring-ui.md` before building UI. Key rules:
 
 Read relevant specs before implementing features:
 
-- `docs/DASHBOARD_SPEC.md` - Trading dashboard (complete UI/UX specification)
 - `docs/refactoring-ui.md` - Design principles
 
 ## Workflow
