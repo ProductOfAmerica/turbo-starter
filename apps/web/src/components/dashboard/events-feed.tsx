@@ -20,7 +20,8 @@ import {
 import { ScrollArea } from '@repo/ui/components/scroll-area';
 import { cn } from '@repo/ui/lib/utils';
 import { Copy, Filter, LineChart, Radio } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { useAutoScroll } from '@/hooks/use-auto-scroll';
 import type { EventType, TradeEvent } from '@/services/types';
 
 type EventFilter = 'all' | 'trades' | 'quotes' | 'market';
@@ -108,45 +109,10 @@ function getEventDetail(event: TradeEvent): string | null {
 
 export function EventsFeed({ events, onShowOnChart }: EventsFeedProps) {
 	const [filter, setFilter] = useState<EventFilter>('all');
-	const [isAtBottom, setIsAtBottom] = useState(true);
-	const [newCount, setNewCount] = useState(0);
-	const scrollRef = useRef<HTMLDivElement>(null);
-	const prevEventsLengthRef = useRef(events.length);
+	const { scrollRef, isAtBottom, newCount, scrollToBottom, handleScroll } = useAutoScroll(events.length);
 
 	const filteredEvents = filterEvents(events, filter);
 	const reversedEvents = [...filteredEvents].reverse();
-
-	const scrollToBottom = useCallback(() => {
-		if (scrollRef.current) {
-			const scrollContainer = scrollRef.current.querySelector('[data-radix-scroll-area-viewport]');
-			if (scrollContainer) {
-				scrollContainer.scrollTop = scrollContainer.scrollHeight;
-				setNewCount(0);
-				setIsAtBottom(true);
-			}
-		}
-	}, []);
-
-	useEffect(() => {
-		if (events.length > prevEventsLengthRef.current) {
-			const newEventsCount = events.length - prevEventsLengthRef.current;
-			if (isAtBottom) {
-				setTimeout(scrollToBottom, 0);
-			} else {
-				setNewCount((prev) => prev + newEventsCount);
-			}
-		}
-		prevEventsLengthRef.current = events.length;
-	}, [events.length, isAtBottom, scrollToBottom]);
-
-	const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-		const target = e.target as HTMLDivElement;
-		const isBottom = Math.abs(target.scrollHeight - target.scrollTop - target.clientHeight) < 10;
-		setIsAtBottom(isBottom);
-		if (isBottom) {
-			setNewCount(0);
-		}
-	}, []);
 
 	const handleCopyDetails = (event: TradeEvent) => {
 		const text = `${event.eventType.toUpperCase()} - ${event.side.toUpperCase()} - ${getEventDescription(event)}`;

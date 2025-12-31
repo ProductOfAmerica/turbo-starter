@@ -46,6 +46,13 @@ class ScenarioRunnerService {
 	private activeOrders: Set<string> = new Set();
 	private initialized = false;
 
+	private trackOrder(orderId: string | undefined, orderIds: string[], label: string): void {
+		if (!orderId) return;
+		orderIds.push(orderId);
+		this.activeOrders.add(orderId);
+		console.log(`[ScenarioRunner] ${label}, order ${orderId}`);
+	}
+
 	init(): void {
 		if (this.initialized) return;
 
@@ -87,12 +94,7 @@ class ScenarioRunnerService {
 				yes_price: config.yesBid,
 				client_order_id: `scenario-bid-${Date.now()}`,
 			});
-			const orderId = response.data.order?.order_id;
-			if (orderId) {
-				orderIds.push(orderId);
-				this.activeOrders.add(orderId);
-				console.log(`[ScenarioRunner] Posted YES bid @ ${config.yesBid}¢, order ${orderId}`);
-			}
+			this.trackOrder(response.data.order?.order_id, orderIds, `Posted YES bid @ ${config.yesBid}¢`);
 		}
 
 		if (config.yesAsk !== undefined) {
@@ -105,12 +107,7 @@ class ScenarioRunnerService {
 				yes_price: config.yesAsk,
 				client_order_id: `scenario-ask-${Date.now()}`,
 			});
-			const orderId = response.data.order?.order_id;
-			if (orderId) {
-				orderIds.push(orderId);
-				this.activeOrders.add(orderId);
-				console.log(`[ScenarioRunner] Posted YES ask @ ${config.yesAsk}¢, order ${orderId}`);
-			}
+			this.trackOrder(response.data.order?.order_id, orderIds, `Posted YES ask @ ${config.yesAsk}¢`);
 		}
 
 		return orderIds;
@@ -139,12 +136,7 @@ class ScenarioRunnerService {
 				yes_price: config.yesAsk,
 				client_order_id: `scenario-spike-${Date.now()}`,
 			});
-			const orderId = response.data.order?.order_id;
-			if (orderId) {
-				orderIds.push(orderId);
-				this.activeOrders.add(orderId);
-				console.log(`[ScenarioRunner] Spike: Posted YES ask @ ${config.yesAsk}¢, order ${orderId}`);
-			}
+			this.trackOrder(response.data.order?.order_id, orderIds, `Spike: Posted YES ask @ ${config.yesAsk}¢`);
 		}
 
 		if (config.yesBid !== undefined) {
@@ -157,12 +149,7 @@ class ScenarioRunnerService {
 				yes_price: config.yesBid,
 				client_order_id: `scenario-spike-${Date.now()}`,
 			});
-			const orderId = response.data.order?.order_id;
-			if (orderId) {
-				orderIds.push(orderId);
-				this.activeOrders.add(orderId);
-				console.log(`[ScenarioRunner] Spike: Posted YES bid @ ${config.yesBid}¢, order ${orderId}`);
-			}
+			this.trackOrder(response.data.order?.order_id, orderIds, `Spike: Posted YES bid @ ${config.yesBid}¢`);
 		}
 
 		return orderIds;
@@ -193,10 +180,7 @@ class ScenarioRunnerService {
 		this.activeOrders.clear();
 	}
 
-	private async executeStep(
-		step: ScenarioStep,
-		ticker: string
-	): Promise<{ step: string; orderId?: string }> {
+	private async executeStep(step: ScenarioStep, ticker: string): Promise<{ step: string; orderId?: string }> {
 		switch (step.action) {
 			case 'setup': {
 				if (!step.config) return { step: 'setup' };

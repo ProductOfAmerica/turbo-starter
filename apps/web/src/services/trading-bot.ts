@@ -253,19 +253,15 @@ class TradingBotService {
 		}
 	}
 
-	private startScenarioRunner(ticker: string): void {
+	private async startScenarioRunner(ticker: string): Promise<void> {
 		console.log('[BOT] Starting ScenarioRunner for demo mode...');
-		scenarioRunner
-			.runScenario('spread-tighten', ticker)
-			.then((result) => {
-				console.log('[BOT] ScenarioRunner result:', result.success ? 'success' : 'failed');
-				if (!result.success) {
-					console.error('[BOT] Scenario steps:', result.steps);
-				}
-			})
-			.catch((err) => {
-				console.error('[BOT] ScenarioRunner error:', err);
-			});
+		try {
+			const result = await scenarioRunner.runScenario('spread-tighten', ticker);
+			console.log('[BOT] ScenarioRunner result:', result.success ? 'success' : 'failed');
+			if (!result.success) console.error('[BOT] Scenario steps:', result.steps);
+		} catch (err) {
+			console.error('[BOT] ScenarioRunner error:', err);
+		}
 	}
 
 	private stopWebSocket(): void {

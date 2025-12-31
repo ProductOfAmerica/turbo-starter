@@ -220,13 +220,13 @@ export function TradesFeed({ trades, edgeThreshold = 0.05 }: TradesFeedProps) {
 												<>
 													<Separator />
 													<a
-														href={`https://polymarket.com/`}
+														href="https://kalshi.com/"
 														target="_blank"
 														rel="noopener noreferrer"
 														className="flex items-center gap-2 text-sm text-primary hover:underline"
 													>
 														<ExternalLink className="h-3 w-3" />
-														View on Polymarket
+														View on Kalshi
 													</a>
 												</>
 											)}

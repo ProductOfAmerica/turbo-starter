@@ -113,47 +113,56 @@ class KalshiWebSocketService extends EventEmitter {
 			});
 
 			this.ws.on('open', () => {
-				console.log(`[WS] Connected to Kalshi (${this.currentDryRun ? 'DEMO' : 'PRODUCTION'})`);
-				this.connected = true;
-				this.reconnectAttempts = 0;
-				this.startPingInterval();
-
-				for (const ticker of this.subscribedMarkets) {
-					this.sendSubscription(ticker);
-				}
-
-				this.emit('connected');
+				this.handleOpen();
 				resolve();
 			});
 
-			this.ws.on('message', (data: Buffer) => {
-				try {
-					const message = JSON.parse(data.toString());
-					this.handleMessage(message);
-				} catch (err) {
-					console.error('[WS] Failed to parse message:', err);
-				}
-			});
+			this.ws.on('message', (data: Buffer) => this.handleIncomingMessage(data));
 
-			this.ws.on('close', (code: number, reason: Buffer) => {
-				console.log(`[WS] Disconnected: ${code} - ${reason.toString()}`);
-				this.connected = false;
-				this.stopPingInterval();
-				this.emit('disconnected');
-
-				if (this.shouldReconnect) {
-					this.attemptReconnect();
-				}
-			});
+			this.ws.on('close', (code: number, reason: Buffer) => this.handleClose(code, reason));
 
 			this.ws.on('error', (err: Error) => {
-				console.error('[WS] Error:', err);
-				this.emit('error', err);
-				if (!this.connected) {
-					reject(err);
-				}
+				this.handleError(err);
+				if (!this.connected) reject(err);
 			});
 		});
+	}
+
+	private handleOpen(): void {
+		console.log(`[WS] Connected to Kalshi (${this.currentDryRun ? 'DEMO' : 'PRODUCTION'})`);
+		this.connected = true;
+		this.reconnectAttempts = 0;
+		this.startPingInterval();
+		this.resubscribeAll();
+		this.emit('connected');
+	}
+
+	private handleIncomingMessage(data: Buffer): void {
+		try {
+			const message = JSON.parse(data.toString());
+			this.handleMessage(message);
+		} catch (err) {
+			console.error('[WS] Failed to parse message:', err);
+		}
+	}
+
+	private handleClose(code: number, reason: Buffer): void {
+		console.log(`[WS] Disconnected: ${code} - ${reason.toString()}`);
+		this.connected = false;
+		this.stopPingInterval();
+		this.emit('disconnected');
+		if (this.shouldReconnect) this.attemptReconnect();
+	}
+
+	private handleError(err: Error): void {
+		console.error('[WS] Error:', err);
+		this.emit('error', err);
+	}
+
+	private resubscribeAll(): void {
+		for (const ticker of this.subscribedMarkets) {
+			this.sendSubscription(ticker);
+		}
 	}
 
 	private startPingInterval(): void {
@@ -231,14 +240,8 @@ class KalshiWebSocketService extends EventEmitter {
 			const yesBidsArr = (msg.yes as number[][]) || [];
 			const noBidsArr = (msg.no as number[][]) || [];
 
-			const yesBids = new Map<number, number>();
-			const noBids = new Map<number, number>();
-			for (const [price, qty] of yesBidsArr) {
-				if (price !== undefined && qty !== undefined) yesBids.set(price, qty);
-			}
-			for (const [price, qty] of noBidsArr) {
-				if (price !== undefined && qty !== undefined) noBids.set(price, qty);
-			}
+			const yesBids = this.parseOrderbookEntries(yesBidsArr);
+			const noBids = this.parseOrderbookEntries(noBidsArr);
 			this.orderbooks.set(marketTicker, { yesBids, noBids });
 			this.emitOrderbookUpdate(marketTicker);
 		}
@@ -267,6 +270,14 @@ class KalshiWebSocketService extends EventEmitter {
 
 			this.emitOrderbookUpdate(marketTicker);
 		}
+	}
+
+	private parseOrderbookEntries(entries: number[][]): Map<number, number> {
+		const result = new Map<number, number>();
+		for (const [price, qty] of entries) {
+			if (price !== undefined && qty !== undefined) result.set(price, qty);
+		}
+		return result;
 	}
 
 	private emitOrderbookUpdate(marketTicker: string): void {

@@ -90,10 +90,9 @@ export function useBotState(serverState?: BotState | null): UseBotStateReturn {
 			}
 
 			elapsedIntervalRef.current = setInterval(() => {
-				if (startTimeRef.current) {
-					const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
-					setState((prev) => ({ ...prev, elapsed }));
-				}
+				if (!startTimeRef.current) return;
+				const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
+				setState((prev) => ({ ...prev, elapsed }));
 			}, 1000);
 		} else {
 			if (elapsedIntervalRef.current) {
@@ -106,9 +105,7 @@ export function useBotState(serverState?: BotState | null): UseBotStateReturn {
 		}
 
 		return () => {
-			if (elapsedIntervalRef.current) {
-				clearInterval(elapsedIntervalRef.current);
-			}
+			if (elapsedIntervalRef.current) clearInterval(elapsedIntervalRef.current);
 		};
 	}, [state.status]);
 

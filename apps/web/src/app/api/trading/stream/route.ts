@@ -1,5 +1,23 @@
 import { tradingBot } from '@/services/trading-bot';
 
+interface StreamController {
+	_checkInterval?: ReturnType<typeof setInterval>;
+	_unsubscribe?: () => void;
+	_closed?: boolean;
+}
+
+function cleanupStream(ctrl: StreamController, controller: ReadableStreamDefaultController): void {
+	if (ctrl._checkInterval) clearInterval(ctrl._checkInterval);
+	if (ctrl._unsubscribe) ctrl._unsubscribe();
+	if (ctrl._closed) return;
+	ctrl._closed = true;
+	try {
+		controller.close();
+	} catch {
+		// Already closed
+	}
+}
+
 export async function GET() {
 	const encoder = new TextEncoder();
 
@@ -77,39 +95,16 @@ export async function GET() {
 				}
 			});
 
-			(controller as unknown as { _checkInterval?: ReturnType<typeof setInterval> })._checkInterval = setInterval(
-				() => {
-					const currentState = tradingBot.getState();
-					if (currentState.status === 'STOPPED' || currentState.status === 'IDLE') {
-						const ctrl = controller as unknown as {
-							_checkInterval?: ReturnType<typeof setInterval>;
-							_unsubscribe?: () => void;
-							_closed?: boolean;
-						};
-						if (ctrl._checkInterval) clearInterval(ctrl._checkInterval);
-						if (ctrl._unsubscribe) ctrl._unsubscribe();
-						if (!ctrl._closed) {
-							ctrl._closed = true;
-							try {
-								controller.close();
-							} catch {
-								// Already closed
-							}
-						}
-					}
-				},
-				5000
-			);
+			const ctrl = controller as unknown as StreamController;
+			ctrl._checkInterval = setInterval(() => {
+				const currentState = tradingBot.getState();
+				if (currentState.status !== 'STOPPED' && currentState.status !== 'IDLE') return;
+				cleanupStream(ctrl, controller);
+			}, 5000);
 		},
 		cancel(controller) {
-			const ctrl = controller as unknown as {
-				_checkInterval?: ReturnType<typeof setInterval>;
-				_unsubscribe?: () => void;
-				_closed?: boolean;
-			};
-			ctrl._closed = true;
-			if (ctrl._checkInterval) clearInterval(ctrl._checkInterval);
-			if (ctrl._unsubscribe) ctrl._unsubscribe();
+			const ctrl = controller as unknown as StreamController;
+			cleanupStream(ctrl, controller);
 		},
 	});
 
