@@ -13,7 +13,7 @@
 		"@repo/ui": "workspace:*",
 		"@vercel/analytics": "^1.6.1",
 		"lucide-react": "^0.562.0",
-		"next": "16.1.1",
+		"next": "16.1.4",
 		"next-themes": "^0.4.6",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
@@ -22,11 +22,11 @@
 		"web-vitals": "^5.1.0"
 	},
 	"devDependencies": {
-		"@next/bundle-analyzer": "^16.1.1",
+		"@next/bundle-analyzer": "^16.1.4",
 		"@repo/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4.1.18",
-		"@types/node": "^24.10.8",
-		"@types/react": "^19.2.7",
+		"@types/node": "^25.0.10",
+		"@types/react": "^19.2.9",
 		"@types/react-dom": "^19.2.3",
 		"cross-env": "^10.1.0",
 		"schema-dts": "^1.1.5",
