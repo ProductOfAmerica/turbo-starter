@@ -7,10 +7,10 @@ A modern, turbocharged monorepo template for building Next.js apps with ease. Pa
 wrapped in a Docker-friendly setup.
 
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
-[![Node.js](https://img.shields.io/badge/Node.js-v20.19.2+-green)](https://nodejs.org/)
-[![pnpm](https://img.shields.io/badge/pnpm-v10.6.2-orange)](https://pnpm.io/)
-[![nextjs](https://img.shields.io/badge/Next.js-16.0.10-blue?logo=nextdotjs)](https://nextjs.org/)
-[![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.1.11-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-v24.13.0+-green)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-v10.28.1-orange)](https://pnpm.io/)
+[![nextjs](https://img.shields.io/badge/Next.js-16.1.4-blue?logo=nextdotjs)](https://nextjs.org/)
+[![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.1.18-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
 ---
@@ -47,8 +47,8 @@ Perfect for developers who want a cutting-edge stack without the setup hassle.
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v22.12.0+)
-- [pnpm](https://pnpm.io/) (`npm i -g pnpm@10.6.2`)
+- [Node.js](https://nodejs.org/) (v24.13.0+)
+- [pnpm](https://pnpm.io/) (`npm i -g pnpm@10.28.1`)
 - [Docker](https://www.docker.com/) (optional, for containerized dev)
 
 ### Setup
