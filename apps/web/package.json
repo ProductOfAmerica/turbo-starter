@@ -22,7 +22,7 @@
 		"web-vitals": "^5.1.0"
 	},
 	"devDependencies": {
-		"@next/bundle-analyzer": "^16.1.4",
+		"@next/bundle-analyzer": "^16.1.6",
 		"@repo/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4.1.18",
 		"@types/node": "^25.0.10",
