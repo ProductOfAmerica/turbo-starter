@@ -32,7 +32,7 @@
 		"@types/react-dom": "^19.2.3",
 		"cross-env": "^10.1.0",
 		"schema-dts": "^1.1.5",
-		"tailwindcss": "^4.1.18",
+		"tailwindcss": "^4.2.2",
 		"typescript": "^5.9.3"
 	}
 }
