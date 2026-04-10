@@ -4,8 +4,24 @@ name: CI
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
+      - '.vscode/**'
+      - '.idea/**'
+      - 'docs/**'
+      - '.github/**'
+      - '!.github/workflows/**'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
+      - '.vscode/**'
+      - '.idea/**'
+      - 'docs/**'
+      - '.github/**'
+      - '!.github/workflows/**'
 
 # Jobs to run
 jobs:
