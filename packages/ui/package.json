@@ -53,7 +53,7 @@
 		"input-otp": "^1.4.2",
 		"lucide-react": "^0.563.0",
 		"next-themes": "^0.4.6",
-		"react-day-picker": "9.13.1",
+		"react-day-picker": "9.14.0",
 		"react-hook-form": "^7.72.1",
 		"react-resizable-panels": "^4.6.2",
 		"recharts": "^3.7.0",
