@@ -7,6 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"check-types": "tsc --noEmit",
+		"test:e2e": "playwright test",
 		"analyze": "next experimental-analyze"
 	},
 	"dependencies": {
@@ -23,6 +24,7 @@
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^16.1.6",
+		"@playwright/test": "^1.59.1",
 		"@repo/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4.1.18",
 		"@types/node": "^25.2.0",
