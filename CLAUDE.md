@@ -1,50 +1,52 @@
-# Project Conventions
+# CLAUDE.md
 
-## Monorepo Structure
-
-Turborepo monorepo with pnpm workspaces.
-
-- `apps/web` — Next.js 16 web application
-- `packages/ui` — Shared UI components (shadcn/radix)
-- `packages/typescript-config` — Shared TypeScript configuration
-
-## Tooling
-
-- **Package manager:** pnpm 10.28.1 (specified in `package.json` `packageManager` field)
-- **Node.js:** 24.13.0 (Volta-pinned)
-- **Bundler/Dev server:** Turbopack (via Next.js)
-- **Linter/Formatter:** Biome (`pnpm lint` runs `biome check .`)
-- **Type checker:** TypeScript (`pnpm check-types` runs `turbo check-types` -> `tsc --noEmit`)
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start dev server (turbo) |
-| `pnpm build` | Production build (turbo) |
-| `pnpm lint` | Biome lint + format check |
-| `pnpm check-types` | TypeScript type checking |
-| `pnpm lint:fix` | Auto-fix lint issues |
+```bash
+pnpm dev                          # Start Next.js dev server (Turbopack)
+pnpm build                        # Build all apps and packages
+pnpm check-types                  # TypeScript type-check across the monorepo
+pnpm lint                         # Biome lint + format check
+pnpm lint:fix                     # Biome auto-fix
+pnpm format-write                 # Biome format (write)
+pnpm lint:ci                      # CI variant (enforces LF line endings)
+cd apps/web && pnpm test:e2e      # Playwright E2E tests (builds first, runs on :3000)
+cd apps/web && pnpm analyze       # Next.js bundle analyzer (set ANALYZE=true)
+pnpm docker                       # Rebuild and start Docker containers
+```
 
-## CI
+## Architecture
 
-GitHub Actions workflow (`.github/workflows/ci.yml`):
-1. Install dependencies (`pnpm install --frozen-lockfile`)
-2. Security audit (`pnpm audit --audit-level=high`)
-3. Lint and format check
-4. Type check
-5. Build
-6. E2E smoke test (Playwright)
+Turborepo monorepo with pnpm workspaces. Two workspace roots: `apps/*` and `packages/*`. Node.js and pnpm versions are Volta-pinned (see `volta` field in root `package.json`).
 
-## Dependency Management
+### `apps/web`
+Next.js 16 app (App Router). Uses `@/*` path alias mapping to `./src/*`. The `proxy.ts` file at `src/proxy.ts` is Next.js middleware that injects security headers (CSP, HSTS, etc.) on all non-static routes. Vercel Analytics and Web Vitals are wired in via the root layout. E2E tests live in `apps/web/e2e/` and use Playwright with a `webServer` config that auto-starts `pnpm start` on port 3000.
 
-- **Dependabot** with weekly schedule, patch/minor only (major versions ignored)
-- **Auto-merge** for Dependabot PRs after CI passes (`.github/workflows/dependabot-auto-merge.yml`)
-- Groups: `react-ecosystem`, `next-ecosystem`, `development`
+### `packages/ui`
+Shared component library built on Shadcn UI + Radix primitives. This is where **all** Shadcn components live -- not in the web app. The `components.json` at the package root configures Shadcn CLI to target this package. Components are exported via path-based exports: `@repo/ui/components/*`, `@repo/ui/lib/*`, `@repo/ui/hooks/*`.
 
-## Telemetry
+### `packages/typescript-config`
+Shared `tsconfig` presets: `base.json`, `nextjs.json`, `react-library.json`. Both `apps/web` and `packages/ui` extend from these.
 
-All telemetry is disabled:
-- `NEXT_TELEMETRY_DISABLED=1`
-- `TURBO_TELEMETRY_DISABLED=1`
-- `DO_NOT_TRACK=1`
+### CSS/Tailwind
+Tailwind CSS v4 using the `@import` / `@theme` syntax (no `tailwind.config.ts`). The design system (colors, spacing, shadows, typography scale, dark mode) is defined in `packages/ui/src/globals.css`. The web app's `globals.css` imports it via `@import "@repo/ui/globals.css"` and adds a `@source` directive to scan the UI package for classes.
+
+## Code Style (Biome)
+
+Biome handles both linting and formatting (no ESLint or Prettier):
+- **Tabs**, indent width **3**, line width **120**
+- **CRLF** line endings (the CI job enforces **LF** via `lint:ci`)
+- Single quotes, trailing commas (`es5`), semicolons always, arrow parens always
+- Import organization is automatic (`organizeImports: "on"`)
+- `noExplicitAny` is a warning globally but an error in `packages/ui`
+- Accessibility rules are enabled for both `apps/web` and `packages/ui`
+
+## CI Pipeline
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on push/PR to `main`: security audit, Biome lint, type check, build, Playwright E2E. Dependabot is configured with auto-merge for patch/minor updates.
+
+## MCP Servers
+
+`.mcp.json` configures `next-devtools` and `shadcn` MCP servers. Use the Shadcn MCP for component operations (adding/auditing components) instead of the CLI directly.
