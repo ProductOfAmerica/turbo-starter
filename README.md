@@ -1,4 +1,4 @@
-<h1><img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" height="32" style="vertical-align: middle;"> Turborepo Starter <a href="https://vercel.com/new/clone?repository-url=https://github.com/ProductOfAmerica/turbo-starter"><img align="right" src="https://vercel.com/button" alt="Deploy with Vercel"></a></h1>
+<h1><img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" height="32" align="middle"> Turborepo Starter <a href="https://vercel.com/new/clone?repository-url=https://github.com/ProductOfAmerica/turbo-starter"><img align="right" src="https://vercel.com/button" alt="Deploy with Vercel"></a></h1>
 
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
 [![Node.js](https://img.shields.io/badge/Node.js-v24.13.0+-green)](https://nodejs.org/)
