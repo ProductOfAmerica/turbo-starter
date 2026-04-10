@@ -1,10 +1,4 @@
-<h1 style="display:flex; align-items:center;">
-  <img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" style="margin-right:10px;" height="32"> Turborepo Starter
-</h1>
-
-A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 16**, **Turborepo**,
-**Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project — all
-wrapped in a Docker-friendly setup.
+<h1><img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" height="32"> Turborepo Starter <a href="https://vercel.com/new/clone?repository-url=https://github.com/ProductOfAmerica/turbo-starter"><img align="right" src="https://vercel.com/button" alt="Deploy with Vercel"></a></h1>
 
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
 [![Node.js](https://img.shields.io/badge/Node.js-v24.13.0+-green)](https://nodejs.org/)
@@ -13,7 +7,9 @@ wrapped in a Docker-friendly setup.
 [![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.1.18-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ProductOfAmerica/turbo-starter)
+A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 16**, **Turborepo**,
+**Shadcn UI**, and **Biome.js**, this starter is your shortcut to a fast, scalable, and beautiful web project — all
+wrapped in a Docker-friendly setup.
 
 ---
 
@@ -51,9 +47,7 @@ Perfect for developers who want a cutting-edge stack without the setup hassle.
 
 ### Option 1: Deploy to Vercel (fastest)
 
-Click the button below. Your app will be live in under 2 minutes.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ProductOfAmerica/turbo-starter)
+Click the **Deploy** button at the top of this README. Your app will be live in under 2 minutes.
 
 ### Option 2: Use this template (GitHub)
 
