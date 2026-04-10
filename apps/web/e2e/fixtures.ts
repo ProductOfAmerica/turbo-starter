@@ -1,11 +1,11 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test as base, expect } from '@playwright/test';
 
-export const test = base.extend<{ homePage: void }>({
-	homePage: async ({ page }, use) => {
+export const test = base.extend<{ _homePage: undefined }>({
+	_homePage: async ({ page }, use) => {
 		await page.goto('/');
 		await page.waitForLoadState('domcontentloaded');
-		await use();
+		await use(undefined);
 	},
 });
 

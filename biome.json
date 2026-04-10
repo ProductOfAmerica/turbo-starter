@@ -40,7 +40,17 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/node_modules", "!**/dist", "!**/.next", "!**/.turbo", "!**/apps/web/out", "!**/.claude"]
+		"includes": [
+			"**",
+			"!**/node_modules",
+			"!**/dist",
+			"!**/.next",
+			"!**/.turbo",
+			"!**/apps/web/out",
+			"!**/.claude",
+			"!**/test-results",
+			"!**/playwright-report"
+		]
 	},
 	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"overrides": [

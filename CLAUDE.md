@@ -16,7 +16,7 @@ pnpm lint                         # Biome lint + format check
 pnpm lint:fix                     # Biome auto-fix
 pnpm format-write                 # Biome format (write)
 pnpm lint:ci                      # CI variant (enforces LF line endings)
-cd apps/web && pnpm test:e2e      # Playwright E2E tests (builds first, runs on :3000)
+pnpm test:e2e                     # Playwright E2E tests (builds first, runs on :3000)
 cd apps/web && pnpm analyze       # Next.js bundle analyzer (set ANALYZE=true)
 pnpm docker                       # Rebuild and start Docker containers
 ```

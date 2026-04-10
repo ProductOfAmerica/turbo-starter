@@ -1,13 +1,13 @@
 import { checkA11y, expect, test } from './fixtures';
 
 test.describe('Homepage rendering', () => {
-	test('hero section renders with heading and CTAs', async ({ page, homePage }) => {
+	test('hero section renders with heading and CTAs', async ({ page, _homePage }) => {
 		await expect(page.locator('h1', { hasText: 'Build faster with' })).toBeVisible();
 		await expect(page.locator('a', { hasText: 'Get Started' })).toBeVisible();
 		await expect(page.locator('a', { hasText: 'Read Documentation' })).toBeVisible();
 	});
 
-	test('tech stack badges render in hero', async ({ page, homePage }) => {
+	test('tech stack badges render in hero', async ({ page, _homePage }) => {
 		const badges = [
 			'Next.js 16',
 			'Turborepo',
@@ -24,7 +24,7 @@ test.describe('Homepage rendering', () => {
 		}
 	});
 
-	test('features section renders all 6 cards', async ({ page, homePage }) => {
+	test('features section renders all 6 cards', async ({ page, _homePage }) => {
 		await expect(page.locator('section#features')).toBeVisible();
 		await expect(page.locator('h2', { hasText: 'Everything you need to ship' })).toBeVisible();
 
@@ -41,29 +41,29 @@ test.describe('Homepage rendering', () => {
 		}
 	});
 
-	test('quick start section renders with install commands', async ({ page, homePage }) => {
+	test('quick start section renders with install commands', async ({ page, _homePage }) => {
 		await expect(page.locator('section#quick-start')).toBeVisible();
 		await expect(page.locator('h2', { hasText: 'Get up and running' })).toBeVisible();
 		await expect(page.getByText('pnpm install')).toBeVisible();
 		await expect(page.getByText('pnpm dev').first()).toBeVisible();
 	});
 
-	test('CTA section renders with both buttons', async ({ page, homePage }) => {
+	test('CTA section renders with both buttons', async ({ page, _homePage }) => {
 		await expect(page.locator('h2', { hasText: 'Ready to build something amazing?' })).toBeVisible();
 		await expect(page.locator('a', { hasText: 'Clone Repository' })).toBeVisible();
 		await expect(page.locator('a', { hasText: 'Deploy to Vercel' })).toBeVisible();
 	});
 
-	test('footer renders with credits', async ({ page, homePage }) => {
+	test('footer renders with credits', async ({ page, _homePage }) => {
 		await expect(page.locator('footer')).toBeVisible();
 		await expect(page.locator('footer').getByText('ProductOfAmerica')).toBeVisible();
 	});
 
-	test('page passes accessibility checks', async ({ page, homePage }) => {
+	test('page passes accessibility checks', async ({ page, _homePage }) => {
 		await checkA11y(page);
 	});
 
-	test('full page screenshot matches baseline', async ({ page, homePage }) => {
+	test('full page screenshot matches baseline', async ({ page, _homePage }) => {
 		await expect(page).toHaveScreenshot('homepage.png', {
 			fullPage: true,
 			maxDiffPixelRatio: 0.05,

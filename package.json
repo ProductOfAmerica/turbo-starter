@@ -12,11 +12,19 @@
 		"lint:fix": "biome check . --write",
 		"lint:ci": "biome check --line-ending=lf --css-parse-tailwind-directives=true .",
 		"check-types": "turbo check-types",
+		"test:e2e": "pnpm --filter web test:e2e",
 		"docker": "docker-compose down --remove-orphans --volumes && docker container prune -f && docker-compose up --build -d",
-		"docker:build": "docker-compose -f docker-compose.yml build"
+		"docker:build": "docker-compose -f docker-compose.yml build",
+		"prepare": "lefthook install"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"lefthook"
+		]
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.3.13",
+		"lefthook": "^2.1.5",
 		"turbo": "^2.8.3",
 		"typescript": "^5.9.3"
 	},
