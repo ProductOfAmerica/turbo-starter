@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Product Context
+
+This repo IS a developer-facing product: a Turborepo boilerplate template that developers clone/fork to start new Next.js projects. Every change affects developer experience. Treat README quality, onboarding friction, and getting-started time as first-class concerns, not afterthoughts.
+
 ## Commands
 
 ```bash
