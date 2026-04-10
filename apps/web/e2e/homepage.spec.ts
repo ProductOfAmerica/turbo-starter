@@ -8,7 +8,16 @@ test.describe('Homepage rendering', () => {
 	});
 
 	test('tech stack badges render in hero', async ({ page, homePage }) => {
-		const badges = ['Next.js 16', 'Turborepo', 'Shadcn UI', 'Tailwind CSS', 'Biome.js', 'TypeScript', 'Docker', 'pnpm'];
+		const badges = [
+			'Next.js 16',
+			'Turborepo',
+			'Shadcn UI',
+			'Tailwind CSS',
+			'Biome.js',
+			'TypeScript',
+			'Docker',
+			'pnpm',
+		];
 		for (const badge of badges) {
 			// Use the Badge component near the hero section
 			await expect(page.getByRole('link', { name: badge }).first()).toBeVisible();
@@ -19,7 +28,14 @@ test.describe('Homepage rendering', () => {
 		await expect(page.locator('section#features')).toBeVisible();
 		await expect(page.locator('h2', { hasText: 'Everything you need to ship' })).toBeVisible();
 
-		const featureTitles = ['Lightning Fast', 'Modern UI', 'Production Ready', 'Developer Experience', 'Containerized', 'Monorepo Structure'];
+		const featureTitles = [
+			'Lightning Fast',
+			'Modern UI',
+			'Production Ready',
+			'Developer Experience',
+			'Containerized',
+			'Monorepo Structure',
+		];
 		for (const title of featureTitles) {
 			await expect(page.locator('section#features').getByText(title)).toBeVisible();
 		}
