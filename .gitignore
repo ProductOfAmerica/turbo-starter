@@ -33,3 +33,6 @@ yarn-error.log*
 # Miscellaneous
 .DS_Store
 *.pem
+/bash.exe.stackdump
+.idea/
+.claude/
