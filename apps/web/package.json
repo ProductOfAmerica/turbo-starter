@@ -26,7 +26,7 @@
 		"@next/bundle-analyzer": "^16.1.6",
 		"@playwright/test": "^1.59.1",
 		"@repo/typescript-config": "workspace:*",
-		"@tailwindcss/postcss": "^4.1.18",
+		"@tailwindcss/postcss": "^4.2.2",
 		"@types/node": "^25.2.0",
 		"@types/react": "^19.2.10",
 		"@types/react-dom": "^19.2.3",
