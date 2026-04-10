@@ -10,8 +10,13 @@ updates:
       prefix: "chore"
       prefix-development: "chore"
     groups:
+      react-ecosystem:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      next-ecosystem:
+        patterns: ["next", "@next/*"]
       development:
         patterns: ["@types/*", "*eslint*", "*prettier*", "@biomejs/*"]
+        exclude-patterns: ["@types/react", "@types/react-dom"]
     # Only minor and patch updates
     ignore:
       - dependency-name: "*"
