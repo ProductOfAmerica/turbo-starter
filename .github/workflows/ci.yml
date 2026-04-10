@@ -29,11 +29,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.19.2
+          node-version: 24.13.0
           cache: 'pnpm'
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Security Audit
+        run: pnpm audit --audit-level=high
 
       # Run Biome linting and formatting checks
       - name: Lint and Format Check
