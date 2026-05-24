@@ -29,7 +29,7 @@
 		"@repo/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4.3.0",
 		"@types/node": "^25.8.0",
-		"@types/react": "^19.2.10",
+		"@types/react": "^19.2.15",
 		"@types/react-dom": "^19.2.3",
 		"cross-env": "^10.1.0",
 		"schema-dts": "^1.1.5",
