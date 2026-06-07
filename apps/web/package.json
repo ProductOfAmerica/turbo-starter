@@ -14,7 +14,7 @@
 		"@repo/ui": "workspace:*",
 		"@vercel/analytics": "^1.6.1",
 		"lucide-react": "^0.577.0",
-		"next": "16.2.6",
+		"next": "16.2.7",
 		"next-themes": "^0.4.6",
 		"react": "^19.2.7",
 		"react-dom": "^19.2.7",
@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "^4.11.3",
-		"@next/bundle-analyzer": "^16.2.6",
+		"@next/bundle-analyzer": "^16.2.7",
 		"@playwright/test": "^1.60.0",
 		"@repo/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4.3.0",
