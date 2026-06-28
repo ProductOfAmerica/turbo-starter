@@ -23,7 +23,7 @@
 		"web-vitals": "^5.3.0"
 	},
 	"devDependencies": {
-		"@axe-core/playwright": "^4.11.3",
+		"@axe-core/playwright": "^4.12.1",
 		"@next/bundle-analyzer": "^16.2.9",
 		"@playwright/test": "^1.61.1",
 		"@repo/typescript-config": "workspace:*",
