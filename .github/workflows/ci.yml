@@ -23,6 +23,12 @@ on:
       - '.github/**'
       - '!.github/workflows/**'
 
+# Cancel superseded PR runs; Dependabot force-pushes a rebase on every lockfile conflict.
+# Push events key on SHA so main-branch runs are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
 # Jobs to run
 jobs:
   build:
