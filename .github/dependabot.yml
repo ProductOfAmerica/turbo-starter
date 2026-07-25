@@ -23,3 +23,18 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+
+  # Workflow actions. Majors are deliberately NOT ignored here: for actions a
+  # major is usually just a runner bump (Node 20 -> 24), and skipping them is
+  # what let checkout/setup-node drift three majors behind. Grouped, so this is
+  # one PR however many actions move. Majors will not auto-merge, since
+  # dependabot-auto-merge.yml only handles patch and minor.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns: ["*"]
