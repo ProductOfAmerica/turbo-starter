@@ -20,7 +20,11 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"lefthook"
-		]
+		],
+		"overrides": {
+			"postcss": "^8.5.23",
+			"sharp": "^0.35.3"
+		}
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.4",
