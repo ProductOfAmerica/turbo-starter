@@ -128,10 +128,12 @@ npx turbo link
 |---------|-------------|
 | `pnpm dev` | Start the dev server |
 | `pnpm build` | Build all apps and packages |
+| `pnpm start` | Serve the production build |
 | `pnpm lint` | Check for lint and format issues |
 | `pnpm lint:fix` | Auto-fix lint issues |
 | `pnpm check-types` | TypeScript type checking |
 | `pnpm format-write` | Format code |
+| `pnpm test:e2e` | Run the Playwright E2E suite |
 
 ---
 
