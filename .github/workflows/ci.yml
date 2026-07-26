@@ -1,16 +1,17 @@
 name: CI
 
-# Trigger the workflow on push and pull requests to the main branch.
+# Trigger on every push and pull request to main.
 #
 # Deliberately no paths-ignore. "build" is a required status check, and a
 # path-filtered workflow produces no run at all, so the check never reports and
-# branch protection blocks the PR forever. There is no recovery: any follow-up
-# commit that is also docs-only stays filtered too.
+# branch protection blocks the PR forever, with no recovery: any follow-up
+# commit that is also docs-only stays filtered too. Verified on PR #176
+# (README-only): mergeable=MERGEABLE, state=BLOCKED, no "build" check created.
 #
-# Verified on PR #176 (README-only): mergeable=MERGEABLE, state=BLOCKED, every
-# other check green, and no "build" check ever created. Skipping buys nothing
-# anyway, since Actions minutes are free on a public repo and Vercel and CodeQL
-# do not honour this filter, so they build regardless.
+# Docs-only changes are skipped at the JOB level instead. That still creates a
+# check run, and per GitHub, "required status checks must have a successful,
+# skipped, or neutral status", so a skipped job satisfies branch protection
+# while a missing one blocks it.
 on:
   push:
     branches: [ main ]
@@ -25,7 +26,57 @@ concurrency:
 
 # Jobs to run
 jobs:
+  # Decide whether anything outside docs changed. Fails safe: if the base commit
+  # cannot be resolved (first push, force-push, shallow clone), assume code
+  # changed and run the whole pipeline. Skipping requires positive evidence.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Detect non-docs changes
+        id: filter
+        env:
+          # Only ever interpolate SHAs here, never branch names or PR titles,
+          # which are attacker-controlled and would be a script-injection vector.
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "$BASE_SHA" ] || [ "$BASE_SHA" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "Base commit unresolvable; running the full pipeline."
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          CHANGED=$(git diff --name-only "$BASE_SHA" HEAD)
+          echo "Changed files:"
+          echo "$CHANGED"
+
+          if [ -z "$CHANGED" ]; then
+            echo "No diff against base; running the full pipeline."
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # code=true if ANY changed path is not documentation.
+          if printf '%s\n' "$CHANGED" | grep -qvE '(\.md$|^LICENSE$|^\.vscode/|^\.idea/|^docs/)'; then
+            echo "Non-docs changes present; running the full pipeline."
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Docs-only change; skipping build."
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1
