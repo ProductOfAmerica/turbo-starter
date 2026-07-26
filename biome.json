@@ -1,5 +1,10 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
@@ -10,7 +15,7 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true,
+			"preset": "recommended",
 			"suspicious": {
 				"noExplicitAny": "warn"
 			},
@@ -40,17 +45,7 @@
 		}
 	},
 	"files": {
-		"includes": [
-			"**",
-			"!**/node_modules",
-			"!**/dist",
-			"!**/.next",
-			"!**/.turbo",
-			"!**/apps/web/out",
-			"!**/.claude",
-			"!**/test-results",
-			"!**/playwright-report"
-		]
+		"includes": ["**"]
 	},
 	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"overrides": [
@@ -59,7 +54,7 @@
 			"linter": {
 				"rules": {
 					"a11y": {
-						"recommended": true
+						"preset": "recommended"
 					},
 					"correctness": {
 						"useJsxKeyInIterable": "error"
@@ -72,7 +67,7 @@
 			"linter": {
 				"rules": {
 					"a11y": {
-						"recommended": true,
+						"preset": "recommended",
 						"useKeyWithClickEvents": "error",
 						"useValidAnchor": "error"
 					},
