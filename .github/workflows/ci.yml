@@ -1,27 +1,21 @@
 name: CI
 
-# Trigger the workflow on push and pull requests to the main branch
+# Trigger the workflow on push and pull requests to the main branch.
+#
+# Deliberately no paths-ignore. "build" is a required status check, and a
+# path-filtered workflow produces no run at all, so the check never reports and
+# branch protection blocks the PR forever. There is no recovery: any follow-up
+# commit that is also docs-only stays filtered too.
+#
+# Verified on PR #176 (README-only): mergeable=MERGEABLE, state=BLOCKED, every
+# other check green, and no "build" check ever created. Skipping buys nothing
+# anyway, since Actions minutes are free on a public repo and Vercel and CodeQL
+# do not honour this filter, so they build regardless.
 on:
   push:
     branches: [ main ]
-    paths-ignore:
-      - '**/*.md'
-      - 'LICENSE'
-      - '.vscode/**'
-      - '.idea/**'
-      - 'docs/**'
-      - '.github/**'
-      - '!.github/workflows/**'
   pull_request:
     branches: [ main ]
-    paths-ignore:
-      - '**/*.md'
-      - 'LICENSE'
-      - '.vscode/**'
-      - '.idea/**'
-      - 'docs/**'
-      - '.github/**'
-      - '!.github/workflows/**'
 
 # Cancel superseded PR runs; Dependabot force-pushes a rebase on every lockfile conflict.
 # Push events key on SHA so main-branch runs are never cancelled.
