@@ -12,7 +12,26 @@ name: CI
 # check run, and per GitHub, "required status checks must have a successful,
 # skipped, or neutral status", so a skipped job satisfies branch protection
 # while a missing one blocks it.
+#
+# The weekly schedule exists because auto-merged pushes do not run CI at all.
+# dependabot-auto-merge.yml merges with GITHUB_TOKEN, and GitHub suppresses
+# workflow runs for events it triggers, to avoid recursion. Between 2026-04-10
+# and 2026-07-25 that meant 145 commits landed on main and produced zero CI
+# runs, so `pnpm audit` never re-checked main. Four high-severity next
+# advisories published on ~2026-07-21 sat undetected until a human push on
+# 07-25 happened to run the audit.
+#
+# Dependabot alerts now catch most of this on their own, but not the case where
+# no fix exists for it to open a PR with. This is the backstop for that.
+# Dependabot lands its batch on Sunday, so run midweek to halve the worst-case
+# window. The minute is offset because GitHub delays scheduled runs that are
+# queued on the hour.
 on:
+  schedule:
+    - cron: '23 6 * * 4'
+  # Same base-less code path as `schedule`, so the scheduled behaviour can be
+  # exercised on demand instead of waiting a week.
+  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
