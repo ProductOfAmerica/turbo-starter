@@ -65,7 +65,6 @@ test.describe('Homepage rendering', () => {
 
 	// Skip screenshot comparison in CI (font rendering differs across OS)
 	// Run locally with: npx playwright test --grep "screenshot"
-	// biome-ignore lint/correctness/noUnusedFunctionParameters: fixture triggers navigation
 	test.skip(!!process.env.CI, 'Screenshot baselines are platform-specific');
 	test('full page screenshot matches baseline', async ({ page, _homePage }) => {
 		await expect(page).toHaveScreenshot('homepage.png', {
