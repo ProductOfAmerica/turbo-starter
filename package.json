@@ -27,9 +27,9 @@
 		}
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.5",
+		"@biomejs/biome": "^2.5.6",
 		"lefthook": "^2.1.10",
-		"turbo": "^2.10.7",
+		"turbo": "^2.10.8",
 		"typescript": "^5.9.3"
 	},
 	"packageManager": "pnpm@10.28.1",
