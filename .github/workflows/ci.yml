@@ -21,8 +21,20 @@ name: CI
 # advisories published on ~2026-07-21 sat undetected until a human push on
 # 07-25 happened to run the audit.
 #
-# Dependabot alerts now catch most of this on their own, but not the case where
-# no fix exists for it to open a PR with. This is the backstop for that.
+# Dependabot alerts catch some of this on their own, but the schedule is the
+# only detector for a whole class it structurally cannot file: a vulnerable
+# TRANSITIVE dependency whose parent needs no update. For npm, Dependabot fixes
+# those by bumping the parent or dropping the sub-dependency, and when neither
+# applies, the fix is a lockfile-only bump of a package that appears in no
+# manifest, which it will not open a PR for. Observed twice here. GHSA-2v37-7h3g
+# -55p8 (nanoid, via @tailwindcss/postcss > postcss) produced an alert on
+# 2026-08-12 and no PR; this schedule caught it on 08-13. The postcss advisories
+# on 07-25 went the same way and were fixed by hand in #174, which is what the
+# `pnpm.overrides` block in the root package.json is. Meanwhile `next` and
+# `sharp` sit in a manifest and got security PRs within a minute of their alerts.
+# In a monorepo most dependencies are transitive, so this is the common case,
+# not the edge one.
+#
 # Dependabot lands its batch on Sunday, so run midweek to halve the worst-case
 # window. The minute is offset because GitHub delays scheduled runs that are
 # queued on the hour.
