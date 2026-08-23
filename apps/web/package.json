@@ -23,8 +23,8 @@
 		"web-vitals": "^5.3.0"
 	},
 	"devDependencies": {
-		"@axe-core/playwright": "^4.12.1",
-		"@next/bundle-analyzer": "^16.3.0",
+		"@axe-core/playwright": "^4.13.0",
+		"@next/bundle-analyzer": "^16.3.1",
 		"@playwright/test": "^1.62.1",
 		"@repo/typescript-config": "workspace:*",
 		"@tailwindcss/postcss": "^4.3.3",
