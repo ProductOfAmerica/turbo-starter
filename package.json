@@ -6,7 +6,7 @@
 		"dev": "turbo dev",
 		"build": "turbo build",
 		"start": "turbo start",
-		"clean": "turbo run clean && rm -rf node_modules",
+		"clean": "node scripts/clean.mjs",
 		"format-write": "biome format --write .",
 		"lint": "biome check .",
 		"lint:fix": "biome check . --write",

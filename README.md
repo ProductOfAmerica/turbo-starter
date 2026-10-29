@@ -136,6 +136,7 @@ npx turbo link
 | `pnpm check-types` | TypeScript type checking |
 | `pnpm format-write` | Format code |
 | `pnpm test:e2e` | Run the Playwright E2E suite |
+| `pnpm clean` | Delete build and test caches (`.next`, `.turbo`, Playwright output); keeps `node_modules` |
 
 ---
 
