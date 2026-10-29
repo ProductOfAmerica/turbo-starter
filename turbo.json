@@ -19,7 +19,6 @@
 			"cache": false,
 			"persistent": true
 		},
-		"//#format-write": { "cache": false },
 		"//#lint": {},
 		"//#lint:fix": { "cache": false }
 	},

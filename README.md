@@ -132,9 +132,8 @@ npx turbo link
 | `pnpm build` | Build all apps and packages |
 | `pnpm start` | Serve the production build |
 | `pnpm lint` | Check for lint and format issues |
-| `pnpm lint:fix` | Auto-fix lint issues |
+| `pnpm lint:fix` | Auto-fix lint issues and format code |
 | `pnpm check-types` | TypeScript type checking |
-| `pnpm format-write` | Format code |
 | `pnpm test:e2e` | Run the Playwright E2E suite |
 | `pnpm clean` | Delete build and test caches (`.next`, `.turbo`, Playwright output); keeps `node_modules` |
 
@@ -145,9 +144,8 @@ npx turbo link
 Keep your code sharp with [Biome.js](https://biomejs.dev/):
 
 ```bash
-pnpm lint          # Check for issues
-pnpm lint:fix      # Auto-fix issues
-pnpm format-write  # Format code
+pnpm lint      # Check for issues
+pnpm lint:fix  # Auto-fix issues and format code
 ```
 
 ---

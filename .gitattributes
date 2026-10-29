@@ -1,12 +1,11 @@
-# Set default behavior to automatically normalize line endings
-* text=auto
+# Normalize text files and check them out with LF on every OS. Biome formats
+# with LF, and without eol=lf Git on Windows checks out CRLF, so `pnpm lint`
+# would flag every file there.
+* text=auto eol=lf
 
 # Force specific files to have CRLF line endings on checkout
 *.bat text eol=crlf
 *.cmd text eol=crlf
-
-# Force specific files to have LF line endings on checkout
-*.sh text eol=lf
 
 # These files are always treated as binary
 *.jpg binary
