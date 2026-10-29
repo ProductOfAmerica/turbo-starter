@@ -6,7 +6,7 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"check-types": "tsc --noEmit",
+		"check-types": "next typegen && tsc --noEmit",
 		"test:e2e": "npx playwright test",
 		"analyze": "next experimental-analyze"
 	},
