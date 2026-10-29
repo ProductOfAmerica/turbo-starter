@@ -4,8 +4,8 @@ Thanks for your interest in contributing!
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) v24.13.0+ (use `nvm use` or [Volta](https://volta.sh/))
-- [pnpm](https://pnpm.io/) v10.28.1 (`npm i -g pnpm@10.28.1`)
+- [Node.js](https://nodejs.org/), at least the version in `.nvmrc` (use `nvm use` or [Volta](https://volta.sh/))
+- [pnpm](https://pnpm.io/) (`npm i -g pnpm`); it switches to the version pinned in `package.json` on its own
 
 ## Setup
 
