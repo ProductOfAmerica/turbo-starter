@@ -26,6 +26,7 @@ dist/
 coverage/
 **/test-results/
 **/playwright-report/
+**/.vitest/
 
 # Logs
 npm-debug.log*
@@ -37,5 +38,9 @@ yarn-error.log*
 *.pem
 /bash.exe.stackdump
 .idea/
-.claude/
+# Claude Code: share the project's settings, rules and hooks; keep the rest local.
+.claude/*
+!.claude/settings.json
+!.claude/rules/
+!.claude/hooks/
 CLAUDE.local.md

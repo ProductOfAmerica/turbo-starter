@@ -12,6 +12,9 @@ const nextConfig = {
 	experimental: {
 		optimizePackageImports: ['lucide-react'],
 	},
+	typescript: {
+		tsconfigPath: 'tsconfig.build.json',
+	},
 };
 
 export default nextConfig;

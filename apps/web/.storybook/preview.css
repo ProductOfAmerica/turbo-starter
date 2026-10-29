@@ -1,0 +1,5 @@
+@import "../src/app/globals.css";
+
+/* The app's globals exclude the story directories from Tailwind's scan; Storybook needs them back. */
+@source "../stories";
+@source "../../../packages/ui/stories";

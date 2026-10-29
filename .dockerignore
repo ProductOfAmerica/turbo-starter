@@ -17,6 +17,7 @@
 **/.next/
 **/build/
 **/dist/
+**/storybook-static/
 
 # Tools and Services
 **/.turbo/
@@ -24,10 +25,12 @@
 
 # Testing
 **/coverage/
+**/.vitest/
 
 # Logs
 **/*-debug.log*
 **/*-error.log*
+**/*storybook.log
 
 # Miscellaneous
 .DS_Store

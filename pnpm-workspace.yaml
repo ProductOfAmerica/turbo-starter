@@ -2,4 +2,4 @@ packages:
   - apps/*
   - packages/*
 
-ignoredBuiltDependencies: [ 'sharp' ]
+ignoredBuiltDependencies: [ 'esbuild', 'sharp' ]

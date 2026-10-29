@@ -4,8 +4,32 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"inputs": [
+				"$TURBO_DEFAULT$",
+				".env*",
+				"!stories/**",
+				"!.storybook/**",
+				"!vitest.config.mts",
+				"!vitest.shims.d.ts",
+				"!**/*.test.ts",
+				"!**/*.test.tsx"
+			],
 			"outputs": [".next/**", "!.next/cache/**"]
+		},
+		// No package has a "transit" script. The empty task links each package's hash to its
+		// dependencies' source files, so editing @repo/ui invalidates web's Storybook tasks.
+		// https://turborepo.dev/docs/core-concepts/package-and-task-graph#transit-nodes
+		"transit": {
+			"dependsOn": ["^transit"]
+		},
+		"build:storybook": {
+			"dependsOn": ["transit"],
+			"outputs": ["storybook-static/**"]
+		},
+		"test": {
+			"dependsOn": ["transit"],
+			"outputs": ["coverage/**"],
+			"passThroughEnv": ["PLAYWRIGHT_*"]
 		},
 		"check-types": {
 			"dependsOn": ["^check-types"]
@@ -23,5 +47,11 @@
 		"//#lint:fix": { "cache": false }
 	},
 	"globalDependencies": ["package.json", "pnpm-lock.yaml"],
-	"globalEnv": ["NODE_ENV", "TURBO_TELEMETRY_DISABLED", "NEXT_TELEMETRY_DISABLED", "DO_NOT_TRACK"]
+	"globalEnv": [
+		"NODE_ENV",
+		"TURBO_TELEMETRY_DISABLED",
+		"NEXT_TELEMETRY_DISABLED",
+		"STORYBOOK_DISABLE_TELEMETRY",
+		"DO_NOT_TRACK"
+	]
 }

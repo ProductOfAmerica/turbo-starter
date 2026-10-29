@@ -1,0 +1,13 @@
+// Used by `next dev`, `next build` and `next typegen` through `typescript.tsconfigPath` in
+// next.config.mjs. It keeps Storybook files and tests out of the app's type-check, so the production
+// build neither needs their types nor changes when a story or test does. tsconfig.json covers everything.
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		// Restores the base config's values that tsconfig.json turns off for stories.
+		"declaration": true,
+		"declarationMap": true
+	},
+	"include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.js", ".next/types/**/*.ts"],
+	"exclude": ["node_modules", "stories", "vitest.shims.d.ts", "**/*.test.ts", "**/*.test.tsx"]
+}
