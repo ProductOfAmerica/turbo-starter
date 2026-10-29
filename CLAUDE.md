@@ -19,6 +19,7 @@ pnpm lint:ci                      # CI variant (enforces LF line endings)
 pnpm test:e2e                     # Playwright E2E tests (builds first, runs on :3000)
 cd apps/web && pnpm analyze       # Next.js bundle analyzer (set ANALYZE=true)
 pnpm docker                       # Rebuild and start Docker containers
+pnpm clean                        # Delete .next/.turbo/Playwright caches in every workspace (keeps node_modules)
 ```
 
 ## Architecture
