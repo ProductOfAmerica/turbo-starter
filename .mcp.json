@@ -7,6 +7,10 @@
 		"shadcn": {
 			"command": "npx",
 			"args": ["shadcn@latest", "mcp"]
+		},
+		"storybook": {
+			"type": "http",
+			"url": "http://localhost:6006/mcp"
 		}
 	}
 }
