@@ -6,7 +6,21 @@ import { cn } from 'cn';
 import { CheckIcon } from 'lucide-react';
 import type * as React from 'react';
 
-function Questionnaire({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Root>) {
+function Questionnaire({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Root> & {
+	/** Name of the item shown first when the active item is uncontrolled. Falls back to the first enabled item if the name is missing or disabled. */
+	defaultItem?: React.ComponentProps<typeof QuestionnairePrimitive.Root>['defaultItem'];
+	/** Name of the active item, for controlled use. Pair with `onItemChange` to update it. */
+	item?: React.ComponentProps<typeof QuestionnairePrimitive.Root>['item'];
+	/** Ordered definitions of the questions (`name`, `required`, `disabled`, `choices`). Sets the navigation order and the choice order used for keyboard shortcuts. Each entry must match a rendered `QuestionnaireItem`; mismatches log a warning in development. */
+	items?: React.ComponentProps<typeof QuestionnairePrimitive.Root>['items'];
+	/** Called with the new item name whenever the active item changes, whether by navigation, skipping, reset, or a failed submit validation. */
+	onItemChange?: React.ComponentProps<typeof QuestionnairePrimitive.Root>['onItemChange'];
+	/** Assigns keyboard shortcuts to the active item's enabled choices: `letters` uses A to Z, `numbers` uses 1 to 9. Pressing a key selects that choice, except while typing in a text field. Off by default. */
+	shortcuts?: React.ComponentProps<typeof QuestionnairePrimitive.Root>['shortcuts'];
+}) {
 	return (
 		<QuestionnairePrimitive.Root
 			data-slot="questionnaire"
@@ -16,7 +30,13 @@ function Questionnaire({ className, ...props }: React.ComponentProps<typeof Ques
 	);
 }
 
-function QuestionnaireProgress({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Progress>) {
+function QuestionnaireProgress({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Progress> & {
+	/** Replaces the default <div> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. The default content reads "Question N of M". */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Progress>['render'];
+}) {
 	return (
 		<QuestionnairePrimitive.Progress
 			data-slot="questionnaire-progress"
@@ -29,7 +49,21 @@ function QuestionnaireProgress({ className, ...props }: React.ComponentProps<typ
 	);
 }
 
-function QuestionnaireItem({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Item>) {
+function QuestionnaireItem({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Item> & {
+	/** Forces the item into its error state, sets `aria-invalid`, and shows `QuestionnaireError`. Use for custom or server-side validation. Defaults to false. */
+	invalid?: React.ComponentProps<typeof QuestionnairePrimitive.Item>['invalid'];
+	/** Unique name of the item. Used to match `items` entries on `Questionnaire`, to select the active item, and as the form field name for the item's answers. */
+	name: React.ComponentProps<typeof QuestionnairePrimitive.Item>['name'];
+	/** Lets the user select several choices (checkboxes) instead of one (radio buttons). Defaults to false. */
+	multiple?: React.ComponentProps<typeof QuestionnairePrimitive.Item>['multiple'];
+	/** Called with `unanswered`, `answered` or `skipped` whenever the item's status changes. */
+	onStatusChange?: React.ComponentProps<typeof QuestionnairePrimitive.Item>['onStatusChange'];
+	/** Requires an answer before the user can move on, and hides `QuestionnaireSkip` for this item. Defaults to false. */
+	required?: React.ComponentProps<typeof QuestionnairePrimitive.Item>['required'];
+}) {
 	return (
 		<QuestionnairePrimitive.Item
 			data-slot="questionnaire-item"
@@ -39,7 +73,13 @@ function QuestionnaireItem({ className, ...props }: React.ComponentProps<typeof 
 	);
 }
 
-function QuestionnaireTitle({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Title>) {
+function QuestionnaireTitle({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Title> & {
+	/** Replaces the default <legend> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Title>['render'];
+}) {
 	return (
 		<QuestionnairePrimitive.Title
 			data-slot="questionnaire-title"
@@ -55,7 +95,10 @@ function QuestionnaireTitle({ className, ...props }: React.ComponentProps<typeof
 function QuestionnaireDescription({
 	className,
 	...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Description>) {
+}: React.ComponentProps<typeof QuestionnairePrimitive.Description> & {
+	/** Replaces the default <p> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Description>['render'];
+}) {
 	return (
 		<QuestionnairePrimitive.Description
 			data-slot="questionnaire-description"
@@ -65,7 +108,13 @@ function QuestionnaireDescription({
 	);
 }
 
-function QuestionnaireChoices({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Choices>) {
+function QuestionnaireChoices({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Choices> & {
+	/** Replaces the default <div> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Choices>['render'];
+}) {
 	return (
 		<QuestionnairePrimitive.Choices
 			data-slot="questionnaire-choices"
@@ -79,7 +128,18 @@ function QuestionnaireChoice({
 	children,
 	className,
 	...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Choice>) {
+}: React.ComponentProps<typeof QuestionnairePrimitive.Choice> & {
+	/** Replaces the default <label> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Choice>['render'];
+	/** Controlled checked state. Pair with `onChange` to update it. */
+	checked?: React.ComponentProps<typeof QuestionnairePrimitive.Choice>['checked'];
+	/** Prevents selecting the choice and excludes it from keyboard shortcuts. Defaults to false. */
+	disabled?: React.ComponentProps<typeof QuestionnairePrimitive.Choice>['disabled'];
+	/** Called when the underlying input changes. Call `event.preventDefault()` to stop the questionnaire from updating its own selection state. */
+	onChange?: React.ComponentProps<typeof QuestionnairePrimitive.Choice>['onChange'];
+	/** Value submitted for the item's `name` when this choice is selected. Must match the `choices` entry in `items` when `items` is set. */
+	value: React.ComponentProps<typeof QuestionnairePrimitive.Choice>['value'];
+}) {
 	return (
 		<QuestionnairePrimitive.Choice
 			data-slot="questionnaire-choice"
@@ -132,7 +192,15 @@ function QuestionnaireChoiceDescription({ className, ...props }: React.Component
 	);
 }
 
-function QuestionnaireInput({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Input>) {
+function QuestionnaireInput({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Input> & {
+	/** Replaces the default <input> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Input>['render'];
+	/** Input type for the free-text answer: `text` (default), `email`, `number`, `password`, `search`, `tel`, `url`, or a date or time type (`date`, `datetime-local`, `month`, `time`, `week`). */
+	type?: React.ComponentProps<typeof QuestionnairePrimitive.Input>['type'];
+}) {
 	return (
 		<div data-slot="questionnaire-input-wrapper" className="group/questionnaire-input relative w-full min-w-0">
 			<QuestionnairePrimitive.Input
@@ -148,7 +216,13 @@ function QuestionnaireInput({ className, ...props }: React.ComponentProps<typeof
 	);
 }
 
-function QuestionnaireError({ className, ...props }: React.ComponentProps<typeof QuestionnairePrimitive.Error>) {
+function QuestionnaireError({
+	className,
+	...props
+}: React.ComponentProps<typeof QuestionnairePrimitive.Error> & {
+	/** Replaces the default <p> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. The default message asks the user to choose an answer or skip. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Error>['render'];
+}) {
 	return (
 		<QuestionnairePrimitive.Error
 			data-slot="questionnaire-error"
@@ -177,8 +251,10 @@ function QuestionnairePrevious({
 	size = 'default',
 	variant = 'outline',
 	...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Previous> &
-	Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
+}: React.ComponentProps<typeof QuestionnairePrimitive.Previous> & {
+	/** Replaces the default <button> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. Use to render the button as a different element, for example a link. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Previous>['render'];
+} & Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
 	return (
 		<QuestionnairePrimitive.Previous
 			data-slot="questionnaire-previous"
@@ -202,8 +278,10 @@ function QuestionnaireSkip({
 	size = 'default',
 	variant = 'outline',
 	...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Skip> &
-	Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
+}: React.ComponentProps<typeof QuestionnairePrimitive.Skip> & {
+	/** Replaces the default <button> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. Use to render the button as a different element, for example a link. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Skip>['render'];
+} & Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
 	return (
 		<QuestionnairePrimitive.Skip
 			data-slot="questionnaire-skip"
@@ -227,8 +305,10 @@ function QuestionnaireNext({
 	size = 'default',
 	variant = 'default',
 	...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Next> &
-	Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
+}: React.ComponentProps<typeof QuestionnairePrimitive.Next> & {
+	/** Replaces the default <button> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. Use to render the button as a different element, for example a link. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Next>['render'];
+} & Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
 	return (
 		<QuestionnairePrimitive.Next
 			data-slot="questionnaire-next"
@@ -252,8 +332,10 @@ function QuestionnaireSubmit({
 	size = 'default',
 	variant = 'default',
 	...props
-}: React.ComponentProps<typeof QuestionnairePrimitive.Submit> &
-	Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
+}: React.ComponentProps<typeof QuestionnairePrimitive.Submit> & {
+	/** Replaces the default <button> with your own element, or a function `(props, state) => element` that receives the props to spread onto it. Use to render the button as a different element, for example a link. */
+	render?: React.ComponentProps<typeof QuestionnairePrimitive.Submit>['render'];
+} & Pick<React.ComponentProps<typeof Button>, 'size' | 'variant'>) {
 	return (
 		<QuestionnairePrimitive.Submit
 			data-slot="questionnaire-submit"

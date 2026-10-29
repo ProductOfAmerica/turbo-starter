@@ -10,6 +10,7 @@ const codeBlockVariants = cva(
 	'group/code-block relative flex w-full min-w-0 flex-col overflow-hidden rounded-lg text-sm has-[>[data-slot=code-block-content]:focus-visible]:ring-3 has-[>[data-slot=code-block-content]:focus-visible]:ring-ring/50 data-[size=sm]:text-xs',
 	{
 		variants: {
+			/** Visual style. 'default' is a neutral bordered block and 'destructive' tints the border and text red, for error output. Defaults to 'default'. */
 			variant: {
 				default:
 					'border border-input text-foreground has-[>[data-slot=code-block-content]:focus-visible]:border-ring dark:bg-input/30',
@@ -27,7 +28,11 @@ function CodeBlock({
 	variant = 'default',
 	size = 'default',
 	...props
-}: React.ComponentProps<'div'> & VariantProps<typeof codeBlockVariants> & { size?: 'default' | 'sm' }) {
+}: React.ComponentProps<'div'> &
+	VariantProps<typeof codeBlockVariants> & {
+		/** Text size and padding. 'sm' uses smaller text and tighter padding. Defaults to 'default'. */
+		size?: 'default' | 'sm';
+	}) {
 	return (
 		<div
 			data-slot="code-block"
@@ -133,8 +138,11 @@ function CodeBlockContent({
 	startLine = 1,
 	...props
 }: React.ComponentProps<'pre'> & {
+	/** Wraps long lines instead of scrolling horizontally. Defaults to false. */
 	wrap?: boolean;
+	/** Shows a line number beside each line. When `children` is a string it is split into lines automatically; otherwise wrap each line in `CodeBlockLine`. Defaults to false. */
 	lineNumbers?: boolean;
+	/** Number of the first line when `lineNumbers` is on. Defaults to 1. */
 	startLine?: number;
 }) {
 	return (
@@ -170,6 +178,7 @@ const codeBlockLineVariants = cva(
 	"relative -mx-4 block min-h-lh px-4 group-data-[size=sm]/code-block:-mx-3 group-data-[size=sm]/code-block:px-3 before:min-w-6 before:text-end before:text-muted-foreground after:absolute after:start-1 after:top-0 after:text-muted-foreground after:select-none in-data-numbered:col-span-2 in-data-numbered:grid in-data-numbered:grid-cols-subgrid in-data-numbered:gap-x-3 in-data-numbered:[counter-increment:line] in-data-numbered:before:content-[counter(line)] in-data-numbered:before:select-none in-data-numbered:supports-[content:counter(line)_/_'']:before:content-[counter(line)_/_'']",
 	{
 		variants: {
+			/** Marks the line's role in a diff or excerpt: 'added' shows a plus marker, 'removed' shows a minus marker with a red tint, and 'highlighted' draws attention with a background and no marker. Defaults to 'default' (plain). */
 			variant: {
 				default: '',
 				added: "bg-muted after:content-['+']",

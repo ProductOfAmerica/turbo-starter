@@ -74,7 +74,9 @@ function MenubarItem({
 	variant = 'default',
 	...props
 }: React.ComponentProps<typeof MenubarPrimitive.Item> & {
+	/** Indents the item so it lines up with sibling items that have an icon or check indicator. */
 	inset?: boolean;
+	/** Item style. `destructive` colors the item red for dangerous actions such as delete. Defaults to `default`. */
 	variant?: 'default' | 'destructive';
 }) {
 	return (
@@ -98,6 +100,7 @@ function MenubarCheckboxItem({
 	inset,
 	...props
 }: React.ComponentProps<typeof MenubarPrimitive.CheckboxItem> & {
+	/** Sets the `data-inset` attribute. The checkbox item already reserves left padding for its check indicator, so this has no visible effect. */
 	inset?: boolean;
 }) {
 	return (
@@ -127,6 +130,7 @@ function MenubarRadioItem({
 	inset,
 	...props
 }: React.ComponentProps<typeof MenubarPrimitive.RadioItem> & {
+	/** Sets the `data-inset` attribute. The radio item already reserves left padding for its check indicator, so this has no visible effect. */
 	inset?: boolean;
 }) {
 	return (
@@ -154,6 +158,7 @@ function MenubarLabel({
 	inset,
 	...props
 }: React.ComponentProps<typeof MenubarPrimitive.Label> & {
+	/** Indents the label so it lines up with sibling items that have an icon or check indicator. */
 	inset?: boolean;
 }) {
 	return (
@@ -199,6 +204,7 @@ function MenubarSubTrigger({
 	children,
 	...props
 }: React.ComponentProps<typeof MenubarPrimitive.SubTrigger> & {
+	/** Indents the submenu trigger so it lines up with sibling items that have an icon or check indicator. */
 	inset?: boolean;
 }) {
 	return (

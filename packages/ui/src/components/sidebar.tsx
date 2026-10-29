@@ -50,8 +50,11 @@ function SidebarProvider({
 	children,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Whether the desktop sidebar starts expanded when uncontrolled. Defaults to true. */
 	defaultOpen?: boolean;
+	/** Controlled expanded state of the desktop sidebar. Pair it with `onOpenChange`; the mobile sheet keeps its own state. */
 	open?: boolean;
+	/** Called with the new expanded state when the desktop sidebar is toggled by the trigger, the rail, or Ctrl/Cmd+B. */
 	onOpenChange?: (open: boolean) => void;
 }) {
 	const isMobile = useIsMobile();
@@ -140,8 +143,11 @@ function Sidebar({
 	dir,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Which edge of the screen the sidebar sits on, also the side the mobile sheet opens from. Defaults to 'left'. */
 	side?: 'left' | 'right';
+	/** Visual style. 'sidebar' is a flush panel with a border, 'floating' is a padded rounded panel with a ring and shadow, and 'inset' leaves a gap for a `SidebarInset` card beside it. Defaults to 'sidebar'. */
 	variant?: 'sidebar' | 'floating' | 'inset';
+	/** How the desktop sidebar collapses. 'offcanvas' slides it fully off screen, 'icon' shrinks it to an icon-only rail, and 'none' makes it non-collapsible. Defaults to 'offcanvas'. */
 	collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
 	const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
@@ -436,11 +442,13 @@ const sidebarMenuButtonVariants = cva(
 	'peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pr-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate',
 	{
 		variants: {
+			/** Visual style. 'default' is a plain row with a hover highlight, and 'outline' adds a background and a thin border. Defaults to 'default'. */
 			variant: {
 				default: 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
 				outline:
 					'bg-background shadow-[0_0_0_1px_var(--sidebar-border)] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_var(--sidebar-accent)]',
 			},
+			/** Row height and text size: 'sm' is compact, 'default' is standard, and 'lg' is tall (h-12), suited to a rich row such as an account switcher. Defaults to 'default'. */
 			size: {
 				default: 'h-8 text-sm',
 				sm: 'h-7 text-xs',
@@ -464,7 +472,9 @@ function SidebarMenuButton({
 	...props
 }: React.ComponentProps<'button'> & {
 	asChild?: boolean;
+	/** Marks the row as the current page, giving it the active highlight and `data-active`. Defaults to false. */
 	isActive?: boolean;
+	/** Label shown in a right-side tooltip, only while the desktop sidebar is collapsed to icons. Pass a string, or `TooltipContent` props for more control. */
 	tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
 	const Comp = asChild ? Slot.Root : 'button';
@@ -506,6 +516,7 @@ function SidebarMenuAction({
 	...props
 }: React.ComponentProps<'button'> & {
 	asChild?: boolean;
+	/** Hides the action on desktop until its menu item is hovered, focused, or the action's menu is open. Defaults to false. */
 	showOnHover?: boolean;
 }) {
 	const Comp = asChild ? Slot.Root : 'button';
@@ -544,6 +555,7 @@ function SidebarMenuSkeleton({
 	showIcon = false,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Renders a square placeholder before the text bar, to match menu items that have an icon. Defaults to false. */
 	showIcon?: boolean;
 }) {
 	// Random width between 50 to 90%.
@@ -605,7 +617,9 @@ function SidebarMenuSubButton({
 	...props
 }: React.ComponentProps<'a'> & {
 	asChild?: boolean;
+	/** Text size of the sub-item: 'sm' is extra small and 'md' is small. Defaults to 'md'. */
 	size?: 'sm' | 'md';
+	/** Marks the sub-item as the current page, giving it the active highlight and `data-active`. Defaults to false. */
 	isActive?: boolean;
 }) {
 	const Comp = asChild ? Slot.Root : 'a';

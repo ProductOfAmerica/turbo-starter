@@ -18,6 +18,7 @@ function Calendar({
 	components,
 	...props
 }: React.ComponentProps<typeof DayPicker> & {
+	/** Button variant used for the previous and next month buttons. Accepts any Button `variant`. Defaults to `ghost`. */
 	buttonVariant?: React.ComponentProps<typeof Button>['variant'];
 }) {
 	const defaultClassNames = getDefaultClassNames();

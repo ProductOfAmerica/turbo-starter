@@ -21,6 +21,7 @@ function TraceLine({
 	status,
 	...props
 }: React.ComponentProps<'span'> & {
+	/** Step state: 'running' shimmers the title, 'error' colors the line red, and 'pending' dims it. Leave unset for a completed step. */
 	status?: 'running' | 'error' | 'pending';
 }) {
 	return (
@@ -75,8 +76,12 @@ function TraceCollapsible({
 	...props
 }: Omit<React.ComponentProps<typeof Collapsible>, 'asChild' | 'open'> &
 	(
-		| { open?: undefined }
 		| {
+				/** Leave unset for an uncontrolled collapsible that manages its own state. */
+				open?: undefined;
+		  }
+		| {
+				/** Controlled open state. When set, `onOpenChange` is required to update it. */
 				open: boolean;
 				onOpenChange: NonNullable<React.ComponentProps<typeof Collapsible>['onOpenChange']>;
 		  }

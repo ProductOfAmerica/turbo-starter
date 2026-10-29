@@ -61,7 +61,9 @@ function ContextMenuItem({
 	variant = 'default',
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Item> & {
+	/** Adds left padding so the item lines up with items that have a check or radio indicator. */
 	inset?: boolean;
+	/** 'destructive' colors the item red, for actions such as delete. Defaults to 'default'. */
 	variant?: 'default' | 'destructive';
 }) {
 	return (
@@ -84,6 +86,7 @@ function ContextMenuSubTrigger({
 	children,
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
+	/** Adds left padding so the trigger lines up with items that have a check or radio indicator. */
 	inset?: boolean;
 }) {
 	return (
@@ -122,6 +125,7 @@ function ContextMenuCheckboxItem({
 	inset,
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.CheckboxItem> & {
+	/** Adds left padding so the item lines up with other inset items. */
 	inset?: boolean;
 }) {
 	return (
@@ -151,6 +155,7 @@ function ContextMenuRadioItem({
 	inset,
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.RadioItem> & {
+	/** Adds left padding so the item lines up with other inset items. */
 	inset?: boolean;
 }) {
 	return (
@@ -178,6 +183,7 @@ function ContextMenuLabel({
 	inset,
 	...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Label> & {
+	/** Adds left padding so the label lines up with items that have a check or radio indicator. */
 	inset?: boolean;
 }) {
 	return (

@@ -1,7 +1,14 @@
 import { cn } from 'cn';
 import type * as React from 'react';
 
-function Card({ className, size = 'default', ...props }: React.ComponentProps<'div'> & { size?: 'default' | 'sm' }) {
+function Card({
+	className,
+	size = 'default',
+	...props
+}: React.ComponentProps<'div'> & {
+	/** Spacing scale. 'sm' uses tighter padding and gaps for compact cards. Defaults to 'default'. */
+	size?: 'default' | 'sm';
+}) {
 	return (
 		<div
 			data-slot="card"

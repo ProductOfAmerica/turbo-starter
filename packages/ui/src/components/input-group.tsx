@@ -25,6 +25,7 @@ const inputGroupAddonVariants = cva(
 	"flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4",
 	{
 		variants: {
+			/** Where the addon sits relative to the control. `inline-start` and `inline-end` put it before or after the input on the same row; `block-start` and `block-end` put it on its own full-width row above or below. Defaults to `inline-start`. */
 			align: {
 				'inline-start': 'order-first pl-2 has-[>button]:-ml-1 has-[>kbd]:ml-[-0.15rem]',
 				'inline-end': 'order-last pr-2 has-[>button]:-mr-1 has-[>kbd]:mr-[-0.15rem]',
@@ -64,6 +65,7 @@ function InputGroupAddon({
 
 const inputGroupButtonVariants = cva('flex items-center gap-2 text-sm shadow-none', {
 	variants: {
+		/** Button size inside the group. `xs` (default) and `sm` are text buttons; `icon-xs` and `icon-sm` are square, for icon-only buttons. `sm` keeps the base Button sizing. */
 		size: {
 			xs: "h-6 gap-1 rounded-[calc(var(--radius)-5px)] px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
 			sm: '',

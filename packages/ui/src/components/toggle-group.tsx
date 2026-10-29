@@ -28,6 +28,7 @@ function ToggleGroup({
 	...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &
 	VariantProps<typeof toggleVariants> & {
+		/** Gap between items in Tailwind spacing units (one unit is 0.25rem). 0 joins the items into one connected strip. Defaults to 2. */
 		spacing?: number;
 		orientation?: 'horizontal' | 'vertical';
 	}) {
