@@ -63,10 +63,11 @@ test.describe('Homepage rendering', () => {
 		await checkA11y(page);
 	});
 
-	// Skip screenshot comparison in CI (font rendering differs across OS)
-	// Run locally with: npx playwright test --grep "screenshot"
-	test.skip(!!process.env.CI, 'Screenshot baselines are platform-specific');
 	test('full page screenshot matches baseline', async ({ page, _homePage }) => {
+		// Skip screenshot comparison in CI (font rendering differs across OS).
+		// Keep this inside the test: test.skip() at describe level skips every test in the group.
+		// Run locally with: npx playwright test --grep "screenshot"
+		test.skip(!!process.env.CI, 'Screenshot baselines are platform-specific');
 		await expect(page).toHaveScreenshot('homepage.png', {
 			fullPage: true,
 			maxDiffPixelRatio: 0.05,
