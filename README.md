@@ -5,6 +5,7 @@
 [![pnpm](https://img.shields.io/badge/pnpm-v10.28.1-orange)](https://pnpm.io/)
 [![nextjs](https://img.shields.io/badge/Next.js-16.2.12-blue?logo=nextdotjs)](https://nextjs.org/)
 [![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.3.3-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-000?logo=shadcnui&logoColor=fff&style=for-the-badge)](https://ui.shadcn.com/)
 [![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
 A modern, turbocharged monorepo template for building Next.js apps with ease. Packed with **Next.js 16**, **Turborepo**,
