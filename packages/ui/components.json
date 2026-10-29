@@ -1,6 +1,6 @@
 {
 	"$schema": "https://ui.shadcn.com/schema.json",
-	"style": "default",
+	"style": "radix-vega",
 	"rsc": true,
 	"tsx": true,
 	"tailwind": {
@@ -10,6 +10,7 @@
 		"cssVariables": true,
 		"prefix": ""
 	},
+	"iconLibrary": "lucide",
 	"aliases": {
 		"components": "@repo/ui/components",
 		"utils": "@repo/ui/lib/utils",
