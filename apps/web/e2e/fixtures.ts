@@ -10,9 +10,7 @@ export const test = base.extend<{ _homePage: undefined }>({
 });
 
 export async function checkA11y(page: import('@playwright/test').Page) {
-	const results = await new AxeBuilder({ page })
-		.disableRules(['region', 'color-contrast']) // Known issues tracked in TODOS.md
-		.analyze();
+	const results = await new AxeBuilder({ page }).analyze();
 	expect(results.violations).toEqual([]);
 }
 

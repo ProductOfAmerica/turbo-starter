@@ -59,21 +59,21 @@ export function QuickStartSection() {
 								</div>
 							</CardHeader>
 							<CardContent className="space-y-4">
-								<div className="bg-muted rounded-lg p-4 font-mono text-sm text-muted-foreground">
+								<div className="bg-muted rounded-lg p-4 font-mono text-sm text-foreground">
 									<div className="flex items-center space-x-2">
 										<Code2 className="w-4 h-4 shrink-0" />
 										<span className="shrink-0">apps/web</span>
-										<span className="text-muted-foreground">→ Next.js application</span>
+										<span className="text-foreground/70">→ Next.js application</span>
 									</div>
 									<div className="flex items-center space-x-2 mt-2">
 										<Package className="w-4 h-4 shrink-0" />
 										<span className="shrink-0">packages/ui</span>
-										<span className="text-muted-foreground">→ Shared components</span>
+										<span className="text-foreground/70">→ Shared components</span>
 									</div>
 									<div className="flex items-center space-x-2 mt-2">
 										<Container className="w-4 h-4 shrink-0" />
 										<span className="shrink-0">docker-compose.yml</span>
-										<span className="text-muted-foreground">→ Container setup</span>
+										<span className="text-foreground/70">→ Container setup</span>
 									</div>
 								</div>
 								<p className="text-sm text-muted-foreground">
