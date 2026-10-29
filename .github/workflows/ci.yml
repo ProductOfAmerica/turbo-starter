@@ -136,9 +136,10 @@ jobs:
       - name: Security Audit
         run: pnpm audit --audit-level=high
 
-      # Run Biome linting and formatting checks
+      # Same checks as `pnpm lint`, read-only. On GitHub, `biome ci` also prints
+      # each failure as an annotation on the PR diff.
       - name: Lint and Format Check
-        run: pnpm lint:ci
+        run: pnpm exec biome ci .
 
       # Run TypeScript type checking via Turborepo
       - name: Type Check

@@ -1,0 +1,8 @@
+# Editors that read EditorConfig (JetBrains IDEs natively, VS Code with the
+# EditorConfig extension) save new files with LF, matching .gitattributes and
+# Biome. Otherwise editors on Windows default to CRLF, and the pre-commit lint
+# fails on the new file until `pnpm lint:fix` runs.
+root = true
+
+[*]
+end_of_line = lf

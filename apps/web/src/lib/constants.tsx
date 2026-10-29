@@ -55,6 +55,6 @@ export const techStack = [
 export const commands = [
 	{ cmd: 'pnpm build', desc: 'Build all packages and apps' },
 	{ cmd: 'pnpm lint', desc: 'Check code quality across the monorepo' },
-	{ cmd: 'pnpm format-write', desc: 'Auto-format all code with Biome' },
+	{ cmd: 'pnpm lint:fix', desc: 'Auto-fix and format all code with Biome' },
 	{ cmd: 'pnpm docker', desc: 'Run the entire stack with Docker' },
 ];

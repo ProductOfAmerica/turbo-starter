@@ -9,8 +9,7 @@
 		"enabled": true,
 		"indentStyle": "tab",
 		"indentWidth": 3,
-		"lineWidth": 120,
-		"lineEnding": "crlf"
+		"lineWidth": 120
 	},
 	"linter": {
 		"enabled": true,
@@ -43,9 +42,6 @@
 		"parser": {
 			"tailwindDirectives": true
 		}
-	},
-	"files": {
-		"includes": ["**"]
 	},
 	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"overrides": [
