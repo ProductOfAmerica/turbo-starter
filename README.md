@@ -59,6 +59,7 @@ Click the **"Use this template"** button at the top of this repo. GitHub creates
 ```bash
 npx degit ProductOfAmerica/turbo-starter my-app
 cd my-app
+git init  # degit copies no .git, and pnpm install sets up git hooks
 pnpm install
 pnpm dev
 ```
@@ -74,9 +75,9 @@ pnpm dev
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v24.13.0+ (use `nvm use` if you have [nvm](https://github.com/nvm-sh/nvm), or [Volta](https://volta.sh/) auto-detects)
-- [pnpm](https://pnpm.io/) (`npm i -g pnpm@10.28.1`)
-- [Docker](https://www.docker.com/) (optional, for containerized dev)
+- [Node.js](https://nodejs.org/), at least the version in `.nvmrc` (run `nvm use` with [nvm](https://github.com/nvm-sh/nvm), or let [Volta](https://volta.sh/) pick it up)
+- [pnpm](https://pnpm.io/) (`npm i -g pnpm`); it switches to the version pinned in `package.json` on its own
+- [Docker](https://www.docker.com/) (optional, to run the production build in a container)
 
 ---
 
@@ -86,7 +87,7 @@ Once `pnpm dev` is running, here's what to do:
 
 ### Add a page
 
-Create a new file at `apps/web/app/about/page.tsx`:
+Create a new file at `apps/web/src/app/about/page.tsx`:
 
 ```tsx
 export default function AboutPage() {
