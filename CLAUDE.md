@@ -1,7 +1,5 @@
 # CLAUDE.md
 
-This repo is a product: a Turborepo + Next.js starter template that developers clone to begin new projects. Every change is developer experience, so README quality, onboarding friction, and time to first run matter as much as the code.
-
 ## Checks
 
 CI (`.github/workflows/ci.yml`) runs the same set.

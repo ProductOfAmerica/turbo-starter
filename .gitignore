@@ -38,3 +38,4 @@ yarn-error.log*
 /bash.exe.stackdump
 .idea/
 .claude/
+CLAUDE.local.md
