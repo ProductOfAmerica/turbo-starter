@@ -16,7 +16,7 @@ wrapped in a Docker-friendly setup.
 
 ## Why This Starter?
 
-- **Monorepo Magic**: [Turborepo](https://turbo.build/repo) optimizes builds and caching across apps and packages.
+- **Monorepo Magic**: [Turborepo](https://turborepo.dev/docs) optimizes builds and caching across apps and packages.
 - **Next.js 16**: The latest [Next.js](https://nextjs.org/) with Turbopack for blazing-fast development.
 - **Shadcn UI**: Beautiful, accessible React components paired with [Tailwind CSS](https://tailwindcss.com/).
 - **Biome.js**: A single, speedy tool for linting and formatting — no ESLint/Prettier mess.
