@@ -153,8 +153,8 @@ pnpm format-write  # Format code
 ## Docker
 
 ```bash
-pnpm docker        # Launch with Docker Compose
-pnpm docker:build  # Rebuild containers
+pnpm docker        # Build and start (or restart) the app with Docker Compose
+pnpm docker:build  # Build the images without starting them
 ```
 
 ---

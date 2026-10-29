@@ -13,8 +13,8 @@
 		"lint:ci": "biome check --line-ending=lf --css-parse-tailwind-directives=true .",
 		"check-types": "turbo check-types",
 		"test:e2e": "pnpm --filter web test:e2e",
-		"docker": "docker-compose down --remove-orphans --volumes && docker container prune -f && docker-compose up --build -d",
-		"docker:build": "docker-compose -f docker-compose.yml build",
+		"docker": "docker compose up --build -d --remove-orphans",
+		"docker:build": "docker compose build",
 		"prepare": "lefthook install"
 	},
 	"pnpm": {

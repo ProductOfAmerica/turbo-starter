@@ -1,8 +1,5 @@
-version: "3"
-
 services:
   web:
-    container_name: web
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
@@ -12,7 +9,6 @@ services:
     networks:
       - app_network
 #  api:
-#    container_name: api
 #    build:
 #      context: .
 #      dockerfile: ./apps/api/Dockerfile
@@ -23,7 +19,7 @@ services:
 #      - app_network
 
 # Define a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
+# with each other, by using their service name as a hostname
 networks:
   app_network:
     driver: bridge
