@@ -1,10 +1,10 @@
 <h1><img src=".github/images/turbo-logo.avif" alt="Turborepo Logo" height="32" style="vertical-align: middle;"> Turborepo Starter <a href="https://vercel.com/new/clone?repository-url=https://github.com/ProductOfAmerica/turbo-starter"><img align="right" src="https://vercel.com/button" alt="Deploy with Vercel"></a></h1>
 
 [![Stars](https://img.shields.io/github/stars/ProductOfAmerica/turbo-starter?style=social)](https://github.com/ProductOfAmerica/turbo-starter)
-[![Node.js](https://img.shields.io/badge/Node.js-v24.13.0+-green)](https://nodejs.org/)
-[![pnpm](https://img.shields.io/badge/pnpm-v10.28.1-orange)](https://pnpm.io/)
-[![nextjs](https://img.shields.io/badge/Next.js-16.2.12-blue?logo=nextdotjs)](https://nextjs.org/)
-[![tailwindcss](https://img.shields.io/badge/TailwindCSS-4.3.3-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Node.js](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FProductOfAmerica%2Fturbo-starter%2Fmain%2Fpackage.json&query=%24.engines.node&label=Node.js&color=green)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FProductOfAmerica%2Fturbo-starter%2Fmain%2Fpackage.json&query=%24.volta.pnpm&label=pnpm&color=orange&prefix=v)](https://pnpm.io/)
+[![nextjs](https://img.shields.io/github/package-json/dependency-version/ProductOfAmerica/turbo-starter/next?filename=apps%2Fweb%2Fpackage.json&label=Next.js&logo=nextdotjs&color=blue)](https://nextjs.org/)
+[![tailwindcss](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FProductOfAmerica%2Fturbo-starter%2Fmain%2Fpnpm-lock.yaml&query=%24.importers%5B%27apps%2Fweb%27%5D.devDependencies.tailwindcss.version&label=TailwindCSS&logo=tailwind-css&color=38B2AC)](https://tailwindcss.com/)
 [![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-Radix-000?logo=shadcnui)](https://ui.shadcn.com/)
 [![Build Status](https://github.com/ProductOfAmerica/turbo-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/ProductOfAmerica/turbo-starter/actions)
 
