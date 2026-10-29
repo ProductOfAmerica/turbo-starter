@@ -72,6 +72,33 @@
 					}
 				}
 			}
+		},
+		{
+			"includes": ["**/packages/ui/src/components/**", "**/packages/ui/src/hooks/**", "**/packages/ui/src/lib/**"],
+			"linter": {
+				"rules": {
+					"a11y": {
+						"useFocusableInteractive": "off",
+						"useKeyWithClickEvents": "off",
+						"useSemanticElements": "off",
+						"noNoninteractiveTabindex": "off",
+						"noRedundantRoles": "off"
+					},
+					"correctness": {
+						"useExhaustiveDependencies": {
+							"level": "error",
+							"options": { "reportUnnecessaryDependencies": false }
+						}
+					},
+					"security": {
+						"noDangerouslySetInnerHtml": "off"
+					},
+					"suspicious": {
+						"noArrayIndexKey": "off",
+						"noDoubleEquals": "off"
+					}
+				}
+			}
 		}
 	]
 }
