@@ -3,6 +3,7 @@ import { ChevronDownIcon } from 'lucide-react';
 import type * as React from 'react';
 
 type NativeSelectProps = Omit<React.ComponentProps<'select'>, 'size'> & {
+	/** Height of the select: 'sm' is shorter than 'default'. Defaults to 'default'. */
 	size?: 'sm' | 'default';
 };
 

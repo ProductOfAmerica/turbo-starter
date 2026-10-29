@@ -11,6 +11,7 @@ const bubbleVariants = cva(
 	'group/bubble relative flex w-fit max-w-[80%] min-w-0 flex-col gap-1 group-data-[align=end]/message:self-end data-[align=end]:self-end data-[variant=ghost]:max-w-full',
 	{
 		variants: {
+			/** Bubble style: 'default' primary fill, 'secondary' and 'muted' softer fills, 'tinted' a pale tint of the primary color, 'outline' a bordered bubble, 'ghost' no bubble chrome at full width, 'destructive' for failed or error messages. Defaults to 'default'. */
 			variant: {
 				default:
 					'*:data-[slot=bubble-content]:bg-primary *:data-[slot=bubble-content]:text-primary-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-primary/80',
@@ -39,6 +40,7 @@ function Bubble({
 	...props
 }: React.ComponentProps<'div'> &
 	VariantProps<typeof bubbleVariants> & {
+		/** Side of the row the bubble sits on: 'start' for incoming messages, 'end' for the user's own. Defaults to 'start'. */
 		align?: 'start' | 'end';
 	}) {
 	return (
@@ -99,7 +101,9 @@ function BubbleReactions({
 	className,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Which bubble corner the reactions sit near: 'start' is the left, 'end' is the right. Defaults to 'end'. */
 	align?: 'start' | 'end';
+	/** Which edge of the bubble the reactions overlap: 'top' or 'bottom'. Defaults to 'bottom'. */
 	side?: 'top' | 'bottom';
 }) {
 	return (

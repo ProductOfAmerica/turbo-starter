@@ -5,7 +5,14 @@ function MessageGroup({ className, ...props }: React.ComponentProps<'div'>) {
 	return <div data-slot="message-group" className={cn('flex min-w-0 flex-col gap-2', className)} {...props} />;
 }
 
-function Message({ className, align = 'start', ...props }: React.ComponentProps<'div'> & { align?: 'start' | 'end' }) {
+function Message({
+	className,
+	align = 'start',
+	...props
+}: React.ComponentProps<'div'> & {
+	/** Which side the message sits on. 'start' is for received messages; 'end' reverses the row and right-aligns its content, for the user's own messages. Defaults to 'start'. */
+	align?: 'start' | 'end';
+}) {
 	return (
 		<div
 			data-slot="message"

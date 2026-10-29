@@ -23,7 +23,10 @@ function FieldLegend({
 	className,
 	variant = 'legend',
 	...props
-}: React.ComponentProps<'legend'> & { variant?: 'legend' | 'label' }) {
+}: React.ComponentProps<'legend'> & {
+	/** 'legend' renders a larger group heading, 'label' renders smaller text that matches field labels. Defaults to 'legend'. */
+	variant?: 'legend' | 'label';
+}) {
 	return (
 		<legend
 			data-slot="field-legend"
@@ -49,6 +52,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
 
 const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:text-destructive', {
 	variants: {
+		/** Layout: 'vertical' stacks the label above the control, 'horizontal' puts them in a row, 'responsive' stacks until the parent `FieldGroup` is wide enough (container query) and then becomes a row. Defaults to 'vertical'. */
 		orientation: {
 			vertical: 'flex-col *:w-full [&>.sr-only]:w-auto',
 			horizontal:
@@ -163,6 +167,7 @@ function FieldError({
 	errors,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Validation errors to show, such as the `errors` array from a form library. Duplicate messages are collapsed; one message renders as text and several as a bulleted list. Ignored when `children` is set. */
 	errors?: Array<{ message?: string } | undefined>;
 }) {
 	const content = useMemo(() => {

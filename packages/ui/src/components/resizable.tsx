@@ -22,6 +22,7 @@ function ResizableHandle({
 	className,
 	...props
 }: ResizablePrimitive.SeparatorProps & {
+	/** Shows a visible grip in the middle of the handle. Defaults to false, which renders only a thin divider line. */
 	withHandle?: boolean;
 }) {
 	return (

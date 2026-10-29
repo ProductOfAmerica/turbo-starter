@@ -22,7 +22,8 @@ wrapped in a Docker-friendly setup.
 - **Biome.js**: A single, speedy tool for linting and formatting — no ESLint/Prettier mess.
 - **Docker Ready**: Spin up with [Docker Compose](https://docs.docker.com/compose/) for consistent environments.
 - **pnpm Workspaces**: Efficient dependency management with [pnpm](https://pnpm.io/).
-- **CI/CD**: GitHub Actions with lint, typecheck, security audit, build, and E2E smoke test.
+- **Storybook**: Every component documented in [Storybook](https://storybook.js.org/), with each story run as an interaction and accessibility test, and served to AI agents through its MCP server.
+- **CI/CD**: GitHub Actions with lint, typecheck, security audit, build, E2E smoke test, and story tests.
 - **Auto-merge**: Dependabot patches and minor updates auto-merge after CI passes.
 
 Perfect for developers who want a cutting-edge stack without the setup hassle.
@@ -34,8 +35,12 @@ Perfect for developers who want a cutting-edge stack without the setup hassle.
 ```
 ├── apps/
 │   └── web/                # Next.js 16 app
+│       ├── .storybook/     # Storybook config
+│       └── stories/        # Stories for the app
 ├── packages/
 │   ├── ui/                 # Shadcn UI components & utilities
+│   │   ├── stories/        # Stories for the UI components
+│   │   └── tests/          # Tests for the code no story reaches
 │   └── typescript-config   # Shared TypeScript settings
 ├── docker-compose.yml      # Docker setup
 ├── turbo.json              # Turborepo config
@@ -105,6 +110,9 @@ Components live in `packages/ui/src/components/`. To use one in your app:
 import { Button } from '@repo/ui/components/button';
 ```
 
+Run `pnpm storybook` to browse every component, its variants and its props. A new component gets a story in
+`packages/ui/stories` (see [Storybook](#storybook)).
+
 ### Deploy to Vercel
 
 ```bash
@@ -135,7 +143,37 @@ npx turbo link
 | `pnpm lint:fix` | Auto-fix lint issues and format code |
 | `pnpm check-types` | TypeScript type checking |
 | `pnpm test:e2e` | Run the Playwright E2E suite |
-| `pnpm clean` | Delete build and test caches (`.next`, `.turbo`, Playwright output); keeps `node_modules` |
+| `pnpm storybook` | Start Storybook on port 6006 |
+| `pnpm build:storybook` | Build the static Storybook, including the components manifest |
+| `pnpm test` | Run the unit tests and every story as a test (light theme, then dark); fails if a file drops below 100% coverage |
+| `pnpm clean` | Delete build and test caches (`.next`, `.turbo`, `storybook-static`, Playwright output); keeps `node_modules` |
+
+---
+
+## Storybook
+
+[Storybook](https://storybook.js.org/) documents the components in `packages/ui` and `apps/web`, and runs each story as a
+test: the story's play function checks its behavior, and [axe](https://github.com/dequelabs/axe-core) checks
+accessibility.
+
+```bash
+pnpm --filter web exec playwright install chromium  # once per machine, for the story tests
+pnpm storybook                                      # Storybook on http://localhost:6006
+pnpm test                                           # unit tests, and every story as a test (light, then dark)
+```
+
+- UI stories live in `packages/ui/stories`, one per component, and app stories in `apps/web/stories/web`, mirroring
+  `apps/web/src`. Storybook itself runs from `apps/web`.
+- [Coverage](https://storybook.js.org/docs/writing-tests/test-coverage): `pnpm test` writes a report of the
+  source the tests exercise to `apps/web/coverage/index.html`, and fails if a file drops below 100%; the few exceptions are
+  listed in `apps/web/vitest.config.mts`. In Storybook, tick Coverage in the testing widget, run
+  the tests, and the report is served at `/coverage/index.html`.
+- While `pnpm storybook` runs, Storybook also serves an [MCP server](https://storybook.js.org/docs/ai/mcp/overview) at
+  `http://localhost:6006/mcp`, listed in `.mcp.json`. AI agents use it to look up components and their props and to run
+  story tests. Claude Code asks you to approve the server once; if Storybook wasn't running when Claude Code started,
+  reconnect it from `/mcp`.
+- `.claude/` holds the rules and hooks that keep Claude Code's UI work reusing components, documented in stories, and
+  tested. See `CLAUDE.md`.
 
 ---
 

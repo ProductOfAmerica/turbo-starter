@@ -10,6 +10,7 @@ function NavigationMenu({
 	viewport = true,
 	...props
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
+	/** Whether submenu content shares one animated viewport below the menu. Set to `false` to have each item's content open directly under its own trigger. Defaults to `true`. */
 	viewport?: boolean;
 }) {
 	return (

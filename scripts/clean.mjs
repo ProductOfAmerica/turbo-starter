@@ -13,7 +13,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, rmSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const ARTIFACTS = ['.next', '.turbo', 'test-results', 'playwright-report'];
+const ARTIFACTS = ['.next', '.turbo', 'storybook-static', 'coverage', 'test-results', 'playwright-report', '.vitest'];
 
 // Ask pnpm for the workspace projects so packages added later are covered too.
 // A fixed command string, so the shell sees no outside input.

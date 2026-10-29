@@ -24,6 +24,7 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 }
 
 type PaginationLinkProps = {
+	/** Marks the link as the current page: sets `aria-current="page"` and uses the outline button style instead of ghost. */
 	isActive?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, 'size'> &
 	React.ComponentProps<'a'>;
@@ -45,7 +46,10 @@ function PaginationPrevious({
 	className,
 	text = 'Previous',
 	...props
-}: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+}: React.ComponentProps<typeof PaginationLink> & {
+	/** Visible label next to the arrow. Hidden below the `sm` breakpoint, leaving only the arrow. Defaults to `Previous`. */
+	text?: string;
+}) {
 	return (
 		<PaginationLink aria-label="Go to previous page" size="default" className={cn('pl-2!', className)} {...props}>
 			<ChevronLeftIcon data-icon="inline-start" />
@@ -58,7 +62,10 @@ function PaginationNext({
 	className,
 	text = 'Next',
 	...props
-}: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+}: React.ComponentProps<typeof PaginationLink> & {
+	/** Visible label next to the arrow. Hidden below the `sm` breakpoint, leaving only the arrow. Defaults to `Next`. */
+	text?: string;
+}) {
 	return (
 		<PaginationLink aria-label="Go to next page" size="default" className={cn('pr-2!', className)} {...props}>
 			<span className="hidden sm:block">{text}</span>

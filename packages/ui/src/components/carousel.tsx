@@ -12,9 +12,13 @@ type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
 type CarouselProps = {
+	/** Embla Carousel options, such as `loop` or `align`. The scroll axis comes from `orientation`, which overrides `axis`. */
 	opts?: CarouselOptions;
+	/** Embla Carousel plugins, such as autoplay. */
 	plugins?: CarouselPlugin;
+	/** Scroll direction. 'vertical' stacks the slides and rotates the previous and next buttons. Defaults to 'horizontal'. */
 	orientation?: 'horizontal' | 'vertical';
+	/** Receives the Embla API once the carousel is ready, for reading the selected slide or scrolling from outside. */
 	setApi?: (api: CarouselApi) => void;
 };
 

@@ -9,6 +9,7 @@ function Switch({
 	size = 'default',
 	...props
 }: React.ComponentProps<typeof SwitchPrimitive.Root> & {
+	/** Track and thumb size. 'sm' is a smaller switch. Defaults to 'default'. */
 	size?: 'sm' | 'default';
 }) {
 	return (

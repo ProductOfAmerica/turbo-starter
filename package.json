@@ -11,6 +11,9 @@
 		"lint:fix": "biome check . --write",
 		"check-types": "turbo check-types",
 		"test:e2e": "pnpm --filter web test:e2e",
+		"storybook": "pnpm --filter web storybook",
+		"build:storybook": "turbo run build:storybook",
+		"test": "turbo run test",
 		"docker": "docker compose up --build -d --remove-orphans",
 		"docker:build": "docker compose build",
 		"prepare": "lefthook install"

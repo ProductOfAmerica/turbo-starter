@@ -35,6 +35,7 @@ function AlertDialogContent({
 	size = 'default',
 	...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
+	/** Dialog width and layout. `default` is narrow on mobile and wider from the sm breakpoint; `sm` stays compact at every width and lays the footer buttons out in two equal columns. Defaults to `default`. */
 	size?: 'default' | 'sm';
 }) {
 	return (

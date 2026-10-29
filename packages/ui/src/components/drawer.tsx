@@ -4,7 +4,34 @@ import { cn } from 'cn';
 import type * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
-function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
+function Drawer({
+	...props
+}: React.ComponentProps<typeof DrawerPrimitive.Root> & {
+	/** The snap point the drawer is currently at when controlled: a fraction of the screen height (0 to 1), a pixel string such as `'355px'`, or `null` when closed. Use with `snapPoints` and `setActiveSnapPoint`. */
+	activeSnapPoint?: React.ComponentProps<typeof DrawerPrimitive.Root>['activeSnapPoint'];
+	/** Called with the new snap point when the user drags to a different one. Pair with `activeSnapPoint` to control it. */
+	setActiveSnapPoint?: React.ComponentProps<typeof DrawerPrimitive.Root>['setActiveSnapPoint'];
+	/** Whether the drawer is open, when controlled. Pair with `onOpenChange`. */
+	open?: React.ComponentProps<typeof DrawerPrimitive.Root>['open'];
+	/** Called with the new open state when the drawer opens or closes, including by dragging, Escape or an outside click. */
+	onOpenChange?: React.ComponentProps<typeof DrawerPrimitive.Root>['onOpenChange'];
+	/** Scales and shifts the page behind the drawer while it is open, for the iOS-sheet effect. Needs the page content wrapped in an element with `data-vaul-drawer-wrapper`. Defaults to `false`. */
+	shouldScaleBackground?: React.ComponentProps<typeof DrawerPrimitive.Root>['shouldScaleBackground'];
+	/** Called repeatedly while the user drags the drawer, with the pointer event and the fraction (0 to 1) of the drawer's size dragged so far. */
+	onDrag?: React.ComponentProps<typeof DrawerPrimitive.Root>['onDrag'];
+	/** Called when the user lets go after dragging, with the pointer event and whether the drawer is staying open (`true`) or closing (`false`). */
+	onRelease?: React.ComponentProps<typeof DrawerPrimitive.Root>['onRelease'];
+	/** Marks this drawer as nested inside another one. Set by `Drawer.NestedRoot`, which also wires it to its parent; rarely needed directly. */
+	nested?: React.ComponentProps<typeof DrawerPrimitive.Root>['nested'];
+	/** Called when the drawer starts closing (dismiss, drag past the close threshold, or a close button). */
+	onClose?: React.ComponentProps<typeof DrawerPrimitive.Root>['onClose'];
+	/** Element the drawer portals into, and measures for snap points, instead of `document.body`. */
+	container?: React.ComponentProps<typeof DrawerPrimitive.Root>['container'];
+	/** On iOS Safari, skips restoring the page scroll position after closing if the URL changed while the drawer was open. Defaults to `false`. */
+	preventScrollRestoration?: React.ComponentProps<typeof DrawerPrimitive.Root>['preventScrollRestoration'];
+	/** Moves focus into the drawer when it opens. Vaul suppresses Radix's auto-focus unless this is `true`. Defaults to `false`. */
+	autoFocus?: React.ComponentProps<typeof DrawerPrimitive.Root>['autoFocus'];
+}) {
 	return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
 }
 

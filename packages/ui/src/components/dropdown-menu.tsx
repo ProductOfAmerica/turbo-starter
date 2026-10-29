@@ -49,7 +49,9 @@ function DropdownMenuItem({
 	variant = 'default',
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
+	/** Indents the item (left padding) so its text lines up with items that show an indicator or icon. */
 	inset?: boolean;
+	/** 'destructive' colors the item red for dangerous actions such as delete. Defaults to 'default'. */
 	variant?: 'default' | 'destructive';
 }) {
 	return (
@@ -73,6 +75,7 @@ function DropdownMenuCheckboxItem({
 	inset,
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.CheckboxItem> & {
+	/** Adds extra left padding to match the indentation of other inset items in the menu. */
 	inset?: boolean;
 }) {
 	return (
@@ -109,6 +112,7 @@ function DropdownMenuRadioItem({
 	inset,
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.RadioItem> & {
+	/** Adds extra left padding to match the indentation of other inset items in the menu. */
 	inset?: boolean;
 }) {
 	return (
@@ -139,6 +143,7 @@ function DropdownMenuLabel({
 	inset,
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
+	/** Indents the item (left padding) so its text lines up with items that show an indicator or icon. */
 	inset?: boolean;
 }) {
 	return (
@@ -184,6 +189,7 @@ function DropdownMenuSubTrigger({
 	children,
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
+	/** Indents the item (left padding) so its text lines up with items that show an indicator or icon. */
 	inset?: boolean;
 }) {
 	return (

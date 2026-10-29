@@ -4,7 +4,7 @@ import { Button, buttonVariants } from '@repo/ui/components/button';
 import { cn } from 'cn';
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import * as React from 'react';
-import { type DayButton, DayPicker, getDefaultClassNames, type Locale } from 'react-day-picker';
+import { type DayButton, DayPicker, getDefaultClassNames, type Locale, type Modifiers } from 'react-day-picker';
 
 function Calendar({
 	className,
@@ -14,12 +14,16 @@ function Calendar({
 	buttonVariant = 'ghost',
 	locale,
 	formatters,
+	labels,
 	components,
 	...props
 }: React.ComponentProps<typeof DayPicker> & {
+	/** Button variant used for the previous and next month buttons. Accepts any Button `variant`. Defaults to `ghost`. */
 	buttonVariant?: React.ComponentProps<typeof Button>['variant'];
 }) {
 	const defaultClassNames = getDefaultClassNames();
+	const dayLabel = (date: Date, modifiers?: Modifiers) =>
+		`${modifiers?.today ? 'Today, ' : ''}${date.toLocaleDateString(locale?.code, { dateStyle: 'full', timeZone: props.timeZone })}`;
 
 	return (
 		<DayPicker
@@ -35,6 +39,15 @@ function Calendar({
 			formatters={{
 				formatMonthDropdown: (date) => date.toLocaleString(locale?.code, { month: 'short' }),
 				...formatters,
+			}}
+			labels={{
+				// Edited after the shadcn CLI: react-day-picker names a day "Sunday, January 4th, 2026", which
+				// doesn't contain the visible "4" as a word (WCAG 2.5.3, label in name). Intl's full date has
+				// no ordinal; the Today and selected parts match react-day-picker's defaults.
+				labelDayButton: (date, modifiers) =>
+					`${dayLabel(date, modifiers)}${modifiers.selected ? ', selected' : ''}`,
+				labelGridcell: dayLabel,
+				...labels,
 			}}
 			classNames={{
 				root: cn('w-fit', defaultClassNames.root),
@@ -76,7 +89,10 @@ function Calendar({
 				),
 				week: cn('mt-2 flex w-full', defaultClassNames.week),
 				week_number_header: cn('w-(--cell-size) select-none', defaultClassNames.week_number_header),
-				week_number: cn('text-[0.8rem] text-muted-foreground select-none', defaultClassNames.week_number),
+				week_number: cn(
+					'text-[0.8rem] font-normal text-muted-foreground select-none',
+					defaultClassNames.week_number
+				),
 				day: cn(
 					'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)',
 					props.showWeekNumber
@@ -118,11 +134,13 @@ function Calendar({
 					return <ChevronDownIcon className={cn('size-4', className)} {...props} />;
 				},
 				DayButton: ({ ...props }) => <CalendarDayButton locale={locale} {...props} />,
-				WeekNumber: ({ children, ...props }) => {
+				// Edited after the shadcn CLI: a <th>, like react-day-picker's own, because its `scope="row"` is
+				// only valid on a header cell; and `week` is data, not an attribute.
+				WeekNumber: ({ children, week: _week, ...props }) => {
 					return (
-						<td {...props}>
+						<th {...props}>
 							<div className="flex size-(--cell-size) items-center justify-center text-center">{children}</div>
-						</td>
+						</th>
 					);
 				},
 				...components,

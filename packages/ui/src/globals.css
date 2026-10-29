@@ -59,10 +59,12 @@
 	--secondary: oklch(0.967 0.001 286.375);
 	--secondary-foreground: oklch(0.21 0.006 285.885);
 	--muted: oklch(0.967 0.001 286.375);
-	--muted-foreground: oklch(0.552 0.016 285.938);
+	/* Darker than shadcn's 0.552 for WCAG AA: that is 4.39:1 on --muted, under the 4.5:1 minimum. */
+	--muted-foreground: oklch(0.54 0.016 285.938);
 	--accent: oklch(0.967 0.001 286.375);
 	--accent-foreground: oklch(0.21 0.006 285.885);
-	--destructive: oklch(0.577 0.245 27.325);
+	/* Darker than shadcn's 0.577 for WCAG AA: text-destructive on its own bg-destructive/10 tint is 4:1, under 4.5:1. */
+	--destructive: oklch(0.52 0.245 27.325);
 	--border: oklch(0.92 0.004 286.32);
 	--input: oklch(0.92 0.004 286.32);
 	--ring: oklch(0.705 0.015 286.067);
@@ -96,7 +98,8 @@
 	--muted-foreground: oklch(0.705 0.015 286.067);
 	--accent: oklch(0.274 0.006 286.033);
 	--accent-foreground: oklch(0.985 0 0);
-	--destructive: oklch(0.704 0.191 22.216);
+	/* Lighter than shadcn's 0.704 for WCAG AA: text-destructive/80 on the dark card is 4.34:1, under 4.5:1. */
+	--destructive: oklch(0.735 0.191 22.216);
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
 	--ring: oklch(0.552 0.016 285.938);

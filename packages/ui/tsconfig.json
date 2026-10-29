@@ -5,8 +5,13 @@
 		"baseUrl": ".",
 		"paths": {
 			"@repo/ui/*": ["./src/*"]
-		}
+		},
+		// Apps compile this package from source, so it never emits declarations. With them on,
+		// TypeScript demands a nameable type for every export, which a story's `meta` built from a
+		// radix-ui component can't provide (TS2742).
+		"declaration": false,
+		"declarationMap": false
 	},
-	"include": ["src"],
+	"include": ["src", "stories", "tests"],
 	"exclude": ["node_modules"]
 }

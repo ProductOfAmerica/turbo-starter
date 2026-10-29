@@ -43,8 +43,10 @@ function ChartContainer({
 	initialDimension = INITIAL_DIMENSION,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Maps each data key to its `label`, optional `icon`, and either a single `color` or a `theme` with `light` and `dark` colors. Each color becomes a `--color-<key>` CSS variable inside the chart, and tooltips and legends read the labels and icons from here. */
 	config: ChartConfig;
 	children: React.ComponentProps<typeof RechartsPrimitive.ResponsiveContainer>['children'];
+	/** Width and height in pixels the chart renders at until the container has been measured, such as during server rendering. Defaults to 320 by 200. */
 	initialDimension?: {
 		width: number;
 		height: number;
@@ -120,11 +122,20 @@ function ChartTooltipContent({
 	labelKey,
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
 	React.ComponentProps<'div'> & {
+		/** Hides the tooltip heading (the category label). Defaults to `false`. */
 		hideLabel?: boolean;
+		/** Hides the colored marker next to each value. Defaults to `false`. */
 		hideIndicator?: boolean;
+		/** Marker shape: `dot` is a small square, `line` a vertical bar, `dashed` a dashed bar. Defaults to `dot`. */
 		indicator?: 'line' | 'dot' | 'dashed';
+		/** Payload key whose value is looked up in the chart `config` for each row's label, instead of the series name or data key. */
 		nameKey?: string;
+		/** Payload key whose value is looked up in the chart `config` for the heading, instead of the series data key. */
 		labelKey?: string;
+		/** Index of the data point whose tooltip shows before the user hovers. Not read by this component; set it on `ChartTooltip` instead. */
+		defaultIndex?: React.ComponentProps<typeof RechartsPrimitive.Tooltip>['defaultIndex'];
+		/** De-duplicates payload entries by a key function, or by the default key when `true`. Not read by this component; set it on `ChartTooltip` instead. */
+		payloadUniqBy?: React.ComponentProps<typeof RechartsPrimitive.Tooltip>['payloadUniqBy'];
 	} & Omit<RechartsPrimitive.DefaultTooltipContentProps<TooltipValueType, TooltipNameType>, 'accessibilityLayer'>) {
 	const { config } = useChart();
 
@@ -240,7 +251,9 @@ function ChartLegendContent({
 	verticalAlign = 'bottom',
 	nameKey,
 }: React.ComponentProps<'div'> & {
+	/** Hides the `config` icons and always shows a colored square. Defaults to `false`. */
 	hideIcon?: boolean;
+	/** Payload key whose value is looked up in the chart `config` for each legend label, instead of the series data key. */
 	nameKey?: string;
 } & RechartsPrimitive.DefaultLegendContentProps) {
 	const { config } = useChart();

@@ -28,9 +28,13 @@ function CommandDialog({
 	showCloseButton = false,
 	...props
 }: React.ComponentProps<typeof Dialog> & {
+	/** Accessible title announced by screen readers. It is visually hidden. Defaults to `Command Palette`. */
 	title?: string;
+	/** Accessible description announced by screen readers. It is visually hidden. Defaults to `Search for a command to run...`. */
 	description?: string;
+	/** Extra classes for the dialog content container, not the dialog root. */
 	className?: string;
+	/** Shows a close button in the dialog's corner. Defaults to false; Escape and a click outside still close the palette. */
 	showCloseButton?: boolean;
 }) {
 	return (

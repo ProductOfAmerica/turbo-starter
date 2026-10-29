@@ -28,7 +28,10 @@ function ComboboxTrigger({ className, children, ...props }: ComboboxPrimitive.Tr
 
 function ComboboxClear({ className, ...props }: ComboboxPrimitive.Clear.Props) {
 	return (
+		// Edited after the shadcn CLI, like the trigger and chip remove buttons below: Base UI ships no
+		// names for its icon-only buttons.
 		<ComboboxPrimitive.Clear
+			aria-label="Clear selection"
 			data-slot="combobox-clear"
 			render={<InputGroupButton variant="ghost" size="icon-xs" />}
 			className={cn(className)}
@@ -63,7 +66,7 @@ function ComboboxInput({
 						className="group-has-data-[slot=combobox-clear]/input-group:hidden data-pressed:bg-transparent"
 						disabled={disabled}
 					>
-						<ComboboxTrigger />
+						<ComboboxTrigger aria-label="Show options" />
 					</InputGroupButton>
 				)}
 				{showClear && <ComboboxClear disabled={disabled} />}
@@ -217,6 +220,7 @@ function ComboboxChip({
 			{children}
 			{showRemove && (
 				<ComboboxPrimitive.ChipRemove
+					aria-label="Remove"
 					render={<Button variant="ghost" size="icon-xs" />}
 					className="-ml-1 opacity-50 hover:opacity-100"
 					data-slot="combobox-chip-remove"

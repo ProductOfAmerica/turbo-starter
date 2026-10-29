@@ -9,8 +9,25 @@
 			{
 				"name": "next"
 			}
-		]
+		],
+		// The app emits nothing. With declarations on, TypeScript demands a nameable type for every
+		// export, which a story's `meta` built from a radix-ui component can't provide (TS2742).
+		// tsconfig.build.json turns them back on for the app's own build.
+		"declaration": false,
+		"declarationMap": false
 	},
-	"include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.js", ".next/types/**/*.ts"],
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
+		"next-env.d.ts",
+		"next.config.js",
+		".next/types/**/*.ts",
+		".storybook/**/*.mts",
+		".storybook/**/*.tsx",
+		"vitest.config.mts",
+		// Storybook documents props (in its own UI and in the components manifest) only for
+		// components that this project lists, and the UI components live in packages/ui.
+		"../../packages/ui/src/**/*.tsx"
+	],
 	"exclude": ["node_modules"]
 }

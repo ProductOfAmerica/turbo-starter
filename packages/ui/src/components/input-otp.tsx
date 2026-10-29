@@ -10,7 +10,28 @@ function InputOTP({
 	containerClassName,
 	...props
 }: React.ComponentProps<typeof OTPInput> & {
+	/** Controlled value: the characters entered so far. Pair it with `onChange`. */
+	value?: React.ComponentProps<typeof OTPInput>['value'];
+	/** Called with the new value as a string (not an event) whenever it changes. */
+	onChange?: React.ComponentProps<typeof OTPInput>['onChange'];
+	/** Number of characters the code holds. Match it to the number of `InputOTPSlot` components rendered. */
+	maxLength: React.ComponentProps<typeof OTPInput>['maxLength'];
+	/** Alignment of the text inside the underlying input: 'left', 'center' or 'right'. Defaults to 'left'. */
+	textAlign?: React.ComponentProps<typeof OTPInput>['textAlign'];
+	/** Called once when every slot becomes filled, with the full value. */
+	onComplete?: React.ComponentProps<typeof OTPInput>['onComplete'];
+	/** How to handle password-manager badges that inject an icon into the input: 'increase-width' widens the input so the badge sits outside the slots, 'none' disables that. Defaults to 'increase-width'. */
+	pushPasswordManagerStrategy?: React.ComponentProps<typeof OTPInput>['pushPasswordManagerStrategy'];
+	/** Maps pasted text to the string that is actually entered, for example to strip dashes or spaces from a copied code. */
+	pasteTransformer?: React.ComponentProps<typeof OTPInput>['pasteTransformer'];
+	/** Class name for the visible wrapper around the slots. `className` goes to the hidden input instead. */
 	containerClassName?: string;
+	/** CSS placed in a `noscript` tag as a fallback when JavaScript is disabled. Pass null to omit the tag. Defaults to the library's built-in rule. */
+	noScriptCSSFallback?: React.ComponentProps<typeof OTPInput>['noScriptCSSFallback'];
+	/** CSP nonce applied to the style tag the component injects. Set it when your Content Security Policy restricts `style-src`. */
+	nonce?: React.ComponentProps<typeof OTPInput>['nonce'];
+	/** Render function that receives the slot state (`slots`, `isFocused`, `isHovering`) and returns the slots. Use it instead of `children`; the two are mutually exclusive. */
+	render?: React.ComponentProps<typeof OTPInput>['render'];
 }) {
 	return (
 		<OTPInput
@@ -41,6 +62,7 @@ function InputOTPSlot({
 	className,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Zero-based position of this slot in the code. It decides which character the slot shows and when it is active. */
 	index: number;
 }) {
 	const inputOTPContext = React.useContext(OTPInputContext);

@@ -112,12 +112,30 @@ jobs:
     env:
       NEXT_TELEMETRY_DISABLED: 1
       TURBO_TELEMETRY_DISABLED: 1
+      STORYBOOK_DISABLE_TELEMETRY: 1
       DO_NOT_TRACK: 1
+      # Turborepo evicts its oldest local cache entries past this size, so the
+      # cache restored below stops growing with every run. A run that misses
+      # every task adds under 10 MB.
+      TURBO_CACHE_MAX_SIZE: 250MB
 
     steps:
       # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v7
+
+      # Turborepo's local cache, carried between runs so a task whose inputs
+      # haven't changed replays its logs and outputs instead of running again.
+      # Free within the repository's default 10 GB of Actions cache storage,
+      # where GitHub evicts old entries rather than billing. Pattern from
+      # https://turborepo.dev/docs/guides/ci-vendors/github-actions
+      - name: Cache Turborepo
+        uses: actions/cache@v6
+        with:
+          path: .turbo/cache
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       # Install pnpm
       - name: Install pnpm
@@ -149,8 +167,26 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # The static build writes the components manifest that the Storybook MCP
+      # server gives agents; the check fails if a component lacks a story, an
+      # accessibility exception has no explaining comment, a manifest entry is
+      # broken, or a prop has no description.
+      - name: Build Storybook
+        run: pnpm build:storybook
+
+      - name: Check Stories
+        run: node scripts/check-stories.mjs --manifest
+
       - name: Install Playwright Browsers
         run: cd apps/web && npx playwright install --with-deps chromium
 
       - name: E2E Smoke Test
         run: cd apps/web && pnpm test:e2e
+
+      # Unit tests, and every story as a test: it renders, its play function
+      # passes, and axe violations fail it, apart from the one rule on one
+      # element that a story's accessibility exception skips. Stories run in
+      # the light theme, then dark; the first pass prints a coverage report
+      # and fails below 100% per file.
+      - name: Tests
+        run: pnpm test

@@ -41,6 +41,7 @@ function DialogContent({
 	showCloseButton = true,
 	...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
+	/** Shows the icon close button in the top-right corner. Defaults to true. */
 	showCloseButton?: boolean;
 }) {
 	return (
@@ -78,6 +79,7 @@ function DialogFooter({
 	children,
 	...props
 }: React.ComponentProps<'div'> & {
+	/** Adds an outline "Close" button after the children that closes the dialog. Defaults to false. */
 	showCloseButton?: boolean;
 }) {
 	return (

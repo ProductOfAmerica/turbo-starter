@@ -10,12 +10,17 @@ function Slider({
 	value,
 	min = 0,
 	max = 100,
+	'aria-label': ariaLabel,
+	'aria-labelledby': ariaLabelledby,
 	...props
 }: React.ComponentProps<typeof SliderPrimitive.Root>) {
 	const _values = React.useMemo(
 		() => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
 		[value, defaultValue, min, max]
 	);
+	// Edited after the shadcn CLI: the thumb (role="slider") is what needs the name, and Radix only
+	// names thumbs of a range ("Minimum", "Maximum"), so a lone thumb takes the slider's own label.
+	const thumbLabel = _values.length === 1 ? { 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledby } : undefined;
 
 	return (
 		<SliderPrimitive.Root
@@ -43,6 +48,7 @@ function Slider({
 				<SliderPrimitive.Thumb
 					data-slot="slider-thumb"
 					key={index}
+					{...thumbLabel}
 					className="block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] select-none hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50"
 				/>
 			))}

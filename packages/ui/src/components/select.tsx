@@ -5,7 +5,16 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import { Select as SelectPrimitive } from 'radix-ui';
 import type * as React from 'react';
 
-function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
+function Select({
+	...props
+}: React.ComponentProps<typeof SelectPrimitive.Root> & {
+	/** The selected value when controlled. Must match the `value` of a `SelectItem`; pair it with `onValueChange`. */
+	value?: React.ComponentProps<typeof SelectPrimitive.Root>['value'];
+	/** The initially selected value when uncontrolled. Must match the `value` of a `SelectItem`. */
+	defaultValue?: React.ComponentProps<typeof SelectPrimitive.Root>['defaultValue'];
+	/** Called with the new value when the user picks an option. */
+	onValueChange?: React.ComponentProps<typeof SelectPrimitive.Root>['onValueChange'];
+}) {
 	return <SelectPrimitive.Root data-slot="select" {...props} />;
 }
 
@@ -23,6 +32,7 @@ function SelectTrigger({
 	children,
 	...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+	/** Trigger height. `sm` is h-8, `default` is h-9. Defaults to `default`. */
 	size?: 'sm' | 'default';
 }) {
 	return (
