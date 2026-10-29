@@ -114,11 +114,28 @@ jobs:
       TURBO_TELEMETRY_DISABLED: 1
       STORYBOOK_DISABLE_TELEMETRY: 1
       DO_NOT_TRACK: 1
+      # Turborepo evicts its oldest local cache entries past this size, so the
+      # cache restored below stops growing with every run. A run that misses
+      # every task adds under 10 MB.
+      TURBO_CACHE_MAX_SIZE: 250MB
 
     steps:
       # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v7
+
+      # Turborepo's local cache, carried between runs so a task whose inputs
+      # haven't changed replays its logs and outputs instead of running again.
+      # Free within the repository's default 10 GB of Actions cache storage,
+      # where GitHub evicts old entries rather than billing. Pattern from
+      # https://turborepo.dev/docs/guides/ci-vendors/github-actions
+      - name: Cache Turborepo
+        uses: actions/cache@v6
+        with:
+          path: .turbo/cache
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
 
       # Install pnpm
       - name: Install pnpm

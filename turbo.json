@@ -1,5 +1,5 @@
 {
-	"$schema": "https://turbo.build/schema.json",
+	"$schema": "https://turborepo.dev/schema.json",
 	"ui": "tui",
 	"tasks": {
 		"build": {
@@ -14,10 +14,12 @@
 				"!**/*.test.ts",
 				"!**/*.test.tsx"
 			],
-			"outputs": [".next/**", "!.next/cache/**"]
+			// next dev writes to .next/dev, which next build leaves in place.
+			"outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"]
 		},
 		// No package has a "transit" script. The empty task links each package's hash to its
-		// dependencies' source files, so editing @repo/ui invalidates web's Storybook tasks.
+		// dependencies' source files, so editing @repo/ui invalidates web's tasks that read it
+		// (Storybook, tests, type checks) without making them wait for @repo/ui's tasks.
 		// https://turborepo.dev/docs/core-concepts/package-and-task-graph#transit-nodes
 		"transit": {
 			"dependsOn": ["^transit"]
@@ -32,7 +34,7 @@
 			"passThroughEnv": ["PLAYWRIGHT_*"]
 		},
 		"check-types": {
-			"dependsOn": ["^check-types"]
+			"dependsOn": ["transit"]
 		},
 		"dev": {
 			"cache": false,
@@ -46,7 +48,6 @@
 		"//#lint": {},
 		"//#lint:fix": { "cache": false }
 	},
-	"globalDependencies": ["package.json", "pnpm-lock.yaml"],
 	"globalEnv": [
 		"NODE_ENV",
 		"TURBO_TELEMETRY_DISABLED",
