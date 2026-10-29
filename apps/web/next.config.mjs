@@ -1,12 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import bundleAnalyzer from '@next/bundle-analyzer';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const withBundleAnalyzer = bundleAnalyzer({
-	enabled: process.env.ANALYZE === 'true',
-});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -19,4 +14,4 @@ const nextConfig = {
 	},
 };
 
-export default withBundleAnalyzer(nextConfig);
+export default nextConfig;
