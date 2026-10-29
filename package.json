@@ -22,14 +22,13 @@
 			"lefthook"
 		],
 		"overrides": {
-			"postcss": "^8.5.23",
-			"sharp": "^0.35.3"
+			"postcss": "^8.5.23"
 		}
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.14",
-		"lefthook": "^2.1.14",
-		"turbo": "^2.11.4",
+		"@biomejs/biome": "^2.5.15",
+		"lefthook": "^2.2.2",
+		"turbo": "^2.11.9",
 		"typescript": "^5.9.3"
 	},
 	"packageManager": "pnpm@10.28.1",
