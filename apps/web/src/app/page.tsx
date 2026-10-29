@@ -10,10 +10,12 @@ export default function Home() {
 				<div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-2xl opacity-20 will-change-transform" />
 			</div>
 			<Navbar />
-			<HeroSection />
-			<FeaturesSection />
-			<QuickStartSection />
-			<CTASection />
+			<main>
+				<HeroSection />
+				<FeaturesSection />
+				<QuickStartSection />
+				<CTASection />
+			</main>
 			<Footer />
 		</div>
 	);
