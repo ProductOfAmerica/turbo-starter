@@ -57,7 +57,7 @@ Every story runs axe, and in both themes a violation fails it.
 
 - With the MCP server connected, run stories with its `test-run` tool. Otherwise run `pnpm test` (unit tests and stories, both themes), or one file with `pnpm --filter web exec vitest run ../../packages/ui/stories/button.stories.tsx` (paths are relative to `apps/web`), and in the dark theme with `pnpm --filter web exec cross-env STORY_THEME=dark vitest run ../../packages/ui/stories/button.stories.tsx`.
 - `test-run` checks the light theme only: it ignores `globals`, so `{ theme: 'dark' }` changes nothing. The hooks and `pnpm test` run dark too, or use the dark command above.
-- `test-run` silently leaves out stories from a story file created after Storybook started: they show as neither passing nor failing. Check that every story you asked for appears in its output, and run a new file with the Vitest command above.
+- `test-run` silently leaves out stories from a story file created in `packages/ui` (outside `apps/web`, where Storybook runs) after Storybook started: they show as neither passing nor failing. Check that every story you asked for appears in its output; restart Storybook or run the new file with the Vitest command above.
 - A new machine needs Chromium once: `pnpm --filter web exec playwright install chromium`.
 - `node scripts/check-stories.mjs` lists missing stories and accessibility exceptions. After `pnpm build:storybook`, add `--manifest` to also check the docs the MCP server serves.
 - Hooks in `.claude/settings.json` run the related story tests after your edits and again before you finish, along with the missing-story and type checks; failures come back to you to fix.

@@ -7,7 +7,8 @@ import type * as React from 'react';
 function ScrollArea({ className, children, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
 	return (
 		<ScrollAreaPrimitive.Root data-slot="scroll-area" className={cn('relative', className)} {...props}>
-			{/* Edited after the shadcn CLI: tabIndex lets keyboard users scroll content with nothing focusable in it. */}
+			{/* Edited after the shadcn CLI: tabIndex lets keyboard users scroll content with nothing focusable
+			    in it. Chrome 130+ does that on its own, but not every browser does (dequelabs/axe-core#4752). */}
 			<ScrollAreaPrimitive.Viewport
 				data-slot="scroll-area-viewport"
 				tabIndex={0}
