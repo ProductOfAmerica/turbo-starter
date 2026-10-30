@@ -92,8 +92,9 @@ export const Default: Story = {
 
 /** No match shows CommandEmpty. */
 export const NoResults: Story = {
-	// a11y exception, aria-required-children: cmdk leaves its role="listbox" list empty when nothing
-	// matches. Only the list is skipped; [role] is the rule's own selector.
+	// a11y exception, aria-required-children: cmdk renders CommandEmpty's text inside its role="listbox"
+	// list, where only options and groups are allowed. Only the list is skipped; [role] is the rule's
+	// own selector.
 	parameters: {
 		a11y: { config: { rules: [{ id: 'aria-required-children', selector: '[role]:not([cmdk-list])' }] } },
 	},
