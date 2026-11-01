@@ -271,7 +271,8 @@ export const Loading: Story = {
 	),
 };
 
-// The provider's handler isn't a Sidebar prop, so it can't be an arg; cleared before each run.
+// The provider's handler isn't a Sidebar prop, so it can't be an arg. Storybook clears it before
+// each story.
 const onOpenChange = fn();
 
 /**
@@ -282,9 +283,6 @@ const onOpenChange = fn();
  * @summary `open` and `onOpenChange` on SidebarProvider to own the open state
  */
 export const Controlled: Story = {
-	beforeEach() {
-		onOpenChange.mockClear();
-	},
 	render: (args) => <ControlledSidebar {...args} />,
 	play: async ({ canvas, canvasElement, userEvent }) => {
 		const sidebar = canvasElement.querySelector('[data-slot="sidebar"]');

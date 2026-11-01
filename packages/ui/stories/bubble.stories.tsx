@@ -91,15 +91,13 @@ export const Group: Story = {
 	),
 };
 
-// The button's handler isn't a Bubble prop, so it can't be an arg; cleared before each run.
+// The button's handler isn't a Bubble prop, so it can't be an arg. Storybook clears it before
+// each story.
 const sendReply = fn();
 
 /** With `asChild`, BubbleContent can be a button, such as a suggested reply. */
 export const AsButton: Story = {
 	args: { variant: 'outline' },
-	beforeEach() {
-		sendReply.mockClear();
-	},
 	render: (args) => (
 		<Bubble {...args}>
 			<BubbleContent asChild>

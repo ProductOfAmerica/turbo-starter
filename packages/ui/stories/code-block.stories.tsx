@@ -81,8 +81,7 @@ type Story = StoryObj<typeof meta>;
 /** Highlighted once the TSX grammar loads; the copy button copies the source. */
 export const Highlighted: Story = {
 	beforeEach() {
-		const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
-		return () => writeText.mockRestore();
+		spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 	},
 	play: async ({ canvas, canvasElement, userEvent }) => {
 		// The highlighter and the TSX grammar load on first use; allow longer than waitFor's
@@ -100,8 +99,7 @@ export const Highlighted: Story = {
 export const CopiedConfirmation: Story = {
 	tags: ['!manifest'],
 	beforeEach() {
-		const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
-		return () => writeText.mockRestore();
+		spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 	},
 	play: async ({ canvas, userEvent }) => {
 		await userEvent.click(canvas.getByRole('button', { name: 'Copy' }));
@@ -114,8 +112,7 @@ export const CopiedConfirmation: Story = {
 export const CopyRejected: Story = {
 	tags: ['!manifest'],
 	beforeEach() {
-		const writeText = spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('denied'));
-		return () => writeText.mockRestore();
+		spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('denied'));
 	},
 	play: async ({ canvas, userEvent }) => {
 		await userEvent.click(canvas.getByRole('button', { name: 'Copy' }));

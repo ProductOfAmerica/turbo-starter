@@ -20,8 +20,7 @@ type Story = StoryObj<typeof meta>;
 /** Clicking copies `cmd`. */
 export const Default: Story = {
 	beforeEach() {
-		const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
-		return () => writeText.mockRestore();
+		spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 	},
 	play: async ({ args, canvas, userEvent }) => {
 		await userEvent.click(canvas.getByRole('button', { name: `Copy ${args.cmd} to clipboard` }));
@@ -33,8 +32,7 @@ export const Default: Story = {
 export const CopiedConfirmation: Story = {
 	tags: ['!manifest'],
 	beforeEach() {
-		const writeText = spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
-		return () => writeText.mockRestore();
+		spyOn(navigator.clipboard, 'writeText').mockResolvedValue();
 	},
 	play: async ({ args, canvas, canvasElement, userEvent }) => {
 		await userEvent.click(canvas.getByRole('button', { name: `Copy ${args.cmd} to clipboard` }));
@@ -47,12 +45,8 @@ export const CopiedConfirmation: Story = {
 export const CopyRejected: Story = {
 	tags: ['!manifest'],
 	beforeEach() {
-		const writeText = spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('denied'));
-		const error = spyOn(console, 'error').mockImplementation(() => {});
-		return () => {
-			writeText.mockRestore();
-			error.mockRestore();
-		};
+		spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new Error('denied'));
+		spyOn(console, 'error').mockImplementation(() => {});
 	},
 	play: async ({ args, canvas, canvasElement, userEvent }) => {
 		await userEvent.click(canvas.getByRole('button', { name: `Copy ${args.cmd} to clipboard` }));

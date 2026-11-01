@@ -10,6 +10,12 @@ paths:
 
 # UI work: reuse components, document them in stories, prove it with story tests
 
+The Storybook MCP server gives agents its own instructions, both when it connects and from its `get-storybook-story-instructions` tool. Where they differ from this file, follow this file:
+
+- In `packages/ui`, story types come from `@storybook/react`, never `@storybook/nextjs-vite`, which that package can't resolve.
+- `test-run` isn't the only way to run story tests. For the dark theme, or a `packages/ui` story file created after Storybook started, use the Vitest commands under Run the checks.
+- Write a story for every variant, size and state the component styles, including those that don't change behavior.
+
 ## Before you build
 
 - Reuse before you write. With the Storybook MCP server connected (it runs while `pnpm storybook` does), call `docs-list`, then `docs-show` on the candidates. Without it, run `pnpm --filter web exec storybook tools docs list` and `... docs show --id ui-button` (an undocumented CLI that reads the same docs without a server), or read the stories in `packages/ui/stories` and `apps/web/stories`.
@@ -34,7 +40,7 @@ The one Storybook, configured in `apps/web/.storybook`, renders both folders and
 - List compound parts in `subcomponents`, and show the canonical composition.
 - Write a story for each variant, size and state that the component styles, one concept per story: agents copy each story's snippet as a usage example. For anything that renders in a portal, add a story with it open, and query it with `screen`.
 - A story that renders the same as another and exists for its play function (keyboard navigation, Escape, a failure path) gets `tags: ['!manifest']`: it still runs as a test, but stays out of the docs agents read.
-- Give interactive behavior a play function. Put `fn()` spies in the args of the story that asserts them, not in `meta`, where every snippet would show them. A handler on a subcomponent can't be an arg: use a module-level `fn()` cleared in the story's `beforeEach`.
+- Give interactive behavior a play function. Put `fn()` spies in the args of the story that asserts them, not in `meta`, where every snippet would show them. A handler on a subcomponent can't be an arg: use a module-level `fn()`. Storybook clears every `fn()` and restores every `spyOn` before each story, so stories never clean up their spies.
 - Keep stories deterministic: fixed dates, `spyOn(navigator.clipboard, 'writeText')`, `globals: { viewport: { value: 'mobile1' } }` for mobile layouts, and `findBy*` or `waitFor` with a timeout for async content. Story tests run at 1200x900 unless a story sets a viewport, with animations off.
 
 ## Coverage
