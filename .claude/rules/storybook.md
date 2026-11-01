@@ -10,6 +10,12 @@ paths:
 
 # UI work: reuse components, document them in stories, prove it with story tests
 
+The Storybook MCP server gives agents its own instructions, both when it connects and from its `get-storybook-story-instructions` tool. Where they differ from this file, follow this file:
+
+- In `packages/ui`, story types come from `@storybook/react`, never `@storybook/nextjs-vite`, which that package can't resolve.
+- `test-run` isn't the only way to run story tests. For the dark theme, or a `packages/ui` story file created after Storybook started, use the Vitest commands under Run the checks.
+- Write a story for every variant, size and state the component styles, including those that don't change behavior.
+
 ## Before you build
 
 - Reuse before you write. With the Storybook MCP server connected (it runs while `pnpm storybook` does), call `docs-list`, then `docs-show` on the candidates. Without it, run `pnpm --filter web exec storybook tools docs list` and `... docs show --id ui-button` (an undocumented CLI that reads the same docs without a server), or read the stories in `packages/ui/stories` and `apps/web/stories`.
