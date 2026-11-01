@@ -87,14 +87,12 @@ export const ImageThumbnail: Story = {
 	),
 };
 
-// The trigger's handler isn't an Attachment prop, so it can't be an arg; cleared before each run.
+// The trigger's handler isn't an Attachment prop, so it can't be an arg. Storybook clears it
+// before each story.
 const openPreview = fn();
 
 /** AttachmentTrigger makes the whole attachment a button, here one that opens a preview. */
 export const Openable: Story = {
-	beforeEach() {
-		openPreview.mockClear();
-	},
 	render: (args) => (
 		<Attachment {...args}>
 			<AttachmentTrigger aria-label="Open release-notes.pdf" onClick={openPreview} />
