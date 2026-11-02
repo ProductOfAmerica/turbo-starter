@@ -30,9 +30,9 @@ const ownDepCache: Plugin = { name: 'own-dep-cache', enforce: 'post', config: ()
 //
 // Three projects: `storybook` runs every story as a test, and `unit` (apps/web, in Node) and `ui`
 // (packages/ui, in the browser) run plain tests for code no story can reach. Only one project uses
-// the Storybook plugin on purpose: when Storybook runs these tests
-// itself (its test widget or the MCP test-run tool), it renames every project that uses the plugin
-// after the config dir, so a second one for the dark theme would collide. `pnpm test` runs the
+// the Storybook plugin on purpose: when Storybook runs these tests itself (its test widget or the
+// MCP test-run tool), it renames every project that uses the plugin after the config dir, so a
+// second one for the dark theme would collide (storybookjs/storybook#37109). `pnpm test` runs the
 // stories again with STORY_THEME=dark.
 export default defineConfig({
 	plugins: [ownDepCache],
