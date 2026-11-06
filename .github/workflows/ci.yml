@@ -86,7 +86,9 @@ jobs:
             exit 0
           fi
 
-          CHANGED=$(git diff --name-only "$BASE_SHA" HEAD)
+          # --no-renames lists both sides of a rename. Otherwise moving code to a
+          # .md path shows only the new name and reads as a docs-only change.
+          CHANGED=$(git diff --name-only --no-renames "$BASE_SHA" HEAD)
           echo "Changed files:"
           echo "$CHANGED"
 
@@ -96,18 +98,25 @@ jobs:
             exit 0
           fi
 
-          # code=true if ANY changed path is not documentation.
-          if printf '%s\n' "$CHANGED" | grep -qvE '(\.md$|^LICENSE$|^\.vscode/|^\.idea/|^docs/)'; then
-            echo "Non-docs changes present; running the full pipeline."
-            echo "code=true" >> "$GITHUB_OUTPUT"
-          else
+          # code=true unless grep counted every path and found no non-docs ones. Only a
+          # printed 0 is evidence, since a failed grep prints nothing. -c has to read all
+          # of its input, unlike -q, which quits at its first match: under pipefail that
+          # fails printf on a long list, and that used to read as a docs-only change.
+          non_docs=$(printf '%s\n' "$CHANGED" | grep -cvE '(\.md$|^LICENSE$)' || true)
+          if [ "$non_docs" = 0 ]; then
             echo "Docs-only change; skipping build."
             echo "code=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Non-docs changes present; running the full pipeline."
+            echo "code=true" >> "$GITHUB_OUTPUT"
           fi
 
   build:
     needs: changes
-    if: needs.changes.outputs.code == 'true'
+    # Skip only on a docs-only result. cancelled() replaces the implicit success(),
+    # so a failed changes job, whose output is empty, runs the pipeline. Skipping
+    # there would pass the required check, since skipped satisfies branch protection.
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
     env:
       NEXT_TELEMETRY_DISABLED: 1

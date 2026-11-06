@@ -6,11 +6,8 @@
 **/node_modules/
 
 # Environment Variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# The **/ matters: without it a pattern only matches at the build context root.
+**/.env*
 
 # Build Outputs
 **/out/
@@ -34,7 +31,7 @@
 
 # Miscellaneous
 .DS_Store
-*.pem
+**/*.pem
 
 # Docker and Git
 .git
