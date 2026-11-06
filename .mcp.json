@@ -11,6 +11,10 @@
 		"storybook": {
 			"type": "http",
 			"url": "http://localhost:6006/mcp"
+		},
+		"webstorm": {
+			"url": "http://127.0.0.1:64894/stream",
+			"type": "http"
 		}
 	}
 }

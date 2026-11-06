@@ -6,8 +6,10 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 # Set working directory
 WORKDIR /app
-# Keep the major in step with the turbo devDependency in the root package.json
-RUN npm install -g turbo@^2
+# Exact version: prune honours apps/web/.gitignore, the second barrier for env
+# files after .dockerignore, so its behaviour shouldn't change between rebuilds.
+# Bump it with the turbo entry in pnpm-lock.yaml.
+RUN npm install -g turbo@2.11.9
 
 # Copy all files needed for turbo prune
 COPY . .

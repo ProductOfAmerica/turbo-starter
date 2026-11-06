@@ -24,7 +24,7 @@ wrapped in a Docker-friendly setup.
 - **pnpm Workspaces**: Efficient dependency management with [pnpm](https://pnpm.io/).
 - **Storybook**: Every component documented in [Storybook](https://storybook.js.org/), with each story run as an interaction and accessibility test, and served to AI agents through its MCP server.
 - **CI/CD**: GitHub Actions with lint, typecheck, security audit, build, E2E smoke test, and story tests.
-- **Auto-merge**: Dependabot patches and minor updates auto-merge after CI passes.
+- **Auto-merge**: Dependabot patches and minor updates auto-merge after CI passes, [once you turn it on](#turn-on-dependabot-auto-merge).
 
 Perfect for developers who want a cutting-edge stack without the setup hassle.
 
@@ -129,6 +129,15 @@ Speed up builds across your team:
 npx turbo login
 npx turbo link
 ```
+
+### Turn on Dependabot auto-merge
+
+Repository settings don't come with the template, so set these once on your own repository:
+
+1. In **Settings > General > Pull Requests**, select **Allow auto-merge**.
+2. In **Settings > Branches**, add a branch protection rule for `main`, select **Require status checks to pass before merging**, and require `build`. It appears in the search once CI has passed in the past week.
+
+Without the required check, Dependabot updates may merge before CI finishes. GitHub Free only offers these settings on public repositories, so on a private repository on that plan, delete `.github/workflows/dependabot-auto-merge.yml`.
 
 ---
 
