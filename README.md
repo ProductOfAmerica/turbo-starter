@@ -96,7 +96,7 @@ Create a new file at `apps/web/src/app/about/page.tsx`:
 
 ```tsx
 export default function AboutPage() {
-  return <h1>About</h1>;
+	return <h1>About</h1>;
 }
 ```
 
@@ -143,19 +143,19 @@ Without the required check, Dependabot updates may merge before CI finishes. Git
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start the dev server |
-| `pnpm build` | Build all apps and packages |
-| `pnpm start` | Serve the production build |
-| `pnpm lint` | Check for lint and format issues |
-| `pnpm lint:fix` | Auto-fix lint issues and format code |
-| `pnpm check-types` | TypeScript type checking |
-| `pnpm test:e2e` | Run the Playwright E2E suite |
-| `pnpm storybook` | Start Storybook on port 6006 |
-| `pnpm build:storybook` | Build the static Storybook, including the components manifest |
-| `pnpm test` | Run the unit tests and every story as a test (light theme, then dark); fails if a file drops below 100% coverage |
-| `pnpm clean` | Delete build and test caches (`.next`, `.turbo`, `storybook-static`, Playwright output); keeps `node_modules` |
+| Command                | Description                                                                                                      |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`             | Start the dev server                                                                                             |
+| `pnpm build`           | Build all apps and packages                                                                                      |
+| `pnpm start`           | Serve the production build                                                                                       |
+| `pnpm lint`            | Check for lint and format issues                                                                                 |
+| `pnpm lint:fix`        | Auto-fix lint issues and format code                                                                             |
+| `pnpm check-types`     | TypeScript type checking                                                                                         |
+| `pnpm test:e2e`        | Run the Playwright E2E suite                                                                                     |
+| `pnpm storybook`       | Start Storybook on port 6006                                                                                     |
+| `pnpm build:storybook` | Build the static Storybook, including the components manifest                                                    |
+| `pnpm test`            | Run the unit tests and every story as a test (light theme, then dark); fails if a file drops below 100% coverage |
+| `pnpm clean`           | Delete build and test caches (`.next`, `.turbo`, `storybook-static`, Playwright output); keeps `node_modules`    |
 
 ---
 

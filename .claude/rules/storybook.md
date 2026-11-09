@@ -1,11 +1,13 @@
 ---
+
 paths:
-  - "packages/ui/src/components/**"
-  - "packages/ui/stories/**"
-  - "packages/ui/tests/**"
-  - "apps/web/src/**/*.tsx"
-  - "apps/web/stories/**"
-  - "apps/web/.storybook/**"
+- "packages/ui/src/components/**"
+- "packages/ui/stories/**"
+- "packages/ui/tests/**"
+- "apps/web/src/**/*.tsx"
+- "apps/web/stories/**"
+- "apps/web/.storybook/**"
+
 ---
 
 # UI work: reuse components, document them in stories, prove it with story tests
