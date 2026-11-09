@@ -38,6 +38,11 @@
 			"allowComments": true
 		}
 	},
+	"yaml": {
+		"formatter": {
+			"indentWidth": 2
+		}
+	},
 	"css": {
 		"parser": {
 			"tailwindDirectives": true
@@ -85,6 +90,7 @@
 						"noRedundantRoles": "off"
 					},
 					"correctness": {
+						"noComponentHookFactories": "off",
 						"useExhaustiveDependencies": {
 							"level": "error",
 							"options": { "reportUnnecessaryDependencies": false }
@@ -95,6 +101,7 @@
 					},
 					"suspicious": {
 						"noArrayIndexKey": "off",
+						"noDocumentCookie": "off",
 						"noDoubleEquals": "off"
 					}
 				}
